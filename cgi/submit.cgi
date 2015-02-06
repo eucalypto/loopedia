@@ -18,9 +18,6 @@ mkdir -p $dir/lock
 cd $dir
 
 
-# the cgi script gets all data and files through stdin. Here we write
-# it to a file using cat (which if used without arguments reads from
-# stin and writes to stout)
 ( cat << _EOF_
 Content-Type: $CONTENT_TYPE
 Content-Transfer-Encoding: binary
@@ -28,6 +25,11 @@ Content-Transfer-Encoding: binary
 _EOF_
   cat
 ) > raw
+# the cgi script gets all data and files through stdin. Here we write
+# it to a file using cat (which if used without arguments reads from
+# stin and writes to stout)
+
+
 
 sed '
 	/[; ]name=[^;]*.pdf/ s/filename=[^;]*//
