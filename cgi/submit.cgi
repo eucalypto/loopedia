@@ -1,14 +1,14 @@
 #! /bin/bash
 
-. $(dirname $0)/config.sh
-httpheaders "Application Submission"
+. $(dirname $0)/looconfig.sh
+httpheaders "Integral Submission"
+
 
 cd "$datadir"
 
-pwd
 
 # ids=$(echo *)
-dir=100
+dir=1000
 # for id in $ids ; do
 for id in *; do
   : $((id >= dir ? dir = id + 1 : 0))
@@ -64,10 +64,39 @@ done
 
 
 
-# uploads=`sed -n '/^Content-Disposition.*filename="[^"]/{
-#   s/^.*[; ]name="\([^"]*\).*filename="\([^"]*\).*$/\1 (original name: \2)/
-#   p
-# }' raw`
+uploads=$(sed -n '/^Content-Disposition.*filename="[^"]/{
+  s/^.*[; ]name="\([^"]*\).*filename="\([^"]*\).*$/\1 (original name: \2)/
+  p
+}' raw)
+# In sed you can group commands with curly brackets {}. Here it is
+# used to split the sed line into better readable lines. Sed searches
+# for lines with '*filename*' and then analyzes it to pick out the
+# filename and the original filename. Those two are printed.
+
+
+show() {
+  for file in "$@" ; do
+    s="(not given)"
+    [[ -f "$file" ]] && s="$(<$file)"
+    echo "$s"
+  done
+}
+
+cat << _EOF_
+This list of things is given:<br>
+email:$(show email)<br>
+name:$(show name)<br>
+result:$(show result)<br>
+integralname:$(show integralname)<br>
+Uploaded files:<br>
+$uploads<br>
+Comment:$(show comment)<br>
+_EOF_
+
+
+
+
+
 
 # gzip raw
 
