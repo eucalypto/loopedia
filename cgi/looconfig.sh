@@ -3,7 +3,11 @@ me=papara@mpp.mpg.de
 # dataurl=$baseurl/internal
 datadir=/home/pcl305/members/papara/lootest
 
-umask 027
+umask 022
+# umask 022: rwxr-xr-x
+# umask 027
+
+
 PATH=/usr/local/bin:$PATH
 shopt -s nullglob
 shopt -s nocasematch
