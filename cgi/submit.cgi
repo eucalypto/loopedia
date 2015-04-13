@@ -36,19 +36,24 @@ _EOF_
 
 
 
-sed '
-	/[; ]name=[^;]*.pdf/ s/filename=[^;]*//
-	/filename=/! s/name=[^;]*/file&/
-' raw | ripmime --no-nameless --formdata -i -
-# in sed you can separate commands with a semicolon or a
+# We don't want to change the "raw"-file. Thus sed just processes the
+# file before it is piped to ripmime, which extracts the files from
+# "raw"
+#
+# In sed you can separate commands with a semicolon or a
 # newline. Ripmime saves files with the filenames given in
 # 'filename="..."'. But we want to save them with the
 # 'name="..."'-entry as filename. The first sed command searches for
-# lines with (name="*.pdf") and deletes the string
-# (filename="something"). The second command searches for lines
-# without "filename" and replaces "name" with "filename". We don't
-# want to change the "raw"-file. Thus sed just processes the file
-# before it is piped to ripmime, which extracts the files from "raw"
+# lines with 'form-data; name="someting"'. If a match is found, the
+# sed commands in the curly brackets {} are executed. The first of
+# those removes '; filename="something"'. And the second replaces
+# 'name="..."' with 'filename="..."'.
+sed -n '
+  /form-data; name=[^;]*/ {
+    s/; filename=[^;]*//
+    s/name[^;]/file&/
+  }
+' raw | ripmime --no-nameless --formdata -i -
 
 
 
