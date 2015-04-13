@@ -23,6 +23,9 @@ cd $dir
 
 
 
+# the cgi script gets all data and files through stdin. Here we write
+# it to a file using cat (which if used without arguments reads from
+# stin and writes to stout)
 ( cat << _EOF_
 Content-Type: $CONTENT_TYPE
 Content-Transfer-Encoding: binary
@@ -30,9 +33,6 @@ Content-Transfer-Encoding: binary
 _EOF_
   cat
 ) > raw
-# the cgi script gets all data and files through stdin. Here we write
-# it to a file using cat (which if used without arguments reads from
-# stin and writes to stout)
 
 
 
@@ -58,13 +58,12 @@ sed -n '
 
 
 
-for file in * ; do
-  case "$(file -bi "$file")" in
-  text/plain*)  dos2ux "$file" 2> /dev/null ;;
-  application/x-directory*) continue ;;
-  esac
-  (( "$(stat -c%s "$file")" <= 2 )) && rm -f "$file"
-done
+# This gives read and execute permissions to all files to EVERYONE!!
+# This is only for testing. REMOVE FROM FINAL DRAFT!
+chmod +rx *
+
+
+
 # The case statement checks if a file is a plain textfile. If yes, the
 # file is converted to unix format (without Carriage Return CR).
 # 
@@ -73,17 +72,24 @@ done
 # simple [[ -s file ]] doesn't work and one has to check if the file
 # is larger than 2 bytes. For this the arithmetic evaluation (( )) is
 # used.
+for file in * ; do
+  case "$(file -bi "$file")" in
+  text/plain*)  dos2ux "$file" 2> /dev/null ;;
+  application/x-directory*) continue ;;
+  esac
+  (( "$(stat -c%s "$file")" <= 2 )) && rm -f "$file"
+done
 
 
-
-uploads=$(sed -n '/^Content-Disposition.*filename="[^"]/{
-  s/^.*[; ]name="\([^"]*\).*filename="\([^"]*\).*$/\1 (original name: \2)/
-  p
-}' raw)
 # In sed you can group commands with curly brackets {}. Here it is
 # used to split the sed line into better readable lines. Sed searches
 # for lines with '*filename*' and then analyzes it to pick out the
 # filename and the original filename. Those two are printed.
+uploads=$(sed -n '/^Content-Disposition.*filename="[^"]/{
+  s/^.*[; ]name="\([^"]*\).*filename="\([^"]*\).*$/\1 (original name: \2)/
+  p
+}' raw)
+
 
 
 show() {
@@ -98,11 +104,10 @@ cat << _EOF_
 This list of things is given:<br>
 email:$(show email)<br>
 name:$(show name)<br>
-result:$(show result)<br>
-integralname:$(show integralname)<br>
+institute:$(show Institute)<br>
 Uploaded files:<br>
 $uploads<br>
-Comment:$(show comment)<br>
+Comments:$(show comments)<br>
 _EOF_
 
 
