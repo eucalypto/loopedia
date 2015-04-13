@@ -46,8 +46,10 @@ sed '
 # 'name="..."'-entry as filename. The first sed command searches for
 # lines with (name="*.pdf") and deletes the string
 # (filename="something"). The second command searches for lines
-# without "filename" and replaces "name" with "filename". Now the
-# result of this replacments is piped into ripmime
+# without "filename" and replaces "name" with "filename". We don't
+# want to change the "raw"-file. Thus sed just processes the file
+# before it is piped to ripmime, which extracts the files from "raw"
+
 
 
 
