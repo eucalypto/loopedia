@@ -7,15 +7,20 @@ httpheaders "Integral Submission"
 cd "$datadir"
 
 
-# ids=$(echo *)
-dir=1000
-# for id in $ids ; do
-for id in *; do
-  : $((id >= dir ? dir = id + 1 : 0))
-done
 
+# The following lines look for already existing folders and find the
+# one with the highest number as name (Nmax). Then a new folder is
+# created with Nmax+1 as name. In the arithmetic evaluation the
+# "condition ? true code : false code" is the "ternary operator". If
+# the condition is true, "true code" will be executed. If the
+# condition is false, "false code" is executed.
+dir=1000
+for id in *; do
+  ((id >= dir ? dir = id + 1 : 0))
+done
 mkdir -p $dir/lock
 cd $dir
+
 
 
 ( cat << _EOF_
