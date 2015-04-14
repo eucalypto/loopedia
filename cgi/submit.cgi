@@ -10,10 +10,12 @@ cd "$datadir"
 
 # The following lines look for already existing folders and find the
 # one with the highest number as name (Nmax). Then a new folder is
-# created with Nmax+1 as name. In the arithmetic evaluation the
-# "condition ? true code : false code" is the "ternary operator". If
-# the condition is true, "true code" will be executed. If the
-# condition is false, "false code" is executed.
+# created with Nmax+1 as name. 
+#
+# Bash reminder: In the arithmetic evaluation the "condition ? true
+#  code : false code" is the "ternary operator". If the condition is
+#  true, "true code" will be executed. If the condition is false,
+#  "false code" is executed.
 dir=1000
 for id in *; do
   ((id >= dir ? dir = id + 1 : 0))
@@ -23,9 +25,11 @@ cd $dir
 
 
 
-# the cgi script gets all data and files through stdin. Here we write
-# it to a file using cat (which if used without arguments reads from
-# stin and writes to stout)
+# The cgi script gets all data and files through stdin encoded in mime
+# format. In this step we just write the data into a file "raw" using
+# cat (which if used without arguments reads from stin and writes to
+# stout). Later we will extract the information and files from this
+# "raw" file. But we still keep this file as sort of "backup".
 ( cat << _EOF_
 Content-Type: $CONTENT_TYPE
 Content-Transfer-Encoding: binary
@@ -107,7 +111,7 @@ show() {
 
 
 # Now we give out a list of given data. This will be shown in the
-# browser after one submits his data.
+# browser after the user submits his data.
 cat << _EOF_
 This list of things is given:<br>
 email:$(show email)<br>
