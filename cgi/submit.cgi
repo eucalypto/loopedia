@@ -48,7 +48,7 @@ _EOF_
 # sed commands in the curly brackets {} are executed. The first of
 # those removes '; filename="something"'. And the second replaces
 # 'name="..."' with 'filename="..."'.
-sed -n '
+sed '
   /form-data; name=[^;]*/ {
     s/; filename=[^;]*//
     s/name[^;]/file&/
@@ -81,6 +81,7 @@ for file in * ; do
 done
 
 
+
 # In sed you can group commands with curly brackets {}. Here it is
 # used to split the sed line into better readable lines. Sed searches
 # for lines with '*filename*' and then analyzes it to pick out the
@@ -92,6 +93,9 @@ uploads=$(sed -n '/^Content-Disposition.*filename="[^"]/{
 
 
 
+# The following function takes an argument and searches for a file
+# with that name. If a file is found, its contents will be
+# returned. If no file was found, "(not given)" is returned.
 show() {
   for file in "$@" ; do
     s="(not given)"
@@ -100,11 +104,16 @@ show() {
   done
 }
 
+
+
+# Now we give out a list of given data. This will be shown in the
+# browser after one submits his data.
 cat << _EOF_
 This list of things is given:<br>
 email:$(show email)<br>
 name:$(show name)<br>
-institute:$(show Institute)<br>
+institute:$(show institute)<br>
+Identifier:$(show integral_id)<br>
 Uploaded files:<br>
 $uploads<br>
 Comments:$(show comments)<br>
