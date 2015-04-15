@@ -116,7 +116,8 @@ cat << _EOF_
 This list of things is given:<br>
 email:$(show email)<br>
 name:$(show name)<br>
-institute:$(show institute)<br>
+Institute:$(show institute)<br>
+Literature:$(show literature)<br>
 Identifier:$(show integral_id)<br>
 Uploaded files:<br>
 $uploads<br>
