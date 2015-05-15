@@ -13,7 +13,9 @@ import graph_state
 
 for name_raw in fileinput.input():
     name = name_raw.strip()
-    gs = graph_state.GraphState.from_str(name)
+    edge_property_key = graph_state.PropertyKey(name="color", is_edge_property=True, is_directed=False, externalizer=graph_state.PropertyExternalizer())
+    colored_edges_config = graph_state.PropertiesConfig.create(edge_property_key)
+    gs = colored_edges_config.graph_state_from_str(name)
     nickel_ = str(gs)
 
     if name <> nickel_:
