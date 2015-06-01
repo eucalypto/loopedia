@@ -7,19 +7,24 @@
 #   (((0,), ), ((0, 1), ), ((0, 1), ), ((1,), ))
 
 import sys
+
+sys.path.insert(0, '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/graph_state')
 import graph_state
+import graph_state_property
+import property_lib
 
 
-name = sys.argv[1]
 
-edge_property_key = graph_state.PropertyKey(name="color", is_edge_property=True, is_directed=False, externalizer=graph_state.PropertyExternalizer())
+nickel_raw = sys.argv[1]
 
-colored_edges_config = graph_state.PropertiesConfig.create(edge_property_key)
+colored_edges_config = graph_state.PropertiesConfig.create(graph_state_property.PropertyKey(name="color",is_edge_property=True, is_directed=False, externalizer=property_lib.StringExternalizer()))
 
-gs = colored_edges_config.graph_state_from_str(name)
-nickel_ = str(gs)
+gs_graph = colored_edges_config.graph_state_from_str(nickel_raw)
 
-if name <> nickel_:
-    raise ValueError, "Non mininal nickel index %s, minimal = %s" % (name, nickel_)
+
+
+nickel_ = str(gs_graph)
+if nickel_raw <> nickel_:
+    raise ValueError, "Non mininal nickel index %s, minimal = %s" % (nickel_raw, nickel_)
     
-print gs.edges
+print gs_graph.edges
