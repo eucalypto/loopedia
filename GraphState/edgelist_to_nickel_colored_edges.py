@@ -6,34 +6,45 @@
 # Expected output:
 #   e12|23|3|e|
 
-import graph_state
+
 import sys
-
-
-def main(arg1):
-    edge_property_key = graph_state.PropertyKey(name="color", is_edge_property=True, is_directed=False, externalizer=graph_state.PropertyExternalizer())
-
-    color_config = graph_state.PropertiesConfig.create(edge_property_key)
-
+sys.path.insert(0, '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/graph_state')
+import graph_state
+import graph_state_property
+import property_lib
 
 
 
-    # edges must be an array (?). So we need do process the input string
-    # to get this array. Here eval() is used. CAUTION! This evaluates the
-    # string as python code. VERY DANGEROUS! 
-    edges = eval(arg1)
+def main(edgelist_raw, colorlist_raw):
+    COLORS_CONFIG = graph_state.PropertiesConfig.create(
+                        graph_state_property.PropertyKey(name="Gandalf",
+                        is_edge_property=True, is_directed=False,
+                        externalizer=property_lib.StringExternalizer()))
 
-    graph_state_edges = map(color_config.new_edge, edges)
 
-    diagram = color_config.new_graph_state(graph_state_edges)
+    # edgelist and colorlist have to be arrays. So we need do process
+    # the input strings to get the arrays. Here eval() is
+    # used. 
+    # CAUTION! This evaluates the string as python code. VERY
+    # DANGEROUS!
+    edgelist = eval(edgelist_raw)
+    colorlist = eval(colorlist_raw)
+
+    if len(edgelist) != len(colorlist):
+        raise ValueError, "Number of edges does NOT correspond to number of colorings"
+
+
+    graph_state_edges = []
+    for i in range(0, len(edgelist)):
+        graph_state_edges.append(COLORS_CONFIG.new_edge(edgelist[i],
+                                                        Gandalf=colorlist[i]))
+
+
+    diagram = COLORS_CONFIG.new_graph_state(graph_state_edges)
 
     print(diagram)
 
-    # adjlist = eval(sys.argv[1])
-    # adjlist = map(lambda e: graph_state.Edge(e), adjlist)
-
-    # print graph_state.GraphState(adjlist)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
