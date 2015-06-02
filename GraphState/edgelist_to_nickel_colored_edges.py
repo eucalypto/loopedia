@@ -32,8 +32,8 @@ def main(edgelist_raw, colorlist_raw):
     colorlist = eval(colorlist_raw)
 
     if len(edgelist) != len(colorlist):
-        raise ValueError, "Number of edges does NOT correspond to number"\
-                          "of colorings"
+        raise ValueError("Number of edges does NOT correspond to "
+                         "number of colorings")
 
 
     graph_state_edges = []
