@@ -8,7 +8,8 @@
 
 
 import sys
-sys.path.insert(0, '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/graph_state')
+sys.path.insert(0,
+  '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/graph_state')
 import graph_state
 import graph_state_property
 import property_lib
@@ -31,7 +32,8 @@ def main(edgelist_raw, colorlist_raw):
     colorlist = eval(colorlist_raw)
 
     if len(edgelist) != len(colorlist):
-        raise ValueError, "Number of edges does NOT correspond to number of colorings"
+        raise ValueError, "Number of edges does NOT correspond to number"\
+                          "of colorings"
 
 
     graph_state_edges = []
