@@ -1,12 +1,16 @@
 #! /usr/bin/python
 # This script uses Python 2.7
 
-import graph_state
 import sys
 
-
-
-
+sys.path.insert(0,
+  '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/nickel')
+sys.path.insert(0,
+  '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/graph_state')
+import graph_state
+import graph_state_property
+import property_lib
+import operations_lib
 
 
 
@@ -21,8 +25,8 @@ onepi_gs = simpleconfig.new_graph_state(onepi_edges)
 print "The Nickel Index is:", onepi_gs
 print "The generated edge list is:", onepi_gs.edges
 
-print "Irreducible?:", graph_state.operations_lib.is_1_irreducible(onepi_gs)
-print "Vertex irreducible?:", graph_state.operations_lib.is_vertex_irreducible(onepi_gs)
+print "Irreducible?:", operations_lib.is_1_irreducible(onepi_gs)
+print "Vertex irreducible?:", operations_lib.is_vertex_irreducible(onepi_gs)
 
 print
 
@@ -35,8 +39,8 @@ onepr_gs = simpleconfig.new_graph_state(onepr_edges)
 print "The Nickel Index is:", onepr_gs
 print "The generated edge list is:", onepr_gs.edges
 
-print "Irreducible?:", graph_state.operations_lib.is_1_irreducible(onepr_gs)
-print "Vertex irreducible?:", graph_state.operations_lib.is_vertex_irreducible(onepr_gs)
+print "Irreducible?:", operations_lib.is_1_irreducible(onepr_gs)
+print "Vertex irreducible?:", operations_lib.is_vertex_irreducible(onepr_gs)
 
 print
 
@@ -52,5 +56,5 @@ nonplanar_gs = simpleconfig.new_graph_state(nonplanar_edges)
 
 print nonplanar_gs
 print "edge list:", nonplanar_gs.edges
-print "Irreducible: ", graph_state.operations_lib.is_1_irreducible(nonplanar_gs)
-print "Vertex irreducible: ", graph_state.operations_lib.is_vertex_irreducible(nonplanar_gs)
+print "Irreducible: ", operations_lib.is_1_irreducible(nonplanar_gs)
+print "Vertex irreducible: ", operations_lib.is_vertex_irreducible(nonplanar_gs)
