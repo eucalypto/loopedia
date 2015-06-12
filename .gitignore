@@ -1,4 +1,4 @@
 ## generic files to ignore
 *~
 \#*#
-GraphState/*.pyc
+*.pyc

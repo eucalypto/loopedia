@@ -37,5 +37,5 @@ def neatodraw(gs_object, filename):
         dotfile.write(external_dot_string)
         dotfile.write(dot_edges_string)
     from subprocess import call
-    call(["neato", "-Tpdf", "-Gstart=1", "-Gepsilon=0.000001", "-O", filename])
+    call(["neato", "-Tpdf", "-Gstart=rand", "-Gepsilon=0.000001", "-O", filename])
 
