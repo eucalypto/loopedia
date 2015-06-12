@@ -7,13 +7,11 @@
 #   (((0,), ), ((0, 1), ), ((0, 1), ), ((1,), ))
 
 import sys
-sys.path.insert(0,
-  '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/nickel')
-sys.path.insert(0,
-  '/home/pcl247e/papara/Documents/mycode/GraphState-1.0.6/graph_state')
 import graph_state
-import graph_state_property
-import property_lib
+from graph_state import graph_state_property
+from graph_state import property_lib
+
+
 
 
 nickel_raw = sys.argv[1]

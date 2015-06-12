@@ -1,3 +1,21 @@
+In order to use the python scripts, you have to install
+Graphstate. You can get it from
+https://code.google.com/p/rg-graph/
+and follow the installation manual.
+
+Or with pip:
+python -m pip install --user graphstate
+
+(If you run pip alone without the python command, it may install the
+package for the wrong python version. The package is for python 2.7)
+
+
+
+
+
+
+
+
 Here I will collect my experience with GraphState.
 
 
