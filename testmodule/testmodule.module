@@ -1,0 +1,16 @@
+<?php
+/**
+* @file
+* Module file for starting drupal dev by me.
+*/
+
+/**
+* Implements of hook_init().
+*/
+function testmodule_init() {
+  drupal_set_message('Beware I live!');
+  $testarray = array("hello", 4, " this", "is", "me", 23.4);
+  dpm($testarray);
+}
+
+
