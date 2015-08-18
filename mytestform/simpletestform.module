@@ -55,6 +55,7 @@ function simpletestform_form_validate($form, &$form_state)
   {
     form_set_error('price', t('Price must be a positive number.'));
   }
+  $form_state['rebuild'] = TRUE;
 }
 
 

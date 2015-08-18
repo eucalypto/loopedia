@@ -1,0 +1,73 @@
+<?php
+
+/**
+* @file
+* Module file for my Nickel play module
+*/
+
+
+function nickelplay_menu()
+{
+  $items = array();
+
+  $items['nickelplay'] = array( // this creates a URL that
+                                // will call this form at
+                                // "examples/form-example"
+    'title' => 'Nickel Play Time', //page title
+    'description' => 'A form for playing with nickel indices',
+    'page callback' => 'drupal_get_form',  //this is the function that will
+                                           //be called when the page is
+                                           //accessed.  for a form, use
+                                           //drupal_get_form
+    'page arguments' => array('nickelplay_form'),
+    'access callback' => TRUE
+  );
+
+  return $items;
+}
+
+
+
+function nickelplay_form($form, &$form_state)
+{
+  $form['nickel'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Nickel Index:',
+    '#size' => 100,
+    '#required' => TRUE, //make this field required
+  );
+
+
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click Here!'),
+  );
+
+  return $form;
+}
+
+
+
+function nickelplay_form_validate($form, &$form_state)
+{
+  $nickel_value_given = $form_state['values']['nickel'];
+  $nickel_value_correct = "e11|234" // Correct Nickel Index calculated by script
+
+
+  if ( $nickel_value_given != $nickel_value_correct )
+  {
+    form_set_error('price', t('The given nickel index:"@ni_given" is not correct (minimal). The right Nickel Index is:"@ni_corr".',
+      array(
+        '@ni_given' => $nickel_value_given,
+        '@ni_correct' => $nickel_value_correct,
+      )
+    ));
+  }
+  $form_state['rebuild'] = TRUE;
+}
+
+
+function nickelplay_form_submit($form, &$form_state)
+{
+
+}
