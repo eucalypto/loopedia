@@ -51,16 +51,26 @@ function nickelplay_form($form, &$form_state)
 function nickelplay_form_validate($form, &$form_state)
 {
   $nickel_value_given = $form_state['values']['nickel'];
-  $nickel_value_correct = "e11|234" // Correct Nickel Index calculated by script
+  $exec = "python /home/viktor/loopediatest/sites/default/scripts/minimalnickel.py \"$nickel_value_given\" 2>&1";
+  $nickel_value_correct = trim( shell_exec($exec) ); // Correct Nickel Index
+                          // calculated by script.  trim() was needed here
+                          // because shell_exec() produced one unwanted
+                          // whitespace at the end of the output string
 
 
   if ( $nickel_value_given != $nickel_value_correct )
   {
-    form_set_error('price', t('The given nickel index:"@ni_given" is not correct (minimal). The right Nickel Index is:"@ni_corr".',
+    form_set_error('price', t('The given nickel index:"@ni_given" is not correct (minimal). The right Nickel Index is:"@ni_correct".',
       array(
         '@ni_given' => $nickel_value_given,
         '@ni_correct' => $nickel_value_correct,
       )
+    ));
+  }
+  else
+  {
+    drupal_set_message(t('The Nickel index "@nickel" is correct!',
+      array('@nickel' => $nickel_value_correct)
     ));
   }
   $form_state['rebuild'] = TRUE;
