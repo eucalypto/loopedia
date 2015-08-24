@@ -33,11 +33,20 @@ function nickelplay_menu()
 
 function nickelplay_form($form, &$form_state)
 {
+  $form['html_text'] = array(
+    '#markup' => t('<p>Hello there. You are reading me right now!</p>')
+  );
+
   $form['nickel'] = array(
     '#type' => 'textfield',
     '#title' => 'Nickel Index:',
     '#size' => 100,
     '#required' => TRUE, //make this field required
+  );
+
+  $form['html_text1'] = array(
+    '#markup' => t('<img src="sites/default/files/pictures/test.svg"
+      width="100%" alt="alternaive text">')
   );
 
 
