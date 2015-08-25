@@ -33,6 +33,7 @@ function nickelplay_menu()
 
 function nickelplay_form($form, &$form_state)
 {
+  // This is how you insert HTML into a form:
   $form['html_text'] = array(
     '#markup' => t('<p>Hello there. You are reading me right now!</p>')
   );
@@ -44,11 +45,14 @@ function nickelplay_form($form, &$form_state)
     '#required' => TRUE, //make this field required
   );
 
-  $form['html_text1'] = array(
-    '#markup' => t('<img src="sites/default/files/pictures/test.svg"
-      width="100%" alt="alternaive text">')
-  );
-
+  // dpm($form_state);
+  if (isset($form_state['imagepath']))
+  {
+    $form['html_text1'] = array(
+      '#markup' => t('<img src="'. $form_state['imagepath'] .
+                      ' "alt="alternative text">')
+      );
+  }
 
   $form['submit_button'] = array(
     '#type' => 'submit',
@@ -89,19 +93,18 @@ function nickelplay_form_validate($form, &$form_state)
       array('@nickel' => $nickel_value_correct)
     ));
   }
-  $form_state['rebuild'] = TRUE;
-
 
   // Generate Picture to Nickel Index
-  $generated_image_name = uniqid($nickel_value_correct);
-  dsm($generated_image_name);
-  $relative_image_path = "sites/default/files/tmp"; // this is the temporary
-                                                    // folder of drupal
-  $exec2 = "python ";
+  $image_path = "sites/default/files/tmp/" . uniqid($nickel_value_correct);
+                 // this is the path to the dot file the image (svg) file will
+                 // have an extra ending of ".svg"
+  $script_path = "sites/default/scripts/neato_from_nickel.py";
+  exec(escapeshellcmd("python $script_path $nickel_value_correct $image_path"));
+  $form_state['imagepath'] = $image_path . ".svg";
 }
 
 
 function nickelplay_form_submit($form, &$form_state)
 {
-
+  $form_state['rebuild'] = TRUE;
 }
