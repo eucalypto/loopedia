@@ -13,17 +13,16 @@ function nickelplay_menu()
 {
   $items = array();
 
-  $items['nickelplay'] = array( // this creates a URL that
-                                // will call this form at
-                                // "examples/form-example"
+  $items['nickelplay'] = array( // This creates a URL that
+                                // will call this form at "nickelplay"
     'title' => 'Nickel Play Time', //page title
     'description' => 'A form for playing with nickel indices',
-    'page callback' => 'drupal_get_form',  //this is the function that will
-                                           //be called when the page is
-                                           //accessed.  for a form, use
-                                           //drupal_get_form
+    'page callback' => 'drupal_get_form',  // This is the function that will
+                                           // be called when the page is
+                                           // accessed.  for a form, use
+                                           // drupal_get_form
     'page arguments' => array('nickelplay_form'),
-    'access callback' => TRUE
+    'access callback' => TRUE,
   );
 
   return $items;
@@ -41,7 +40,7 @@ function nickelplay_form($form, &$form_state)
   $form['nickel'] = array(
     '#type' => 'textfield',
     '#title' => 'Nickel Index:',
-    '#size' => 100,
+    '#size' => 60,
     '#required' => TRUE, //make this field required
   );
 
