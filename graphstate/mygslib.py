@@ -16,7 +16,7 @@ def neatodraw(gs_object, filename):
         dotfile.write("graph 1 {\n")
         dotfile.write("node [shape=point];\n")
 
-    
+
         externalcount = 0
         external_dot_string = '{node [shape=plaintext label=""] '
         dot_edges_string = ""
@@ -38,6 +38,5 @@ def neatodraw(gs_object, filename):
         dotfile.write(external_dot_string)
         dotfile.write(dot_edges_string)
     from subprocess import call
-    call(["neato", "-Tpdf", "-Gstart=rand", "-Gepsilon=0.000001",
+    call(["neato", "-Tsvg", "-Gstart=rand", "-Gepsilon=0.000001",
           "-O", filename])
-
