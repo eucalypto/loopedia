@@ -33,8 +33,14 @@ function nickelplay_menu()
 function nickelplay_form($form, &$form_state)
 {
   // This is how you insert HTML into a form:
-  $form['html_text'] = array(
-    '#markup' => t('<p>Hello there. You are reading me right now!</p>')
+  // $form['html_text'] = array(
+  //   '#markup' => t('<p>Hello there. You are reading me right now!</p>')
+  // );
+
+  $form['introduction'] = array(
+    '#type' => 'item',
+    '#title' => t('item tile'),
+    '#description' => t('Hello this is a long sentence. Just kidding. I want to write some text here.'),
   );
 
   $form['selection'] = array(
@@ -95,47 +101,91 @@ function nickelplay_form($form, &$form_state)
 
 function nickelplay_form_validate($form, &$form_state)
 {
-  $nickel_value_given = $form_state['values']['nickel'];
-
-  // When drupal executes a script, it starts in the project path e.g.
-  // /var/www/html/drupal_project/ , where the "sites/" folder is.
-  $exec1 = "python sites/default/scripts/minimalnickel.py " .
-             "\"$nickel_value_given\" 2>&1";
-  $nickel_value_correct = trim( shell_exec($exec1) ); // Correct Nickel Index
-                          // calculated by script.  trim() was needed here
-                          // because shell_exec() produces one unwanted
-                          // whitespace at the end of the output string
-
-  if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
+  if ($form_state['values']['selection'] == 'adjalist')
   {
-    form_set_error('nickel', t("Your nickel index \"$nickel_value_given\" seems to be completely wrong. Please check if it is according to the conventions.") );
-    return 0;
-  }
-  else if ( $nickel_value_given != $nickel_value_correct )
-  {
-    form_set_error('nickel', t('The given nickel index: "@ni_given" is not correct (minimal). Please use the right Nickel index: "@ni_correct".',
-      array(
-        '@ni_given' => $nickel_value_given,
-        '@ni_correct' => $nickel_value_correct,
-      )
+    // Calculate the Nickel index from the given Adjacency List
+    $generated_nickel = trim( shell_exec(
+      "python sites/default/scripts/edgelist_to_nickel.py \"" .
+      $form_state['values']['adjalist'] .
+      "\" 2>&1"
     ));
-    // dsm($form_state);
-    // dsm($form);
+
+
+    // If the script outputs more than one line (nickel index), then there must
+    // have been an error. So if the output $generated_nickel contains a newline
+    // character ("\n" == PHP_EOL), an error is displayed.
+    // http://stackoverflow.com/questions/9437121/how-to-detect-if-a-string-has-a-new-line-break-in-it
+    if (strpos($generated_nickel, PHP_EOL) !== false)
+    {
+      form_set_error('adjalist', t(
+        "There seems to be a problem with your adjacency list."
+      ));
+      return 0;
+    }
+    else
+    {
+      $form_state['values']['nickel'] = $generated_nickel;
+    }
+
+
   }
   else
   {
-    drupal_set_message(t('The Nickel index "@nickel" is correct!',
-      array('@nickel' => $nickel_value_correct)
-    ));
-  }
+    // Check, if given Nickel index is correct.
+
+    $nickel_value_given = $form_state['values']['nickel'];
+
+    // When drupal executes a script, it starts in the project path e.g.
+    // /var/www/html/drupal_project/ , where the "sites/" folder is.
+    $exec1 = "python sites/default/scripts/minimalnickel.py " .
+               "\"$nickel_value_given\" 2>&1";
+    $nickel_value_correct = trim( shell_exec($exec1) ); // Correct Nickel Index
+                            // calculated by script.  trim() was needed here
+                            // because shell_exec() produces one unwanted
+                            // whitespace at the end of the output string
+
+    if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
+    {
+      form_set_error('nickel', t(
+        "Your nickel index \"$nickel_value_given\" seems to be completely " .
+        "wrong. Please check if it is according to the conventions."
+      ));
+      return 0;
+    }
+    elseif ( $nickel_value_given != $nickel_value_correct )
+    {
+      form_set_error('nickel', t('The given nickel index: "@ni_given" is not correct (minimal). Please use the right Nickel index: "@ni_correct".',
+        array(
+          '@ni_given' => $nickel_value_given,
+          '@ni_correct' => $nickel_value_correct,
+        )
+      ));
+      // dsm($form_state);
+      // dsm($form);
+    }
+    else
+    {
+      drupal_set_message(t('The Nickel index "@nickel" is correct!',
+        array('@nickel' => $nickel_value_correct)
+      ));
+    }
+
+  }  // end of checking the Nickel index.
+
+
 
   // Generate Picture to Nickel Index
-  $image_path = "sites/default/files/tmp/" . uniqid($nickel_value_correct);
+  $image_path = "sites/default/files/tmp/" .
+                  uniqid($form_state['values']['nickel']);
                  // this is the path to the dot file the image (svg) file will
                  // have an extra ending of ".svg"
   $script_path = "sites/default/scripts/neato_from_nickel.py";
-  exec(escapeshellcmd("python $script_path $nickel_value_correct $image_path"));
+  exec(escapeshellcmd("python $script_path " .
+                       $form_state['values']['nickel'] .
+                       " $image_path"));
   $form_state['imagepath'] = $image_path . ".svg";
+
+  dpm($form_state);
 }
 
 
