@@ -15,7 +15,7 @@ function nickelplay_menu()
 
   $items['nickelplay'] = array( // This creates a URL that
                                 // will call this form at "nickelplay"
-    'title' => 'Nickel Play Time', //page title
+    'title' => 'Nickel', //page title
     'description' => 'A form for playing with nickel indices',
     'page callback' => 'drupal_get_form',  // This is the function that will
                                            // be called when the page is
