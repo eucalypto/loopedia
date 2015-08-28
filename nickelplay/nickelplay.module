@@ -37,6 +37,12 @@ function nickelplay_form($form, &$form_state)
   //   '#markup' => t('<p>Hello there. You are reading me right now!</p>')
   // );
 
+  $form['guidance'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Help'),
+    '#collapsible' => true,
+  );
+
   $form['introduction'] = array(
     '#type' => 'item',
     '#title' => t('item tile'),
