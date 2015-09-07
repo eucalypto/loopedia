@@ -82,6 +82,7 @@ function nickelplay_form($form, &$form_state)
     '#type' => 'textfield',
     '#title' => 'Adjacency List',
     '#size' => 80,
+    '#maxlength' => 400,
     // '#required' => TRUE,
 
     // Only show this filed if "adjacency list" was selected.
@@ -120,17 +121,34 @@ function nickelplay_form($form, &$form_state)
 }
 
 
-
+/**
+ * Implements hook_form_validate().
+ *
+ * This is where the validation of the entries happens.
+ */
 function nickelplay_form_validate($form, &$form_state)
 {
   if ($form_state['values']['selection'] == 'adjalist')
   {
-    // Calculate the Nickel index from the given Adjacency List
-    $generated_nickel = trim( shell_exec(
-      "python sites/default/scripts/edgelist_to_nickel.py \"" .
-      $form_state['values']['adjalist'] .
-      "\" 2>&1"
+    // Begin of the check of the given adjacency list
+
+    // Check if the given adjacency list string contains forbidden characters.
+    // Allowed ones are ",", "-", "[", "]", "0-9", " "
+    if (preg_match('/^[,\[\]0-9\s-]*$/', $form_state['values']['adjalist']) !== 1)
+    {
+      form_set_error('adjalist', t(
+      'Your adjacency list seems to contain not allowed characters. The allowed ones are: "[comma]", "-", "[", "]", "0-9", "[whitespace]"'
     ));
+    }
+
+
+
+    // Calculate the Nickel index from the given Adjacency List
+    $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
+              escapeshellarg($form_state['values']['adjalist']) .
+              " 2>&1";
+    $generated_nickel = trim(shell_exec($exec0));
+
 
 
     // If the script outputs more than one line (nickel index), then there must
@@ -149,41 +167,60 @@ function nickelplay_form_validate($form, &$form_state)
       $form_state['values']['nickel'] = $generated_nickel;
     }
 
-
+    // End of check of the given adjacency list.
   }
   else
   {
-    // Check, if given Nickel index is correct.
-
+    // Begin of checking of the given nickel index.
     $nickel_value_given = $form_state['values']['nickel'];
+
+    // Check the formal structure of the given index: it shall only contain "e",
+    // "0-9" and "|".
+    if (preg_match('/^[e0-9\|]*$/', $nickel_value_given) !== 1)
+    {
+      form_set_error('nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "|".'));
+    }
+
+
+    // Check, if given Nickel index is correct(minimal).
 
     // When drupal executes a script, it starts in the project path e.g.
     // /var/www/html/drupal_project/ , where the "sites/" folder is.
     $exec1 = "python sites/default/scripts/minimalnickel.py " .
-               "\"$nickel_value_given\" 2>&1";
-    $nickel_value_correct = trim( shell_exec($exec1) ); // Correct Nickel Index
+               escapeshellarg($nickel_value_given) .
+               " 2>&1";
+    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel Index
                             // calculated by script.  trim() was needed here
                             // because shell_exec() produces one unwanted
                             // whitespace at the end of the output string
 
+
     if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
     {
+      // GraphState outputs a (long) error message if the nickel string argument
+      // is wrong according to the convention. So if the output of the script
+      // has not the same length as the given nickel string, something went
+      // wrong.
+
       form_set_error('nickel', t(
-        "Your nickel index \"$nickel_value_given\" seems to be completely " .
-        "wrong. Please check if it is according to the conventions."
+        'Your nickel index "@ni_given" seems to be wrong. Please check if it is according to the conventions.',
+        array(
+        '@ni_given' => $nickel_value_given,
+        )
       ));
       return 0;
     }
     elseif ( $nickel_value_given != $nickel_value_correct )
     {
+      // If the given string has the same length as the outupt but is not equal,
+      // then the given nickel index is not minimal.
+
       form_set_error('nickel', t('The given nickel index: "@ni_given" is not correct (minimal). Please use the right Nickel index: "@ni_correct".',
         array(
           '@ni_given' => $nickel_value_given,
           '@ni_correct' => $nickel_value_correct,
         )
       ));
-      // dsm($form_state);
-      // dsm($form);
     }
     else
     {
@@ -192,8 +229,8 @@ function nickelplay_form_validate($form, &$form_state)
       ));
     }
 
-  }  // end of checking the Nickel index.
-
+    // End of checking the Nickel index.
+  }
 
 
   // Generate Picture to Nickel Index
