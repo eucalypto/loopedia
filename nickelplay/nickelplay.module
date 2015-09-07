@@ -43,10 +43,16 @@ function nickelplay_form($form, &$form_state)
     '#collapsible' => true,
   );
 
-  $form['introduction'] = array(
+  $form['guidance']['adjalist'] = array(
     '#type' => 'item',
-    '#title' => t('item tile'),
-    '#description' => t('Hello this is a long sentence. Just kidding. I want to write some text here.'),
+    '#title' => t('Adjacency List'),
+    '#description' => t('An adjacency list is a list of connections between vertices. Please label the vertices after a non-negative integers (0, 1, 3, 23, ...). And external "vertices" are labelled with a "-1".<br> An example of an adjacency list would be "[-1, 1], [1, 2], [1, 2], [1, 2], [2, -1]" for the Sunrise diagram.'),
+  );
+
+  $form['guidance']['nickel'] = array(
+    '#type' => 'item',
+    '#title' => t('Nickel Index'),
+    '#description' => t('A Nickel Index is a string consisting of several parts. Each part is closed with a "|" (vertical bar)')
   );
 
   $form['selection'] = array(
@@ -89,6 +95,16 @@ function nickelplay_form($form, &$form_state)
   // dpm($form_state);
   if (isset($form_state['imagepath']))
   {
+    if ($form_state['values']['selection'] == 'adjalist')
+    {
+      $form['calculatednickel'] = array(
+        '#type' => 'item',
+        '#title' => t('Correspondung Nickel Index: "@nickel"', array(
+          '@nickel' => $form_state['values']['nickel'],
+        )),
+      );
+    }
+
     $form['html_text1'] = array(
       '#markup' => t('<img src="'. $form_state['imagepath'] .
                       ' "alt="alternative text">')
