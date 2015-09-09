@@ -160,7 +160,6 @@ function nickelplay_form_validate($form, &$form_state)
       form_set_error('adjalist', t(
         "There seems to be a problem with your adjacency list."
       ));
-      return 0;
     }
     else
     {
@@ -208,7 +207,6 @@ function nickelplay_form_validate($form, &$form_state)
         '@ni_given' => $nickel_value_given,
         )
       ));
-      return 0;
     }
     elseif ( $nickel_value_given != $nickel_value_correct )
     {
@@ -233,22 +231,28 @@ function nickelplay_form_validate($form, &$form_state)
   }
 
 
+}
+
+/**
+ * Implements hook_form_submit()
+ *
+ * Here is everything that is not just validation of the user input.
+ */
+function nickelplay_form_submit($form, &$form_state)
+{
   // Generate Picture to Nickel Index
   $image_path = "sites/default/files/tmp/" .
                   uniqid($form_state['values']['nickel']);
                  // this is the path to the dot file the image (svg) file will
                  // have an extra ending of ".svg"
   $script_path = "sites/default/scripts/neato_from_nickel.py";
-  exec(escapeshellcmd("python $script_path " .
-                       $form_state['values']['nickel'] .
-                       " $image_path"));
+  $exec2 = escapeshellcmd("python $script_path " .
+                           $form_state['values']['nickel'] .
+                           " $image_path");
+  exec($exec2);
   $form_state['imagepath'] = $image_path . ".svg";
 
-  dpm($form_state);
-}
+  drupal_set_message('This should only appear when no error is given!<br />' . $exec2);
 
-
-function nickelplay_form_submit($form, &$form_state)
-{
   $form_state['rebuild'] = TRUE;
 }
