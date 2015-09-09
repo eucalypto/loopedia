@@ -41,6 +41,7 @@ function nickelplay_form($form, &$form_state)
     '#type' => 'fieldset',
     '#title' => t('Help'),
     '#collapsible' => true,
+    '#collapsed' => true,
   );
 
   $form['guidance']['adjalist'] = array(
@@ -52,7 +53,7 @@ function nickelplay_form($form, &$form_state)
   $form['guidance']['nickel'] = array(
     '#type' => 'item',
     '#title' => t('Nickel Index'),
-    '#description' => t('A Nickel Index is a string consisting of several parts. Each part is closed with a "|" (vertical bar)')
+    '#description' => t('A Nickel Index is a string consisting of several parts. Each part is closed with a "|" (vertical bar) and describes one vertex. The vertices are numbered the programmer\'s style: the first one gets the number zero (0) and so on. So the first part of the nickel index lists the vertices that are connected to the first (0) vertex -- external connections are denoted with "e". The second part lists all connections of the second (1) vertex except the previous established connections with the first vertex. This goes on. In each part only new connections (lines) are written down such that in the whole nickel string every line is denoted by exactly one character (number or "e"). <br />Now by permuting the vertex numbers one can find a particular "minimal" index. This is called the (true) Nickel Index. This Nickel Index is explained in more detail in the paper of <a href="@batkov-arxiv">Batkovich et al.</a> As an example the Nickel Index of the sunrise diagram woud be "e111|e|".', array('@batkov-arxiv' => 'http://arxiv.org/abs/1409.8227')),
   );
 
   $form['selection'] = array(
@@ -252,7 +253,7 @@ function nickelplay_form_submit($form, &$form_state)
   exec($exec2);
   $form_state['imagepath'] = $image_path . ".svg";
 
-  drupal_set_message('This should only appear when no error is given!<br />' . $exec2);
+  // drupal_set_message('This should only appear when no error is given!<br />' . $exec2);
 
   $form_state['rebuild'] = TRUE;
 }
