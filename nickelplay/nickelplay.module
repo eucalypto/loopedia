@@ -47,13 +47,18 @@ function nickelplay_form($form, &$form_state)
   $form['guidance']['adjalist'] = array(
     '#type' => 'item',
     '#title' => t('Adjacency List'),
-    '#description' => t('An adjacency list is a list of connections between vertices. Please label the vertices after a non-negative integers (0, 1, 3, 23, ...). And external "vertices" are labelled with a "-1".<br> An example of an adjacency list would be "[-1, 1], [1, 2], [1, 2], [1, 2], [2, -1]" for the Sunrise diagram.'),
+    '#description' => t(
+      'An adjacency list is a list of connections between vertices. Please label the vertices after a non-negative integers (0, 1, 3, 23, ...). And <strong>all</strong> external legs are labelled with the <strong>same</strong> "-1". Please <strong>don\'t</strong> use "-2", "-3" and so on.<br> An example of an adjacency list would be "[-1, 1], [1, 2], [1, 2], [1, 2], [2, -1]" for the Sunrise diagram.'
+    ),
   );
 
   $form['guidance']['nickel'] = array(
     '#type' => 'item',
     '#title' => t('Nickel Index'),
-    '#description' => t('A Nickel Index is a string consisting of several parts. Each part is closed with a "|" (vertical bar) and describes one vertex. The vertices are numbered the programmer\'s style: the first one gets the number zero (0) and so on. So the first part of the nickel index lists the vertices that are connected to the first (0) vertex -- external connections are denoted with "e". The second part lists all connections of the second (1) vertex except the previous established connections with the first vertex. This goes on. In each part only new connections (lines) are written down such that in the whole nickel string every line is denoted by exactly one character (number or "e"). <br />Now by permuting the vertex numbers one can find a particular "minimal" index. This is called the (true) Nickel Index. This Nickel Index is explained in more detail in the paper of <a href="@batkov-arxiv">Batkovich et al.</a> As an example the Nickel Index of the sunrise diagram woud be "e111|e|".', array('@batkov-arxiv' => 'http://arxiv.org/abs/1409.8227')),
+    '#description' => t(
+      'A Nickel Index is a string consisting of several parts. For <strong>each</strong> vertex there exists one part which <em>must</em> be closed with a vertical bar "|". The vertices are numbered the programmer\'s style: the first one gets the number zero (0) and so on. So the first part of the nickel index lists the vertices that are connected to the first (0) vertex -- external connections are denoted with "e". The second part lists all connections of the second (1) vertex except the previous established connections with the first vertex. This goes on. In each part only new connections (lines) are written down such that in the whole nickel string every line is denoted by exactly one character (number or "e"). <br />Now by permuting the vertex numbers one can find a particular "minimal" index. This is called the (true) Nickel Index. This Nickel Index is explained in more detail in the paper of <a href="@batkov-arxiv">Batkovich et al.</a> As an example the Nickel Index of the sunrise diagram woud be "<strong>e111|e|</strong>".<br>As another example consider the following Nickel index: "<strong>e123|e23|e3||</strong>". This diagram has four vertices. Thus there are four parts in the Nickel index closed off with a vertical bar | including the last one, which contains no <em>new</em> connections.',
+    array('@batkov-arxiv' => 'http://arxiv.org/abs/1409.8227')
+    ),
   );
 
   $form['selection'] = array(
@@ -214,7 +219,7 @@ function nickelplay_form_validate($form, &$form_state)
       // If the given string has the same length as the outupt but is not equal,
       // then the given nickel index is not minimal.
 
-      form_set_error('nickel', t('The given nickel index: "@ni_given" is not correct (minimal). Please use the right Nickel index: "@ni_correct".',
+      form_set_error('nickel', t('The given nickel index: "@ni_given" is not correct (minimal). Please use the right (minimal) Nickel index: <strong>"@ni_correct"</strong>.',
         array(
           '@ni_given' => $nickel_value_given,
           '@ni_correct' => $nickel_value_correct,
