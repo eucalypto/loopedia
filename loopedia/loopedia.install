@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Implements hook_install().
+ *
+ * This is taken from
+ * http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
+ */
+function loopedia_install()
+{
+  $new_vocab = (object) array(
+    'name' => 'My custom vocabulary',
+    'description' => 'This vocabulary has a special purpose',
+    'machine_name' => 'my_custom_vocab',
+  );
+
+  taxonomy_vocabulary_save($new_vocab);
+
+  $vocab = taxonomy_vocabulary_machine_name_load('my_custom_vocab');
+
+  $term1 = (object) array(
+   'name' => 'Term 1',
+   'description' => 'This is term 1',
+   'vid' => $vocab->vid,
+  );
+
+  taxonomy_term_save($term1);
+}
+
+
+
+/**
+* Implements hook_uninstall().
+*/
+function loopedia_uninstall()
+{
+  $vocab = taxonomy_vocabulary_machine_name_load('my_custom_vocab');
+  taxonomy_vocabulary_delete($vocab->vid);
+}
