@@ -1,0 +1,65 @@
+<?php
+
+/**
+* @file
+* Module file for my first test form
+*/
+
+
+function simpletestform_menu()
+{
+  $items = array();
+
+  $items['myexamples/myformexample'] = array( // this creates a URL that
+                                              // will call this form at
+                                              // "examples/form-example"
+    'title' => 'My Example form', //page title
+    'description' => 'A form to mess around with.',
+    'page callback' => 'drupal_get_form',  //this is the function that will
+                                           //be called when the page is
+                                           //accessed.  for a form, use
+                                           //drupal_get_form
+    'page arguments' => array('simpletestform_form'),
+    'access callback' => TRUE
+  );
+
+  return $items;
+}
+
+
+
+function simpletestform_form($form, &$form_state)
+{
+  $form['price'] = array(
+    '#type' => 'textfield',
+    '#title' => 'What is your Price?',
+    '#size' => 10,
+    '#maxlength' => 10,
+    '#required' => TRUE, //make this field required
+  );
+
+
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click Here!'),
+  );
+
+  return $form;
+}
+
+
+
+function simpletestform_form_validate($form, &$form_state)
+{
+  if (!($form_state['values']['price'] > 0))
+  {
+    form_set_error('price', t('Price must be a positive number.'));
+  }
+  $form_state['rebuild'] = TRUE;
+}
+
+
+function simpletestform_form_submit($form, &$form_state)
+{
+
+}

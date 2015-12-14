@@ -1,0 +1,62 @@
+Here are the points, that I have to figure out in Drupal:
+
+-> Where are Pictures (jpg, and possible files like pdf) stored?
+
+     They are Stored in /var/www/html/mysite/sites/default/files/
+
+
+-> Revision of Project / Backups:
+
+     You can just make a git repository of /var/www/html/mysite/sites/
+     There is already a .gitignore file that excludes the "files"
+     folder from being tracked. Not many changes are made here,
+     howewer. Most of the configurations and content is stored in the
+     database.
+
+     To make a backup of the database you can use drush:
+     ~$ drush cc all  
+     ~$ drush sql-dump --ordered-dump > ~/my-sql-dump-file-name.sql    
+
+     The first line clears the caches of drupal and the second one
+     dumps the database into the given sql-file.
+
+     Now to import the sql file you have to use the following
+     commands:
+     ~$ drush sql-drop           # this deletes the current drupal 
+                                 # database
+     ~$ drush sql-cli < /path/to/my-sql-dump-file-name.sql
+
+     voila.
+
+-> Revision of Content in Drupal:
+
+   After creation our content can be changed. We want to keep track of
+   these changes. Firstly you can turn on revisioning for a content
+   type in structure > content types > mycontent > (edit) > publishing
+   options. This way the system keeps revisioning snapshots of the
+   content each time it is updated.
+
+   Then there is a Module named Diff, which shows differcneces between
+   revision snapshots as a normal text diff.
+
+
+-> Installing Drush:
+
+   https://www.drupal.org/project/drush   
+
+
+-> Setting up Drupal with drush
+   
+   set up mysql user and database:
+   ~$ mysql -u root -p
+   mysql> CREATE USER 'wernerheisenberg'@'localhost' IDENTIFIED BY 'iwouldnevertortureacat';
+   mysql> CREATE DATABASE loopedia_drupal_test;
+   mysql> GRANT ALL PRIVILEGES ON loopedia_drupal_test.* TO 'wernerheisenberg'@'localhost';
+   mysql> exit;
+   ~$ cd /to/your/site/
+   ~$ drush dl drupal-7.x
+   ~$ (rename generated drupal-7.x_dev/ folder into loopedia/)
+   in browser: localhost/loopedia -> rest of configuration
+
+
+-> What fields should my content type "integral" store?

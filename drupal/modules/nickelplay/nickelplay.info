@@ -1,0 +1,5 @@
+name = Nickel Play Time
+description = This module defines a form with which people can generate nickel indices and graphs
+core = 7.x
+
+version = 7.x-0.0
