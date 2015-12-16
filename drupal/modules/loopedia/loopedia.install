@@ -1,36 +1,73 @@
 <?php
 
 /**
- * Implements hook_install().
+ * Implements hook_enable().
  *
  * This is taken from
  * http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
+ * I saved this site in "loopedia_reference_collection/web_pages/How to
+ * Create Taxonomy Vocabularies and Terms Programatically in Drupal 7.pdf".
+ * This Text uses the hook_install() to save the vocabulary; but we want
+ * to be able to update the vocabulary after installation. This is why
+ * we used the hook_enable(); we just have to update this code and
+ * disable und enable the module.
  */
-function loopedia_install()
+function loopedia_enable()
 {
-  $new_vocab = (object) array(
-    'name' => 'My custom vocabulary',
-    'description' => 'This vocabulary has a special purpose',
-    'machine_name' => 'my_custom_vocab',
-  );
+  // Loopedia test Vocabulary:
+  //
+  $new_vocab = new stdClass();
+  $new_vocab->name = 'Loopedia Test Vocabulary';
+  $new_vocab->description = 'This vocabulary has a special purpose.';
+  $new_vocab->machine_name = 'loopedia_test_vocabulary';
 
+  // The following part checks if the vocabulary already exists. If it
+  // finds an existing machine name it sets the corresponding vid. This
+  // "vid" has to be set if we want to update a vocabulary (and not
+  // create a new one).
+  // https://api.drupal.org/api/drupal/modules!taxonomy!taxonomy.module/function/taxonomy_vocabulary_save/7
+  //
+  $vocab_temp = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
+  if ($vocab_temp != FALSE) {
+    $new_vocab->vid = $vocab_temp->vid;
+  }
+
+  // Now we can give our newly created vocabulary object "new_vocab" to
+  // the save function. This function only accepts (class) objects as
+  // arguments; not arrays.
   taxonomy_vocabulary_save($new_vocab);
 
-  $vocab = taxonomy_vocabulary_machine_name_load('my_custom_vocab');
+
+
+  // Here, we define the terms of our vocabulary
+
+  $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
+  $existing_terms = taxonomy_get_tree($vocab->vid);
 
   $term1 = (object) array(
    'name' => 'Term 1',
    'description' => 'This is term 1',
    'vid' => $vocab->vid,
   );
-
   taxonomy_term_save($term1);
+
+  $term2 = (object) array(
+    'name' => 'MyTerm 2',
+    'description' => t('This is my term 2.'),
+    'vid' => $vocab->vid,
+  );
+  taxonomy_term_save($term2);
+
+
 }
 
 
 
 /**
 * Implements hook_uninstall().
+*
+* This function is called when we uninstall the module. It deletes the
+* vocabulary.
 */
 function loopedia_uninstall()
 {
