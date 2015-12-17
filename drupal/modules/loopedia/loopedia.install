@@ -44,12 +44,22 @@ function loopedia_enable()
   $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
   $existing_terms = taxonomy_get_tree($vocab->vid);
 
-  $term1 = (object) array(
-   'name' => 'Term 1',
-   'description' => 'This is term 1',
-   'vid' => $vocab->vid,
-  );
+  $termname = 'Term 1';
+  $term1 = new stdClass();
+  $term1->name = $termname;
+  $term1->description = 'This is term 1';
+  $term1->vid = $vocab->vid;
+  foreach ($existing_terms as $term)
+  {
+    if ($term->name == $termname)
+    {
+      $term1->tid = $term->tid;
+    }
+  }
   taxonomy_term_save($term1);
+
+
+
 
   $term2 = (object) array(
     'name' => 'MyTerm 2',
@@ -71,6 +81,6 @@ function loopedia_enable()
 */
 function loopedia_uninstall()
 {
-  $vocab = taxonomy_vocabulary_machine_name_load('my_custom_vocab');
+  $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
   taxonomy_vocabulary_delete($vocab->vid);
 }
