@@ -1,6 +1,82 @@
 <?php
 
 /**
+ * Saves vocabulary
+ *
+ * This function is used to save a (new) vocabulary. If a vocabulary
+ * with the same machine name already exists, it is updated.
+ *
+ * The three parameter variables are expected to be strings.
+ *
+ * We will use this function in hook_enable()
+ */
+function loopedia_save_or_update_vocabulary($name, $machine_name, $description)
+{
+  $new_vocab = new stdClass();
+  $new_vocab->name = $name;
+  $new_vocab->machine_name = $machine_name;
+  $new_vocab->description = $description;
+
+  // The following part checks if the vocabulary already exists. If it
+  // finds an existing machine name it sets the corresponding vid. This
+  // "vid" has to be set if we want to update a vocabulary (and not
+  // create a new one).
+  // https://api.drupal.org/api/drupal/modules!taxonomy!taxonomy.module/function/taxonomy_vocabulary_save/7
+  //
+  $vocab_temp = taxonomy_vocabulary_machine_name_load($machine_name);
+  if ($vocab_temp != FALSE) {
+    $new_vocab->vid = $vocab_temp->vid;
+  }
+
+  // Now we can give our newly created vocabulary object "new_vocab" to
+  // the save function. This function only accepts (class) objects as
+  // arguments; not arrays.
+  taxonomy_vocabulary_save($new_vocab);
+}// end of function loopedia_save_or_update_vocabulary()
+
+
+
+
+
+/**
+ * Saves or updates an array of taxonomy terms.
+ *
+ * @param array $terms_def
+ *   The definitions of new terms in an array (see code, weher this
+ *   function is used)
+ *
+ * @param string $vocab_machine_name
+ *   The vocabulary machine name.
+ */
+function loopedia_save_or_update_taxonomy_terms($terms_def, $vocab_machine_name)
+{
+
+  $vocab = taxonomy_vocabulary_machine_name_load($vocab_machine_name);
+  $existing_terms = taxonomy_get_tree($vocab->vid);
+
+  foreach ($terms_def as $term)
+  {
+    $term_new = new stdClass();
+    $term_new->name = $term['name'];
+    $term_new->description = $term['description'];
+    $term_new->vid = $vocab->vid;
+    foreach ($existing_terms as $term_e)
+    {
+      if ($term_e->name == $term['name'])
+      {
+        $term_new->tid = $term_e->tid;
+      }
+    }
+    taxonomy_term_save($term_new);
+  }
+
+}// end of function loopedia_save_or_update_taxonomy_terms()
+
+
+
+
+
+/**
  * Implements hook_enable().
  *
  * This is taken from
@@ -10,66 +86,43 @@
  * This Text uses the hook_install() to save the vocabulary; but we want
  * to be able to update the vocabulary after installation. This is why
  * we used the hook_enable(); we just have to update this code and
- * disable und enable the module.
+ * disable and (re-)enable the module.
  */
 function loopedia_enable()
 {
   // Loopedia test Vocabulary:
   //
-  $new_vocab = new stdClass();
-  $new_vocab->name = 'Loopedia Test Vocabulary';
-  $new_vocab->description = 'This vocabulary has a special purpose.';
-  $new_vocab->machine_name = 'loopedia_test_vocabulary';
-
-  // The following part checks if the vocabulary already exists. If it
-  // finds an existing machine name it sets the corresponding vid. This
-  // "vid" has to be set if we want to update a vocabulary (and not
-  // create a new one).
-  // https://api.drupal.org/api/drupal/modules!taxonomy!taxonomy.module/function/taxonomy_vocabulary_save/7
-  //
-  $vocab_temp = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
-  if ($vocab_temp != FALSE) {
-    $new_vocab->vid = $vocab_temp->vid;
-  }
-
-  // Now we can give our newly created vocabulary object "new_vocab" to
-  // the save function. This function only accepts (class) objects as
-  // arguments; not arrays.
-  taxonomy_vocabulary_save($new_vocab);
-
+  // ..save_or_update_vocabulary($name, $machine_name, $description)
+  loopedia_save_or_update_vocabulary(
+    'Loopedia Test Vocabulary',
+    'loopedia_test_vocabulary',
+    'This vocabulary has a special purpose.'
+  );
 
 
   // Here, we define the terms of our vocabulary
-
-  $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
-  $existing_terms = taxonomy_get_tree($vocab->vid);
-
-  $termname = 'Term 1';
-  $term1 = new stdClass();
-  $term1->name = $termname;
-  $term1->description = 'This is term 1';
-  $term1->vid = $vocab->vid;
-  foreach ($existing_terms as $term)
-  {
-    if ($term->name == $termname)
-    {
-      $term1->tid = $term->tid;
-    }
-  }
-  taxonomy_term_save($term1);
-
-
-
-
-  $term2 = (object) array(
-    'name' => 'MyTerm 2',
-    'description' => t('This is my term 2.'),
-    'vid' => $vocab->vid,
+  $terms_def = array(
+    array(
+      'name' => 'Term 1',
+      'description' => 'This is term 1.',
+    ),
+    array(
+      'name' => 'Term 2',
+      'description' => 'This is term 2.',
+    ),
+    array(
+      'name' => 'Term 3',
+      'description' => 'This is term 3.',
+    ),
   );
-  taxonomy_term_save($term2);
+
+  loopedia_save_or_update_taxonomy_terms(
+    $terms_def,
+    'loopedia_test_vocabulary'
+  );
 
 
-}
+}// end of function loopedia_enable()
 
 
 
