@@ -55,6 +55,13 @@ function simpletestform_form_validate($form, &$form_state)
   {
     form_set_error('price', t('Price must be a positive number.'));
   }
+
+  $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
+  $existing_terms = taxonomy_get_tree($vocab->vid);
+  dpm($vocab);
+  dpm($existing_terms);
+
+  drupal_set_message(t('Your price was @price', array('@price' => $form_state['values']['price'])));
   $form_state['rebuild'] = TRUE;
 }
 
