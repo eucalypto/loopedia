@@ -10,7 +10,7 @@
  *
  * We will use this function in hook_enable()
  */
-function loopedia_save_or_update_vocabulary($name, $machine_name, $description)
+function _loopedia_save_or_update_vocabulary($name, $machine_name, $description)
 {
   $new_vocab = new stdClass();
   $new_vocab->name = $name;
@@ -48,7 +48,7 @@ function loopedia_save_or_update_vocabulary($name, $machine_name, $description)
  * @param string $vocab_machine_name
  *   The vocabulary machine name.
  */
-function loopedia_save_or_update_taxonomy_terms($terms_def, $vocab_machine_name)
+function _loopedia_save_or_update_taxonomy_terms($terms_def, $vocab_machine_name)
 {
 
   $vocab = taxonomy_vocabulary_machine_name_load($vocab_machine_name);
@@ -93,7 +93,7 @@ function loopedia_enable()
   // Loopedia test Vocabulary:
   //
   // ..save_or_update_vocabulary($name, $machine_name, $description)
-  loopedia_save_or_update_vocabulary(
+  _loopedia_save_or_update_vocabulary(
     'Loopedia Test Vocabulary',
     'loopedia_test_vocabulary',
     'This vocabulary has a special purpose.'
@@ -116,7 +116,7 @@ function loopedia_enable()
     ),
   );
 
-  loopedia_save_or_update_taxonomy_terms(
+  _loopedia_save_or_update_taxonomy_terms(
     $terms_def,
     'loopedia_test_vocabulary'
   );
