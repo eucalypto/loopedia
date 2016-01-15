@@ -14,15 +14,15 @@ Here are the points, that I have to figure out in Drupal:
      database.
 
      To make a backup of the database you can use drush:
-     ~$ drush cc all  
-     ~$ drush sql-dump --ordered-dump > ~/my-sql-dump-file-name.sql    
+     ~$ drush cc all
+     ~$ drush sql-dump --ordered-dump > ~/my-sql-dump-file-name.sql
 
      The first line clears the caches of drupal and the second one
      dumps the database into the given sql-file.
 
      Now to import the sql file you have to use the following
      commands:
-     ~$ drush sql-drop           # this deletes the current drupal 
+     ~$ drush sql-drop           # this deletes the current drupal
                                  # database
      ~$ drush sql-cli < /path/to/my-sql-dump-file-name.sql
 
@@ -42,11 +42,11 @@ Here are the points, that I have to figure out in Drupal:
 
 -> Installing Drush:
 
-   https://www.drupal.org/project/drush   
+   https://www.drupal.org/project/drush
 
 
 -> Setting up Drupal with drush
-   
+
    set up mysql user and database:
    ~$ mysql -u root -p
    mysql> CREATE USER 'wernerheisenberg'@'localhost' IDENTIFIED BY 'iwouldnevertortureacat';
@@ -60,3 +60,13 @@ Here are the points, that I have to figure out in Drupal:
 
 
 -> What fields should my content type "integral" store?
+
+
+
+
+2016-01-14: I used the drupal module "features" to define a custom node
+type and export it to a module. This module is in
+/drupal/modules/integral_feature.
+
+I also copied the node example module from the examples-module to
+/doc/drupal/node_example_original/

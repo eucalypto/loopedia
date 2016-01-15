@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the integral_feature feature.
+ */
+
+include_once 'integral_feature.features.inc';
