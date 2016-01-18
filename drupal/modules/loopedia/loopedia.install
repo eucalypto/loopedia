@@ -26,7 +26,10 @@ function loopedia_enable()
 
   // Custom content type loopedia_integral:
   node_types_rebuild();
-  _loopedia_update_custom_fields();
+  _loopedia_update_custom_fields(
+    _loopedia_integral_installed_fields(),
+    _loopedia_integral_installed_instances()
+  );
 }
 // end of hook_enable()
 
@@ -39,7 +42,10 @@ function loopedia_enable()
 function loopedia_install() {
   // Custom node type and its fields:
   node_types_rebuild();
-  _loopedia_create_custom_fields();
+  _loopedia_create_custom_fields(
+    _loopedia_integral_installed_fields(),
+    _loopedia_integral_installed_instances()
+  );
 }
 
 
@@ -79,7 +85,7 @@ function loopedia_uninstall()
 
 
 /**
- * Saves vocabulary
+ * Saves or updates vocabulary.
  *
  * This function is used to save a (new) vocabulary. If a vocabulary
  * with the same machine name already exists, it is updated.
@@ -172,16 +178,24 @@ function _loopedia_save_or_update_taxonomy_terms($voc)
 
 
 /**
- * Creates custom fields and instances
+ * Creates custom fields and instances.
+ *
+ * @param array $fields_def
+ *   An array defining the fields. For example
+ *   _loopedia_integral_installed_fields() returns such an array.
+ *
+ * @param array $field_instances_def
+ *   An array defining the field instances. For example
+ *   _loopedia_integral_installed_instances() returns such an array.
  */
- function _loopedia_create_custom_fields()
+ function _loopedia_create_custom_fields($fields_def, $field_instances_def)
  {
-   foreach (_loopedia_integral_installed_fields() as $field)
+   foreach ($fields_def as $field)
    {
      field_create_field($field);
    }
 
-   foreach (_loopedia_integral_installed_instances() as $instance)
+   foreach ($field_instances_def as $instance)
    {
     field_create_instance($instance);
    }
@@ -189,16 +203,24 @@ function _loopedia_save_or_update_taxonomy_terms($voc)
 
 
  /**
-  * Uptades custom fields and instances
+  * Uptades custom fields and instances.
+  *
+  * @param array $fields_def
+  *   An array defining the fields. For example
+  *   _loopedia_integral_installed_fields() returns such an array.
+  *
+  * @param array $field_instances_def
+  *   An array defining the field instances. For example
+  *   _loopedia_integral_installed_instances() returns such an array.
   */
-  function _loopedia_update_custom_fields()
+  function _loopedia_update_custom_fields($fields_def, $field_instances_def)
   {
-    foreach (_loopedia_integral_installed_fields() as $field)
+    foreach ($fields_def as $field)
     {
       field_update_field($field);
     }
 
-    foreach (_loopedia_integral_installed_instances() as $instance)
+    foreach ($field_instances_def as $instance)
     {
       field_update_instance($instance);
     }
@@ -219,9 +241,10 @@ function _loopedia_save_or_update_taxonomy_terms($voc)
 // Taxonomy:
 
 /**
- * Defines the vocabularies (including terms) for our taxonomy
+ * Defines the vocabularies (including terms) for our taxonomy.
  *
  * @return array $tax_def
+ *   Just returns the defining array $tax_def
  */
 function _loopedia_taxonomy_definition()
 {
