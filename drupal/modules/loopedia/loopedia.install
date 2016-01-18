@@ -1,80 +1,5 @@
 <?php
 
-/**
- * Saves vocabulary
- *
- * This function is used to save a (new) vocabulary. If a vocabulary
- * with the same machine name already exists, it is updated.
- *
- * The three parameter variables are expected to be strings.
- *
- * We will use this function in hook_enable()
- */
-function _loopedia_save_or_update_vocabulary($name, $machine_name, $description)
-{
-  $new_vocab = new stdClass();
-  $new_vocab->name = $name;
-  $new_vocab->machine_name = $machine_name;
-  $new_vocab->description = $description;
-
-  // The following part checks if the vocabulary already exists. If it
-  // finds an existing machine name it sets the corresponding vid. This
-  // "vid" has to be set if we want to update a vocabulary (and not
-  // create a new one).
-  // https://api.drupal.org/api/drupal/modules!taxonomy!taxonomy.module/function/taxonomy_vocabulary_save/7
-  //
-  $vocab_temp = taxonomy_vocabulary_machine_name_load($machine_name);
-  if ($vocab_temp != FALSE) {
-    $new_vocab->vid = $vocab_temp->vid;
-  }
-
-  // Now we can give our newly created vocabulary object "new_vocab" to
-  // the save function. This function only accepts (class) objects as
-  // arguments; not arrays.
-  taxonomy_vocabulary_save($new_vocab);
-}// end of function loopedia_save_or_update_vocabulary()
-
-
-
-
-
-/**
- * Saves or updates an array of taxonomy terms.
- *
- * @param array $terms_def
- *   The definitions of new terms in an array (see code, weher this
- *   function is used)
- *
- * @param string $vocab_machine_name
- *   The vocabulary machine name.
- */
-function _loopedia_save_or_update_taxonomy_terms($terms_def, $vocab_machine_name)
-{
-
-  $vocab = taxonomy_vocabulary_machine_name_load($vocab_machine_name);
-  $existing_terms = taxonomy_get_tree($vocab->vid);
-
-  foreach ($terms_def as $term)
-  {
-    $term_new = new stdClass();
-    $term_new->name = $term['name'];
-    $term_new->description = $term['description'];
-    $term_new->vid = $vocab->vid;
-    foreach ($existing_terms as $term_e)
-    {
-      if ($term_e->name == $term['name'])
-      {
-        $term_new->tid = $term_e->tid;
-      }
-    }
-    taxonomy_term_save($term_new);
-  }
-
-}// end of function loopedia_save_or_update_taxonomy_terms()
-
-
-
-
 
 /**
  * Implements hook_enable().
@@ -125,26 +50,133 @@ function loopedia_enable()
 
   // Code for custom conten type loopedia_integral:
   node_types_rebuild();
-  $types = node_type_get_types();
-  node_add_body_field($types['loopedia_integral']);
   _loopedia_update_custom_fields();
+}
+// end of hook_enable()
 
 
-}// end of function loopedia_enable()
 
 
 /**
  * Implements hook_install().
  */
 function loopedia_install() {
-    node_types_rebuild();
-    $types = node_type_get_types();
-    node_add_body_field($types['loopedia_integral']);
-    _loopedia_create_custom_fields();
+  // Custom node type and its fields:
+  node_types_rebuild();
+  _loopedia_create_custom_fields();
 }
 
 
 
+
+/**
+* Implements hook_uninstall().
+*
+* This function is called when we uninstall the module.
+*/
+function loopedia_uninstall()
+{
+  // Uninstall code for the Taxonomy:
+  $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
+  taxonomy_vocabulary_delete($vocab->vid);
+
+
+
+
+  // Uninstall code for the custom node and fields:
+  foreach (array_keys(_loopedia_integral_installed_fields()) as $field)
+  {
+    field_delete_field($field);
+  }
+
+  $instances = field_info_instances('node', 'loopedia_integral');
+  foreach ($instances as $instance_name => $fieldinstance)
+  {
+    field_delete_instance($fieldinstance);
+  }
+}
+// end of hook_uninstall()
+
+
+
+
+// ****************************************************
+// Helper functions:
+
+
+/**
+ * Saves vocabulary
+ *
+ * This function is used to save a (new) vocabulary. If a vocabulary
+ * with the same machine name already exists, it is updated.
+ *
+ * The three parameter variables are expected to be strings.
+ *
+ * We will use this function in hook_enable()
+ */
+function _loopedia_save_or_update_vocabulary($name, $machine_name, $description)
+{
+  $new_vocab = new stdClass();
+  $new_vocab->name = $name;
+  $new_vocab->machine_name = $machine_name;
+  $new_vocab->description = $description;
+
+  // The following part checks if the vocabulary already exists. If it
+  // finds an existing machine name it sets the corresponding vid. This
+  // "vid" has to be set if we want to update a vocabulary (and not
+  // create a new one).
+  // https://api.drupal.org/api/drupal/modules!taxonomy!taxonomy.module/function/taxonomy_vocabulary_save/7
+  //
+  $vocab_temp = taxonomy_vocabulary_machine_name_load($machine_name);
+  if ($vocab_temp != FALSE) {
+    $new_vocab->vid = $vocab_temp->vid;
+  }
+
+  // Now we can give our newly created vocabulary object "new_vocab" to
+  // the save function. This function only accepts (class) objects as
+  // arguments; not arrays.
+  taxonomy_vocabulary_save($new_vocab);
+}
+// end of function loopedia_save_or_update_vocabulary()
+
+
+
+
+
+/**
+ * Saves or updates an array of taxonomy terms.
+ *
+ * @param array $terms_def
+ *   The definitions of new terms in an array (see code, where this
+ *   function is used)
+ *
+ * @param string $vocab_machine_name
+ *   The vocabulary machine name.
+ */
+function _loopedia_save_or_update_taxonomy_terms($terms_def, $vocab_machine_name)
+{
+
+  $vocab = taxonomy_vocabulary_machine_name_load($vocab_machine_name);
+  $existing_terms = taxonomy_get_tree($vocab->vid);
+
+  foreach ($terms_def as $term)
+  {
+    $term_new = new stdClass();
+    $term_new->name = $term['name'];
+    $term_new->description = $term['description'];
+    $term_new->vid = $vocab->vid;
+    foreach ($existing_terms as $term_e)
+    {
+      if ($term_e->name == $term['name'])
+      {
+        $term_new->tid = $term_e->tid;
+      }
+    }
+    taxonomy_term_save($term_new);
+  }
+
+}
+// end of function loopedia_save_or_update_taxonomy_terms()
 
 
 
@@ -161,12 +193,9 @@ function loopedia_install() {
 
    foreach (_loopedia_integral_installed_instances() as $instance)
    {
-    //  $instance['entity_type'] = 'node';
-    //  $instance['bundle'] = 'loopedia_integral'
     field_create_instance($instance);
    }
  }
-
 
 
  /**
@@ -181,14 +210,20 @@ function loopedia_install() {
 
     foreach (_loopedia_integral_installed_instances() as $instance)
     {
-     //  $instance['entity_type'] = 'node';
-     //  $instance['bundle'] = 'loopedia_integral'
-     field_update_instance($instance);
+      field_update_instance($instance);
     }
   }
 
 
 
+
+
+
+
+
+
+// *********************************************************
+// Concrete definitions; "Data"; could also be put into a separate file.
 
 
 
@@ -239,7 +274,7 @@ function _loopedia_integral_installed_fields()
 
   $field_bases['loopedia_term_reference'] = array(
     'active' => 1,
-    'cardinality' => -1,
+    'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'loopedia_term_reference',
@@ -248,7 +283,7 @@ function _loopedia_integral_installed_fields()
         0 => 'tid',
       ),
     ),
-    'locked' => 0,
+    'locked' => 1,
     'module' => 'taxonomy',
     'settings' => array(
       'allowed_values' => array(
@@ -413,6 +448,10 @@ function _loopedia_integral_installed_instances()
       'active' => 1,
       'module' => 'options',
       'settings' => array(),
+      // type:
+      // 'options_selectoptions_select' -> Select list
+      // 'options_buttons' -> Check boxes/radio buttons
+      // 'taxonomy_autocomplete' -> Autocomplete term widget (tagging)
       'type' => 'options_buttons',
       'weight' => 4,
     ),
@@ -463,37 +502,4 @@ function _loopedia_integral_installed_instances()
   );
 
   return $field_instances;
-}
-
-
-
-
-
-
-/**
-* Implements hook_uninstall().
-*
-* This function is called when we uninstall the module. It deletes the
-* vocabulary.
-*/
-function loopedia_uninstall()
-{
-  // Uninstall code for the Taxonomy:
-  $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
-  taxonomy_vocabulary_delete($vocab->vid);
-
-
-
-
-  // Uninstall code for the custom node and fields:
-  foreach (array_keys(_loopedia_integral_installed_fields()) as $field)
-  {
-    field_delete_field($field);
-  }
-
-  $instances = field_info_instances('node', 'loopedia_integral');
-  foreach ($instances as $instance_name => $fieldinstance)
-  {
-    field_delete_instance($fieldinstance);
-  }
 }
