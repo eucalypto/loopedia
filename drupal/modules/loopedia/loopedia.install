@@ -4,51 +4,28 @@
 /**
  * Implements hook_enable().
  *
- * This is taken from
- * http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
- * I saved this site in "loopedia_reference_collection/web_pages/How to
- * Create Taxonomy Vocabularies and Terms Programatically in Drupal 7.pdf".
- * This Text uses the hook_install() to save the vocabulary; but we want
- * to be able to update the vocabulary after installation. This is why
- * we used the hook_enable(); we just have to update this code and
- * disable and (re-)enable the module.
+
  */
 function loopedia_enable()
 {
-  // Loopedia test Vocabulary:
-  //
-  // ..save_or_update_vocabulary($name, $machine_name, $description)
-  _loopedia_save_or_update_vocabulary(
-    'Loopedia Test Vocabulary',
-    'loopedia_test_vocabulary',
-    'This vocabulary has a special purpose.'
-  );
+  // Taxonomy:
+  // This is taken from  http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
+  // I saved this site in "loopedia_reference_collection/web_pages/How
+  // to Create Taxonomy Vocabularies and Terms Programatically in Drupal
+  // 7.pdf". This Text uses the hook_install() to save the vocabulary;
+  // but we want to be able to update the vocabulary after installation.
+  // This is why we used the hook_enable(); we just have to update this
+  // code and disable atnd (re-)enable the module.
+  foreach (_loopedia_taxonomy_definition() as $tax)
+  {
+    // Vocabulary:
+    _loopedia_save_or_update_vocabulary($tax);
+    // Terms:
+    _loopedia_save_or_update_taxonomy_terms($tax);
+  }
 
 
-  // Here, we define the terms of our vocabulary
-  $terms_def = array(
-    array(
-      'name' => 'Term 1',
-      'description' => 'This is term 1.',
-    ),
-    array(
-      'name' => 'Term 2',
-      'description' => 'This is term 2.',
-    ),
-    array(
-      'name' => 'Term 3',
-      'description' => 'This is term 3.',
-    ),
-  );
-
-  _loopedia_save_or_update_taxonomy_terms(
-    $terms_def,
-    'loopedia_test_vocabulary'
-  );
-  // End of Loopedia Text vocabulary
-
-
-  // Code for custom conten type loopedia_integral:
+  // Code for custom content type loopedia_integral:
   node_types_rebuild();
   _loopedia_update_custom_fields();
 }
@@ -110,16 +87,20 @@ function loopedia_uninstall()
  * This function is used to save a (new) vocabulary. If a vocabulary
  * with the same machine name already exists, it is updated.
  *
- * The three parameter variables are expected to be strings.
+ * @param associative array $voc
+ *   This array must have the following key-value pairs:
+ *     'name' => string
+ *     'machine_name' => string
+ *     'description' => string
  *
- * We will use this function in hook_enable()
+ * @see hook loopedia_enable()
  */
-function _loopedia_save_or_update_vocabulary($name, $machine_name, $description)
+function _loopedia_save_or_update_vocabulary($voc)
 {
   $new_vocab = new stdClass();
-  $new_vocab->name = $name;
-  $new_vocab->machine_name = $machine_name;
-  $new_vocab->description = $description;
+  $new_vocab->name = $voc['name'];
+  $new_vocab->machine_name = $voc['machine_name'];
+  $new_vocab->description = $voc['description'];
 
   // The following part checks if the vocabulary already exists. If it
   // finds an existing machine name it sets the corresponding vid. This
@@ -127,7 +108,8 @@ function _loopedia_save_or_update_vocabulary($name, $machine_name, $description)
   // create a new one).
   // https://api.drupal.org/api/drupal/modules!taxonomy!taxonomy.module/function/taxonomy_vocabulary_save/7
   //
-  $vocab_temp = taxonomy_vocabulary_machine_name_load($machine_name);
+  $vocab_temp = taxonomy_vocabulary_machine_name_load(
+                  $new_vocab->machine_name);
   if ($vocab_temp != FALSE) {
     $new_vocab->vid = $vocab_temp->vid;
   }
@@ -144,30 +126,41 @@ function _loopedia_save_or_update_vocabulary($name, $machine_name, $description)
 
 
 /**
- * Saves or updates an array of taxonomy terms.
+ * Saves or updates taxonomy terms.
  *
- * @param array $terms_def
- *   The definitions of new terms in an array (see code, where this
- *   function is used)
- *
- * @param string $vocab_machine_name
- *   The vocabulary machine name.
+ * @param associative array $voc
+ *   Holds the definitions of the vocabulary; including terms. The
+ *   following parts of the array are used in this function:
+ *     'machine_name' -> string
+ *     'terms' -> array
  */
-function _loopedia_save_or_update_taxonomy_terms($terms_def, $vocab_machine_name)
-{
 
-  $vocab = taxonomy_vocabulary_machine_name_load($vocab_machine_name);
+function _loopedia_save_or_update_taxonomy_terms($voc)
+{
+  // We load the vocabulary object with its machine name. This object
+  // contains the vid (vocabulary id), which we need to load the
+  // existing terms.
+  $vocab = taxonomy_vocabulary_machine_name_load($voc['machine_name']);
   $existing_terms = taxonomy_get_tree($vocab->vid);
 
-  foreach ($terms_def as $term)
+  // Saving the terms
+  foreach ($voc['terms'] as $term)
   {
     $term_new = new stdClass();
     $term_new->name = $term['name'];
     $term_new->description = $term['description'];
     $term_new->vid = $vocab->vid;
+
+    // Each taxonomy term gets an identification number "tid" after it
+    // is created. taxonomy_term_save() doesn't check if a term already
+    // exists but just makes a duplicate (with different tid). This is
+    // why we are checking if a taxonomy term with the same name already
+    // exists. If yes, we copy the existing tid to the new term object.
+    // Now taxonomy_term_save() recognizes the given "tid" and updates
+    // the term instead of creating a new one.
     foreach ($existing_terms as $term_e)
     {
-      if ($term_e->name == $term['name'])
+      if ($term_e->name == $term_new->name)
       {
         $term_new->tid = $term_e->tid;
       }
@@ -226,6 +219,51 @@ function _loopedia_save_or_update_taxonomy_terms($terms_def, $vocab_machine_name
 // Concrete definitions; "Data"; could also be put into a separate file.
 
 
+// Taxonomy:
+
+/**
+ * Defines the vocabularies (including terms) for our taxonomy
+ *
+ * @return array $tax_def
+ */
+function _loopedia_taxonomy_definition()
+{
+  $tax_def = array();
+
+  // Loopedia test vocabulary
+  $tax_def[1] = array(
+    'name' => 'Loopedia Test Vocabulary',
+    'machine_name' => 'loopedia_test_vocabulary',
+    'description' => 'This vocabulary has no special purpose except testing.',
+    'terms' => array(
+      array(
+        'name' => 'Term 1',
+        'description' => 'This is term 1.',
+      ),
+      array(
+        'name' => 'Term 2',
+        'description' => 'This is term 2.',
+      ),
+      array(
+        'name' => 'Term 3',
+        'description' => 'This is term 3.',
+      ),
+      array(
+        'name' => 'blabla',
+        'description' => 'This is blabla.'
+      ),
+    ),
+  );
+
+
+  return $tax_def;
+}
+
+
+
+
+
+// Node fields and instances:
 
 /**
  * Defines fields for the loopedia integral cnotent type.
