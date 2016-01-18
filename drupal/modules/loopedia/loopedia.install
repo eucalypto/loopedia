@@ -4,7 +4,6 @@
 /**
  * Implements hook_enable().
  *
-
  */
 function loopedia_enable()
 {
@@ -25,7 +24,7 @@ function loopedia_enable()
   }
 
 
-  // Code for custom content type loopedia_integral:
+  // Custom content type loopedia_integral:
   node_types_rebuild();
   _loopedia_update_custom_fields();
 }
@@ -53,14 +52,12 @@ function loopedia_install() {
 */
 function loopedia_uninstall()
 {
-  // Uninstall code for the Taxonomy:
+  // Taxonomy:
   $vocab = taxonomy_vocabulary_machine_name_load('loopedia_test_vocabulary');
   taxonomy_vocabulary_delete($vocab->vid);
 
 
-
-
-  // Uninstall code for the custom node and fields:
+  // Custom node type and fields:
   foreach (array_keys(_loopedia_integral_installed_fields()) as $field)
   {
     field_delete_field($field);
