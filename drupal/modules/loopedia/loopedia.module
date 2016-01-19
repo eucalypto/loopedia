@@ -41,23 +41,23 @@ function loopedia_form($node, $form_state) {
 
 
 
-// /**
-// * Implements of hook_init().
-// *
-// * This function can be used for dirty debugging because it is executed
-// * on all page requests that are not cached.
-// */
-// function loopedia_init() {
-//   drupal_set_message('Beware I live!');
-//   $types = node_type_get_types();
-//   dpm($types);
-//
-//   $type = node_type_load('loopedia-integral');
-//   dpm($type);
-//   // $instance_info = field_info_instance('node', 'loopedia_term_reference', 'loopedia_integral');
-//   // dpm($instance_info);
-//   //
-//   // $fieldinfo = field_info_field('loopedia_term_reference');
-//   // dpm($fieldinfo);
-//   // dpm(hook_field_storage_info());
-// }
+/**
+* Implements of hook_init().
+*
+* This function can be used for dirty debugging because it is executed
+* on all page requests that are not cached.
+*/
+function loopedia_init() {
+  // drupal_set_message('Beware I live!');
+  // $types = node_type_get_types();
+  // dpm($types);
+  //
+  // $type = node_type_load('loopedia-integral');
+  // dpm($type);
+  // $instance_info = field_info_instance('node', 'loopedia_term_reference', 'loopedia_integral');
+  // dpm($instance_info);
+  //
+  // $fieldinfo = field_info_field('loopedia_term_reference');
+  // dpm($fieldinfo);
+  // dpm(hook_field_storage_info());
+}

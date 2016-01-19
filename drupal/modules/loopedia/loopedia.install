@@ -482,9 +482,20 @@ function _loopedia_integral_installed_instances()
     'description' => 'Help text',
     'display' => array(
       'default' => array(
+        //
+        // 'label' specifies how the label is displayed:
+        // 'above' means the label is above the field content
+        // 'inline' means the label is dispalyed on the same line as the
+        //          field content.
         'label' => 'above',
         'module' => 'taxonomy',
         'settings' => array(),
+        //
+        // 'type' determines how it is displayed:
+        // 'taxonomy_term_reference_link' -> link
+        // 'taxonomy_term_reference_plain' -> Plain text
+        // 'taxonomy_term_reference_rss_category' -> RSS category
+        // 'hidden' -> <Hidden> ; not visible
         'type' => 'taxonomy_term_reference_link',
         'weight' => 2,
       ),
@@ -510,7 +521,7 @@ function _loopedia_integral_installed_instances()
       // 'options_selectoptions_select' -> Select list
       // 'options_buttons' -> Check boxes/radio buttons
       // 'taxonomy_autocomplete' -> Autocomplete term widget (tagging)
-      'type' => 'options_buttons',
+      'type' => 'options_selectoptions_select',
       'weight' => 4,
     ),
   );
