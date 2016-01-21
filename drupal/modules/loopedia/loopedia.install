@@ -298,82 +298,277 @@ function _loopedia_integral_installed_fields()
 {
   $field_bases = array();
 
-  $field_bases['loopedia_long_text'] = array(
-    'active' => 1,
-    'cardinality' => -1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'loopedia_long_text',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'text_long',
-  );
-
-  $field_bases['loopedia_numbers'] = array(
-    'active' => 1,
-    'cardinality' => -1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'loopedia_numbers',
-    'indexes' => array(),
-    'locked' => 0,
-    'module' => 'number',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'number_integer',
-  );
-
-  $field_bases['loopedia_term_reference'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'loopedia_term_reference',
-    'indexes' => array(
-      'tid' => array(
-        0 => 'tid',
-      ),
-    ),
-    'locked' => 1,
-    'module' => 'taxonomy',
-    'settings' => array(
-      'allowed_values' => array(
-        0 => array(
-          'vocabulary' => 'loopedia_test_vocabulary',
-          'parent' => 0,
+  $field_bases['loopedia_comment'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_comment',
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
         ),
       ),
-    ),
-    'translatable' => 0,
-    'type' => 'taxonomy_term_reference',
-  );
+      'locked' => 0,
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'text_long',
+    );
 
-  $field_bases['loopedia_text'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'loopedia_text',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
+    $field_bases['loopedia_external_leg_01_virtuality'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_external_leg_01_virtuality',
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
       ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(
-      'max_length' => 255,
-    ),
-    'translatable' => 0,
-    'type' => 'text',
-  );
+      'locked' => 0,
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'light-like' => 'light-like',
+          'on_internal_mass_shell' => 'on_internal_mass_shell',
+          'off-shell' => 'off-shell',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => 0,
+      'type' => 'list_text',
+    );
+
+    $field_bases['loopedia_literature_arxiv'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_literature_arxiv',
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => 0,
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => 512,
+      ),
+      'translatable' => 0,
+      'type' => 'text',
+    );
+
+    $field_bases['loopedia_literature_publication'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_literature_publication',
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => 0,
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'text_long',
+    );
+
+    $field_bases['loopedia_internal_mass_shell_leg_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_internal_mass_shell_leg_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_leg_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_leg_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_light_like_leg_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_light_like_leg_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_loop_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_loop_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_mass_scale_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_mass_scale_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_massless_propagator_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_massless_propagator_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_off_shell_leg_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_off_shell_leg_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_propagator_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_propagator_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+    $field_bases['loopedia_propagator_01_mass'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_propagator_01_mass',
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'locked' => 0,
+      'module' => 'list',
+      'settings' => array(
+        'allowed_values' => array(
+          'massless' => 'massless',
+          'm1' => 'm1',
+          'm2' => 'm2',
+          'm3' => 'm3',
+          'm4' => 'm4',
+          'm5' => 'm5',
+          'm6' => 'm6',
+          'm7' => 'm7',
+          'm8' => 'm8',
+          'm9' => 'm9',
+          'm10' => 'm10',
+          'm11' => 'm11',
+          'm12' => 'm12',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'translatable' => 0,
+      'type' => 'list_text',
+    );
+
+    $field_bases['loopedia_propagator_01_power'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'loopedia_propagator_01_power',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
+
+
+  //******************************************************************
+  // old ones:
+
+  // $field_bases['loopedia_term_reference'] = array(
+  //   'active' => 1,
+  //   'cardinality' => 1,
+  //   'deleted' => 0,
+  //   'entity_types' => array(),
+  //   'field_name' => 'loopedia_term_reference',
+  //   'indexes' => array(
+  //     'tid' => array(
+  //       0 => 'tid',
+  //     ),
+  //   ),
+  //   'locked' => 1,
+  //   'module' => 'taxonomy',
+  //   'settings' => array(
+  //     'allowed_values' => array(
+  //       0 => array(
+  //         'vocabulary' => 'loopedia_test_vocabulary',
+  //         'parent' => 0,
+  //       ),
+  //     ),
+  //   ),
+  //   'translatable' => 0,
+  //   'type' => 'taxonomy_term_reference',
+  // );
 
   return $field_bases;
 }
@@ -391,18 +586,35 @@ function _loopedia_integral_installed_instances()
 {
   $field_instances = array();
 
-  $field_instances['loopedia_integral-loopedia_long_text'] = array(
+  $field_instances['loopedia_integral_comment'] = array(
     'bundle' => 'loopedia_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Help textt',
+    'description' => '',
     'display' => array(
       'default' => array(
+        //
+        // 'label' specifies how the label is displayed:
+        // 'above' means the label is above the field content
+        // 'inline' means the label is dispalyed on the same line as the
+        //          field content.
         'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 17,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -412,9 +624,9 @@ function _loopedia_integral_installed_instances()
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'loopedia_long_text',
-    'label' => 'loopedia long text',
-    'required' => 1,
+    'field_name' => 'loopedia_comment',
+    'label' => 'comment',
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -426,27 +638,39 @@ function _loopedia_integral_installed_instances()
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => -1,
+      'weight' => 14,
     ),
   );
 
-  $field_instances['loopedia_integral-loopedia_numbers'] = array(
+  $field_instances['loopedia_integral_external_leg_01_virtuality'] = array(
     'bundle' => 'loopedia_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'This is the help text for Features numbers',
+    'description' => 'Choose the virtuality of the external legs. The choices are:
+ <ul>
+  <li>light-like : p^2 = 0</li>
+  <li>on_internal_mass_shell : p^2 &ne; 0. But p is on a mass shell of one of the (internal) propagators: p^2 = m_j.</li>
+  <li>off-shell: p is not light like and also not on one of the internal mass shells.</li>
+</ul> ',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 1,
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 6,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -456,59 +680,8 @@ function _loopedia_integral_installed_instances()
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'loopedia_numbers',
-    'label' => 'Features numbers',
-    'required' => 1,
-    'settings' => array(
-      'max' => 2048,
-      'min' => 10,
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => -3,
-    ),
-  );
-
-  $field_instances['loopedia_integral-loopedia_term_reference'] = array(
-    'bundle' => 'loopedia_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Help text',
-    'display' => array(
-      'default' => array(
-        //
-        // 'label' specifies how the label is displayed:
-        // 'above' means the label is above the field content
-        // 'inline' means the label is dispalyed on the same line as the
-        //          field content.
-        'label' => 'above',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        //
-        // 'type' determines how it is displayed:
-        // 'taxonomy_term_reference_link' -> link
-        // 'taxonomy_term_reference_plain' -> Plain text
-        // 'taxonomy_term_reference_rss_category' -> RSS category
-        // 'hidden' -> <Hidden> ; not visible
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 2,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'loopedia_term_reference',
-    'label' => 'features term reference',
+    'field_name' => 'loopedia_external_leg_01_virtuality',
+    'label' => 'External Virtuality leg 01',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -517,31 +690,34 @@ function _loopedia_integral_installed_instances()
       'active' => 1,
       'module' => 'options',
       'settings' => array(),
-      // type:
-      // 'options_selectoptions_select' -> Select list
-      // 'options_buttons' -> Check boxes/radio buttons
-      // 'taxonomy_autocomplete' -> Autocomplete term widget (tagging)
-      'type' => 'options_selectoptions_select',
-      'weight' => 4,
+      'type' => 'options_buttons',
+      'weight' => 3,
     ),
   );
 
-  // Exported field_instance: 'node-features_integral-field_features_text'.
-  $field_instances['loopedia_integral-loopedia_text'] = array(
+  $field_instances['loopedia_integral_literature_arxiv'] = array(
     'bundle' => 'loopedia_integral',
-    'default_value' => array(
-      0 => array(
-        'value' => 'default value',
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'This is the help text for the features text field',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
+        'weight' => 16,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'teaser' => array(
@@ -552,9 +728,9 @@ function _loopedia_integral_installed_instances()
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'loopedia_text',
-    'label' => 'Short text',
-    'required' => 1,
+    'field_name' => 'loopedia_literature_arxiv',
+    'label' => 'literature arxiv',
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -566,9 +742,677 @@ function _loopedia_integral_installed_instances()
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -4,
+      'weight' => 13,
     ),
   );
+
+  $field_instances['loopedia_integral_literature_publication'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 15,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_literature_publication',
+    'label' => 'literature publication',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 1,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 12,
+    ),
+  );
+
+  $field_instances['loopedia_integral_internal_mass_shell_leg_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 10,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_internal_mass_shell_leg_number',
+    'label' => 'number internal mass shell',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 6,
+    ),
+  );
+
+  $field_instances['loopedia_integral_leg_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This is the number of external legs.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 7,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_leg_number',
+    'label' => 'number legs',
+    'required' => 1,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 4,
+    ),
+  );
+
+  $field_instances['loopedia_integral_light_like_leg_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This is the number of ligh-like legs.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 9,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_light_like_leg_number',
+    'label' => 'number light-like',
+    'required' => 1,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 5,
+    ),
+  );
+
+  $field_instances['loopedia_integral_loop_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This is the number of loops.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 8,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_loop_number',
+    'label' => 'number loops',
+    'required' => 1,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 8,
+    ),
+  );
+
+  $field_instances['loopedia_integral_mass_scale_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 12,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_mass_scale_number',
+    'label' => 'number of mass scales',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 11,
+    ),
+  );
+
+  $field_instances['loopedia_integral_massless_propagator_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 13,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_massless_propagator_number',
+    'label' => 'number of massless propagators',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 10,
+    ),
+  );
+
+  $field_instances['loopedia_integral_off_shell_leg_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 11,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_off_shell_leg_number',
+    'label' => 'number of off-shell legs',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 7,
+    ),
+  );
+
+  $field_instances['loopedia_integral_propagator_number'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 14,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_propagator_number',
+    'label' => 'number of propagators',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 9,
+    ),
+  );
+
+  $field_instances['loopedia_integral_propagator_01_mass'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Specify the mass of the propagator.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 18,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_propagator_01_mass',
+    'label' => 'propagator mass 01',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 15,
+    ),
+  );
+
+  $field_instances['loopedia_integral_propagator_01_power'] = array(
+    'bundle' => 'loopedia_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 19,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'loopedia_propagator_01_power',
+    'label' => 'propagator power 01',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 16,
+    ),
+  );
+
+
+//****************************************************************
+// old ones:
+
+
+  // $field_instances['loopedia_integral-loopedia_term_reference'] = array(
+  //   'bundle' => 'loopedia_integral',
+  //   'default_value' => NULL,
+  //   'deleted' => 0,
+  //   'description' => 'Help text',
+  //   'display' => array(
+  //     'default' => array(
+  //       //
+  //       // 'label' specifies how the label is displayed:
+  //       // 'above' means the label is above the field content
+  //       // 'inline' means the label is dispalyed on the same line as the
+  //       //          field content.
+  //       'label' => 'above',
+  //       'module' => 'taxonomy',
+  //       'settings' => array(),
+  //       //
+  //       // 'type' determines how it is displayed:
+  //       // 'taxonomy_term_reference_link' -> link
+  //       // 'taxonomy_term_reference_plain' -> Plain text
+  //       // 'taxonomy_term_reference_rss_category' -> RSS category
+  //       // 'hidden' -> <Hidden> ; not visible
+  //       'type' => 'taxonomy_term_reference_link',
+  //       'weight' => 2,
+  //     ),
+  //     'teaser' => array(
+  //       'label' => 'above',
+  //       'settings' => array(),
+  //       'type' => 'hidden',
+  //       'weight' => 0,
+  //     ),
+  //   ),
+  //   'entity_type' => 'node',
+  //   'field_name' => 'loopedia_term_reference',
+  //   'label' => 'features term reference',
+  //   'required' => 0,
+  //   'settings' => array(
+  //     'user_register_form' => FALSE,
+  //   ),
+  //   'widget' => array(
+  //     'active' => 1,
+  //     'module' => 'options',
+  //     'settings' => array(),
+  //     // type:
+  //     // 'options_selectoptions_select' -> Select list
+  //     // 'options_buttons' -> Check boxes/radio buttons
+  //     // 'taxonomy_autocomplete' -> Autocomplete term widget (tagging)
+  //     'type' => 'options_selectoptions_select',
+  //     'weight' => 4,
+  //   ),
+  // );
 
   return $field_instances;
 }
