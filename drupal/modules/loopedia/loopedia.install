@@ -296,6 +296,11 @@ function _loopedia_taxonomy_definition()
  */
 function _loopedia_integral_installed_fields()
 {
+  // $max_num_prop defines the maximal number of propagators that are
+  // being stored.
+  $max_num_prop = 12;
+
+
   $field_bases = array();
 
   $field_bases['lop_comment'] = array(
@@ -316,34 +321,45 @@ function _loopedia_integral_installed_fields()
       'type' => 'text_long',
     );
 
+    // This defines the allowed values for the virtuality of the
+    // external legs.
+    $allowed_values = array(
+      'light-like' => 'light-like',
+      // 'on_internal_mass_shell' => 'on_internal_mass_shell',
+      'off-shell' => 'off-shell',
+    );
+    for ($j = 1; $j <= $max_num_prop; $j++)
+    {
+      $allowed_values['m' . $j . '^2'] = 'm' . $j . '^2';
+    }
 
+
+    // Define 20 fields for each of the external legs.
+    // This will store the virtuality of each leg.
     for ($i = 1; $i <= 20; $i++)
-      {
-        $field_bases['lop_ext_leg_' . $i . '_virt'] = array(
-          'active' => 1,
-          'cardinality' => 1,
-          'deleted' => 0,
-          'entity_types' => array(),
-          'field_name' => 'lop_ext_leg_' . $i . '_virt',
-          'indexes' => array(
-            'value' => array(
-              0 => 'value',
-            ),
+    {
+      $field_bases['lop_ext_leg_' . $i . '_virt'] = array(
+        'active' => 1,
+        'cardinality' => 1,
+        'deleted' => 0,
+        'entity_types' => array(),
+        'field_name' => 'lop_ext_leg_' . $i . '_virt',
+        'indexes' => array(
+          'value' => array(
+            0 => 'value',
           ),
-          'locked' => 0,
-          'module' => 'list',
-          'settings' => array(
-            'allowed_values' => array(
-              'light-like' => 'light-like',
-              'on_internal_mass_shell' => 'on_internal_mass_shell',
-              'off-shell' => 'off-shell',
-            ),
-            'allowed_values_function' => '',
-          ),
-          'translatable' => 0,
-          'type' => 'list_text',
-        );
-      }
+        ),
+        'locked' => 0,
+        'module' => 'list',
+        'settings' => array(
+          'allowed_values' => $allowed_values,
+          'allowed_values_function' => '',
+        ),
+        'translatable' => 0,
+        'type' => 'list_text',
+      );
+    }
+
 
 
     $field_bases['lop_literature_arxiv'] = array(
@@ -496,7 +512,7 @@ function _loopedia_integral_installed_fields()
       'type' => 'number_integer',
     );
 
-    for ($i = 1; $i <=12; $i++)
+    for ($i = 1; $i <= $max_num_prop; $i++)
     {
       $field_bases['lop_propagator_' . $i . '_mass'] = array(
         'active' => 1,

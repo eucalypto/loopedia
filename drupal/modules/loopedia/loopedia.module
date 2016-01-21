@@ -43,6 +43,19 @@ function loopedia_form($node, $form_state) {
 }
 
 
+/**
+ * Implements hook_form_alter().
+ */
+function loopedia_form_alter(&$form, &$form_state, $form_id)
+{
+  dpm($form_id);
+  // dpm($form);
+  // dpm($form_state);
+  $form['revision_information']['revision']['#default_value'] = 1;
+  dpm($form);
+}
+
+
 
 /**
 * Implements of hook_init().
@@ -61,8 +74,8 @@ function loopedia_init() {
   //
   // $type = node_type_load('lop-integral');
   // dpm($type);
-  $instance_info = field_info_instance('node', 'field_blabla', 'article');
-  dpm($instance_info);
+  // $instance_info = field_info_instance('node', 'field_blabla', 'article');
+  // dpm($instance_info);
   //
   // $fieldinfo = field_info_field('loopedia_term_reference');
   // dpm($fieldinfo);
