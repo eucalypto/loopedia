@@ -144,3 +144,14 @@ To update drupal and all packages, use
 $ drush up
 ```
 which is an abbreviation of "drush pm-update"
+
+### The following modules are useful:
+
+* Chaos tools suite
+* Devel
+* example modules
+* features
+* Flags ?
+* Diff
+* Taxonomy manager?
+* Views ui

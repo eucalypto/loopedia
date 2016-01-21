@@ -15,8 +15,11 @@
 function loopedia_node_info()
 {
   return array(
-    'loopedia_integral' => array(
+    'lop_integral' => array(
       'name' => t('Integral'),
+      // 'base' should be the (machine) name of the module. If it is
+      // not, this content type will not appear in structure -> content
+      // type.
       'base' => 'loopedia',
       'description' => t('This is the node type for Feynman Integrals'),
       'has_title' => '1',
@@ -48,14 +51,18 @@ function loopedia_form($node, $form_state) {
 * on all page requests that are not cached.
 */
 function loopedia_init() {
+  // $arr = array();
+  // $i = 13;
+  // $arr['bla' . $i . 'blub'] = 'yes' . ' no' . $i . ' maybe';
+  // dpm($arr);
   // drupal_set_message('Beware I live!');
   // $types = node_type_get_types();
   // dpm($types);
   //
-  // $type = node_type_load('loopedia-integral');
+  // $type = node_type_load('lop-integral');
   // dpm($type);
-  // $instance_info = field_info_instance('node', 'loopedia_term_reference', 'loopedia_integral');
-  // dpm($instance_info);
+  $instance_info = field_info_instance('node', 'field_blabla', 'article');
+  dpm($instance_info);
   //
   // $fieldinfo = field_info_field('loopedia_term_reference');
   // dpm($fieldinfo);
