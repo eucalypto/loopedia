@@ -44,14 +44,52 @@ function loopedia_form($node, $form_state) {
 
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Here, we want to change the standard submission form to a more custom
+ * version.
  */
-function loopedia_form_alter(&$form, &$form_state, $form_id)
+function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
 {
-  dpm($form_id);
+  // Restore previously "hidden" elements:
+  if ( isset($form['hide_me']['#value']) )
+  {
+  $form[] = $form['hide_me']['#value'];
+  unset($form['hide_me']['#value']);
+  }
+
+  // dpm($form_id);
   // dpm($form);
   // dpm($form_state);
   $form['revision_information']['revision']['#default_value'] = 1;
+
+  // $form['lop_leg_number']['#type_old'] = $form['lop_leg_number']['#type'];
+  // $form['lop_leg_number']['#type'] = 'hidden';
+
+  $form['hide_me'] = array(
+    '#type' => 'value',
+    '#value' => array(
+      'lop_leg_number' => $form['lop_leg_number'],
+    ),
+  );
+  unset($form['lop_leg_number']);
+
+  //
+  // for ($i = 1; $i <= 12; $i++)
+  // {
+  //   $form['prop_' . $i] = array(
+  //     '#type' => 'fieldset',
+  //     '#title' => 'Propagator ' . $i,
+  //     '#description' => t('This is the description of the fieldset for the Propagator.')
+  //     '#collapsible' => false,
+  //     'lop_propagator_' . $i . '_mass' => $form['lop_propagator_' . $i . '_mass'],
+  //     'lop_propagator_' . $i . '_power' => $form['lop_propagator_' . $i . '_power'],
+  //     // '#weight' => -4,
+  //   );
+  //   unset($form['lop_propagator_' . $i . '_mass'],
+  //         $form['lop_propagator_' . $i . '_power']);
+  // }
+
   dpm($form);
 }
 
