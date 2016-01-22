@@ -303,6 +303,27 @@ function _loopedia_integral_installed_fields()
 
   $field_bases = array();
 
+
+  $field_bases['lop_nickel'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'lop_nickel',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 512,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   $field_bases['lop_comment'] = array(
       'active' => 1,
       'cardinality' => 1,
@@ -610,6 +631,62 @@ function _loopedia_integral_installed_instances()
 {
   $field_instances = array();
 
+
+  $field_instances['lop_i_nickel'] = array(
+    'bundle' => 'lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 16,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'lop_nickel',
+    'label' => 'Nickel Index',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => -4,
+    ),
+  );
+
+
   $field_instances['lop_i_comment'] = array(
     'bundle' => 'lop_integral',
     'default_value' => NULL,
@@ -649,7 +726,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_comment',
-    'label' => 'comment',
+    'label' => 'Comments',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -662,7 +739,7 @@ function _loopedia_integral_installed_instances()
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 14,
+      'weight' => 23,
     ),
   );
 
@@ -719,7 +796,7 @@ function _loopedia_integral_installed_instances()
         // 'options_select' -> drop-down selection
         // 'options_buttons' => buttons to select
         'type' => 'options_select',
-        'weight' => 3,
+        'weight' => 30,
       ),
     );
   }
@@ -868,7 +945,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_int_mass_shell_leg_num',
-    'label' => 'number internal mass shell',
+    'label' => 'Number of legs on an internal mass shell',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -925,7 +1002,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_leg_number',
-    'label' => 'number legs',
+    'label' => 'Number of legs',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -982,7 +1059,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_light_like_leg_number',
-    'label' => 'number light-like',
+    'label' => 'Number of ligh-like legs',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -1039,7 +1116,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_loop_number',
-    'label' => 'number loops',
+    'label' => 'Number of loops',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -1096,7 +1173,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_mass_scale_number',
-    'label' => 'number of mass scales',
+    'label' => 'Number of internal mass scales',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -1153,7 +1230,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_massless_propagator_number',
-    'label' => 'number of massless propagators',
+    'label' => 'Number of massless propagators',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -1175,7 +1252,7 @@ function _loopedia_integral_installed_instances()
     'bundle' => 'lop_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'This is the number of off-shell legs. Here, it means that the external leg is neither on a mass-shell of an (internal) propagator, nor is it massless.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1210,7 +1287,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_off_shell_leg_number',
-    'label' => 'number of off-shell legs',
+    'label' => 'Number of off-shell legs',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -1267,7 +1344,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_propagator_number',
-    'label' => 'number of propagators',
+    'label' => 'Number of propagators',
     'required' => 0,
     'settings' => array(
       'max' => '',
