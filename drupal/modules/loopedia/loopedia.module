@@ -65,24 +65,9 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
   $form['#validate'][] = $form['#validate'][0];
   $form['#validate'][0] = 'loopedia_lop_integral_form_validate';
 
-
-  // dpm($form_id);
-  // dpm($form);
-  // dpm($form_state);
+  // Here we try to auto-check the checkbox that triggers a revision
+  // control
   $form['revision_information']['revision']['#default_value'] = 1;
-
-
-  // // This code tries to "hide" the form element "lop_leg_number" by
-  // // copying its array definition from $form[...] to $form['hide_me'].
-  // // But this approach is not ideal because after form sumbission, you
-  // // canot set the value of this form element in $form_state['values']
-  // $form['hide_me'] = array(
-  //   '#type' => 'value',
-  //   '#value' => array(
-  //     'lop_leg_number' => $form['lop_leg_number'],
-  //   ),
-  // );
-  // unset($form['lop_leg_number']);
 
 
 
@@ -94,24 +79,52 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
 
 
 
-  // $form['hide'] = array(
-  //   '#type' => 'value',
-  //   '#value' => 'true',
-  // );
-
-  // $form['lop_leg_number']['#states'] = array(
-  //   'invisible' => array(
-  //     ':input[name="hide[#value]"]' => array('value' => 'true'),
-  //   ),
-  // );
-
 
   // If you want to hide a field in a form, this seems like the way to
   // go. You define an '#attributes' to a field  in the following
   // manner. This just marks the form invisible in css. If the user
-  // turns css off, he still can see the field.
+  // turns css off, he still can see the field. See
+  // http://drupal.stackexchange.com/questions/7199/how-to-hide-and-or-prevent-access-to-fields-in-a-form-such-as-group-audience-f
+  // This way, you can still populate a field with #default_value and it
+  // will even be validated.
+  //
+  // An alternative way could be using '#prefix'
+  // and '#suffix' according to https://www.drupal.org/node/728398
   $form['lop_leg_number']['#attributes']['class']['hide_me'] = 'element-hidden';
   $form['lop_leg_number']['und'][0]['value']['#default_value'] = 'b200';
+
+
+  $elements_to_hide = array(
+    'lop_comment',
+    // 'lop_nickel',
+    'lop_literature_arxiv',
+    'lop_literature_publication',
+    'lop_int_mass_shell_leg_num',
+    'lop_leg_number',
+    'lop_light_like_leg_number',
+    'lop_loop_number',
+    'lop_mass_scale_number',
+    'lop_massless_propagator_number',
+    'lop_off_shell_leg_number',
+    'lop_propagator_number',
+  );
+  // Adding the external leg virtualities to $elements_to_hide :
+  for ($i = 1; $i <= 20; $i++)
+  {
+    $elements_to_hide[] = 'lop_ext_leg_' . $i . '_virt';
+  }
+  // Adding the mass and power fields for the propagators:
+  for ($i = 1; $i <= 12; $i++)
+  {
+    $elements_to_hide[] = 'lop_propagator_' . $i . '_mass';
+    $elements_to_hide[] = 'lop_propagator_' . $i . '_power';
+  }
+
+
+  foreach ($elements_to_hide as $hide_me)
+  {
+    $form[$hide_me]['#attributes']['class']['hide_me'] = 'element-hidden';
+  }
 
 
   // // Here, we put the two fields for each propagator into one fieldset.
@@ -132,7 +145,6 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
 
   // dpm($form_state, '$form_state');
   dpm($form, '$form');
-  // drupal_rebuild_form($form_id, $form_state);
 }
 
 
@@ -142,13 +154,6 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
  */
 function loopedia_lop_integral_form_validate($form, &$form_state)
 {
-  // Restore previously "hidden" elements:
-  if ( isset($form['hide_me']['#value']) )
-  {
-  $form[] = $form['hide_me']['#value'];
-  unset($form['hide_me']['#value']);
-  }
-
   dsm('I am loopedia_lop_integral_form_validate ' . microtime(true) );
   dpm($form_state, '$form_state');
   dpm($form, '$form');
