@@ -43,6 +43,16 @@ function loopedia_form($node, $form_state) {
 }
 
 
+/** Implements hook_form_alter().
+ *
+ */
+function loopedia_form_alter(&$form, &$form_state, $form_id)
+{
+  // dpm($form_id, '$form_id');
+  // dpm($form, '$form');
+  // dpm($form_state, '$form_state');
+}
+
 /**
  * Implements hook_form_FORM_ID_alter().
  *
@@ -51,36 +61,66 @@ function loopedia_form($node, $form_state) {
  */
 function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
 {
-  // Restore previously "hidden" elements:
-  if ( isset($form['hide_me']['#value']) )
-  {
-  $form[] = $form['hide_me']['#value'];
-  unset($form['hide_me']['#value']);
-  }
+  // Add an extra validate function
+  $form['#validate'][] = $form['#validate'][0];
+  $form['#validate'][0] = 'loopedia_lop_integral_form_validate';
+
 
   // dpm($form_id);
   // dpm($form);
   // dpm($form_state);
   $form['revision_information']['revision']['#default_value'] = 1;
 
-  // $form['lop_leg_number']['#type_old'] = $form['lop_leg_number']['#type'];
-  // $form['lop_leg_number']['#type'] = 'hidden';
 
-  $form['hide_me'] = array(
-    '#type' => 'value',
-    '#value' => array(
-      'lop_leg_number' => $form['lop_leg_number'],
-    ),
-  );
-  unset($form['lop_leg_number']);
+  // // This code tries to "hide" the form element "lop_leg_number" by
+  // // copying its array definition from $form[...] to $form['hide_me'].
+  // // But this approach is not ideal because after form sumbission, you
+  // // canot set the value of this form element in $form_state['values']
+  // $form['hide_me'] = array(
+  //   '#type' => 'value',
+  //   '#value' => array(
+  //     'lop_leg_number' => $form['lop_leg_number'],
+  //   ),
+  // );
+  // unset($form['lop_leg_number']);
 
-  //
+
+
+  // We want so set a value for a field through our srcipts. But the
+  // user still wants to see the value that we put in. The way to go is
+  // this. Define "#default_value" here in form_alter() and it will be
+  // put into the generated form.
+  $form['lop_light_like_leg_number']['und'][0]['value']['#default_value'] = '123';
+
+
+
+  // $form['hide'] = array(
+  //   '#type' => 'value',
+  //   '#value' => 'true',
+  // );
+
+  // $form['lop_leg_number']['#states'] = array(
+  //   'invisible' => array(
+  //     ':input[name="hide[#value]"]' => array('value' => 'true'),
+  //   ),
+  // );
+
+
+  // If you want to hide a field in a form, this seems like the way to
+  // go. You define an '#attributes' to a field  in the following
+  // manner. This just marks the form invisible in css. If the user
+  // turns css off, he still can see the field.
+  $form['lop_leg_number']['#attributes']['class']['hide_me'] = 'element-hidden';
+  $form['lop_leg_number']['und'][0]['value']['#default_value'] = 'b200';
+
+
+  // // Here, we put the two fields for each propagator into one fieldset.
   // for ($i = 1; $i <= 12; $i++)
   // {
   //   $form['prop_' . $i] = array(
   //     '#type' => 'fieldset',
   //     '#title' => 'Propagator ' . $i,
-  //     '#description' => t('This is the description of the fieldset for the Propagator.')
+  //     '#description' => t('This is the description of the fieldset for the Propagator.'),
   //     '#collapsible' => false,
   //     'lop_propagator_' . $i . '_mass' => $form['lop_propagator_' . $i . '_mass'],
   //     'lop_propagator_' . $i . '_power' => $form['lop_propagator_' . $i . '_power'],
@@ -90,8 +130,30 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
   //         $form['lop_propagator_' . $i . '_power']);
   // }
 
-  dpm($form);
+  // dpm($form_state, '$form_state');
+  dpm($form, '$form');
+  // drupal_rebuild_form($form_id, $form_state);
 }
+
+
+/**
+ * Callback function for extra form validation of the integral node
+ * type.
+ */
+function loopedia_lop_integral_form_validate($form, &$form_state)
+{
+  // Restore previously "hidden" elements:
+  if ( isset($form['hide_me']['#value']) )
+  {
+  $form[] = $form['hide_me']['#value'];
+  unset($form['hide_me']['#value']);
+  }
+
+  dsm('I am loopedia_lop_integral_form_validate ' . microtime(true) );
+  dpm($form_state, '$form_state');
+  dpm($form, '$form');
+}
+
 
 
 

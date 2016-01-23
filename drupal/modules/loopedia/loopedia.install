@@ -1024,7 +1024,7 @@ function _loopedia_integral_installed_instances()
     'bundle' => 'lop_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'This is the number of ligh-like legs.',
+    'description' => 'This is the number of light-like legs.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1059,7 +1059,7 @@ function _loopedia_integral_installed_instances()
     ),
     'entity_type' => 'node',
     'field_name' => 'lop_light_like_leg_number',
-    'label' => 'Number of ligh-like legs',
+    'label' => 'Number of light-like legs',
     'required' => 0,
     'settings' => array(
       'max' => '',
