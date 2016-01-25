@@ -143,7 +143,7 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
 
 
 /**
- * Callback function for the first step of the integral sumbission form.
+ * Callback function for the first step of the integral submission form.
  */
 function loopedia_integral_first_step(&$form, &$form_state)
 {
@@ -187,10 +187,35 @@ function loopedia_integral_first_step(&$form, &$form_state)
     '#type' => 'submit',
     '#value' => 'Next >>',
     '#submit' => array('loopedia_integral_next_submit_1'),
-    // '#validate' => array('form_example_tutorial_8_next_validate'),
+    '#validate' => array('loopedia_integral_next_validate_1'),
   );
   $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
 }
+
+/**
+ * Submit handler for loopedia_integral_first_step next button.
+ */
+function loopedia_integral_next_submit_1(&$form, &$form_state)
+{
+  // We set 'step' to 2 such that when the form gets build next time,
+  // it will build the second step
+  $form_state['step'] = 2;
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Validate handler for loopedia_integral_first_step next button
+ *
+ * It might become important, in which order the validation functions
+ * are executed. Then, you should experiment with it.
+ *
+ */
+function loopedia_integral_next_validate_1(&$form, &$form_state)
+{
+  dsm('This is the validation of the button' . microtime() );
+}
+
+
 
 
 /**
@@ -221,28 +246,6 @@ function loopedia_integral_second_step(&$form, &$form_state)
   $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
 }
 
-
-/**
- * Callback function for the third step of the integral sumbission form.
- */
-function loopedia_integral_third_step(&$form, &$form_state)
-{
-  dsm('this is step three!');
-}
-
-
-
-/**
- * Submit handler for loopedia_integral_first_step next button.
- */
-function loopedia_integral_next_submit_1(&$form, &$form_state)
-{
-  // We set 'step' to 2 such that when the form gets build next time,
-  // it will build the second step
-  $form_state['step'] = 2;
-  $form_state['rebuild'] = TRUE;
-}
-
 /**
  * Submit handler for loopedia_integral_second_step next button.
  */
@@ -252,7 +255,6 @@ function loopedia_integral_next_submit_2(&$form, &$form_state)
   $form_state['rebuild'] = TRUE;
 }
 
-
 /**
  * Submit handler for loopedia_integral_second_step back button.
  */
@@ -261,6 +263,17 @@ function loopedia_integral_back_submit_2(&$form, &$form_state)
   $form_state['step'] = 1;
   $form_state['rebuild'] = TRUE;
 }
+
+
+
+/**
+ * Callback function for the third step of the integral sumbission form.
+ */
+function loopedia_integral_third_step(&$form, &$form_state)
+{
+  dsm('this is step three!');
+}
+
 
 /**
  * Submit handler for loopedia_integral_third_step back button.
