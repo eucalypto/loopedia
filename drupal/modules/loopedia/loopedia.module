@@ -71,29 +71,84 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
 
 
 
-  // We want so set a value for a field through our srcipts. But the
-  // user still wants to see the value that we put in. The way to go is
-  // this. Define "#default_value" here in form_alter() and it will be
-  // put into the generated form.
-  $form['lop_light_like_leg_number']['und'][0]['value']['#default_value'] = '123';
+  // // We want so set a value for a field through our srcipts. But the
+  // // user still wants to see the value that we put in. The way to go is
+  // // this. Define "#default_value" here in form_alter() and it will be
+  // // put into the generated form.
+  // $form['lop_light_like_leg_number']['und'][0]['value']['#default_value'] = '123';
 
 
 
 
-  // If you want to hide a field in a form, this seems like the way to
-  // go. You define an '#attributes' to a field  in the following
-  // manner. This just marks the form invisible in css. If the user
-  // turns css off, he still can see the field. See
-  // http://drupal.stackexchange.com/questions/7199/how-to-hide-and-or-prevent-access-to-fields-in-a-form-such-as-group-audience-f
-  // This way, you can still populate a field with #default_value and it
-  // will even be validated.
-  //
-  // An alternative way could be using '#prefix'
-  // and '#suffix' according to https://www.drupal.org/node/728398
-  $form['lop_leg_number']['#attributes']['class']['hide_me'] = 'element-hidden';
-  $form['lop_leg_number']['und'][0]['value']['#default_value'] = 'b200';
+  // // If you want to hide a field in a form, this seems like the way to
+  // // go. You define an '#attributes' to a field  in the following
+  // // manner. This just marks the form invisible in css. If the user
+  // // turns css off, he still can see the field. See
+  // // http://drupal.stackexchange.com/questions/7199/how-to-hide-and-or-prevent-access-to-fields-in-a-form-such-as-group-audience-f
+  // // This way, you can still populate a field with #default_value and it
+  // // will even be validated.
+  // //
+  // // An alternative way could be using '#prefix'
+  // // and '#suffix' according to https://www.drupal.org/node/728398
+  // $form['lop_leg_number']['#attributes']['class']['hide_me'] = 'element-hidden';
+  // $form['lop_leg_number']['und'][0]['value']['#default_value'] = 'b200';
 
 
+  // We control the steps of the form with $form_state['step']. If it is
+  // not set, we must be on the first page. So we set it to 1. If
+  // it is set, we obviously don't want to change it here.
+  if (!isset($form_state['step']))
+  {
+    $form_state['step'] = 1;
+  }
+
+
+  // Decide what to do according to the 'step' variable:
+  switch ($form_state['step'])
+  {
+    case 1:
+      // Do something for the first page
+      loopedia_integral_first_step($form, $form_state);
+      break;
+    case 2:
+      // Do something for the second page
+      loopedia_integral_second_step($form, $form_state);
+      break;
+    case 3:
+      loopedia_integral_third_step($form, $form_state);
+      break;
+  }
+
+
+
+  // // Here, we put the two fields for each propagator into one fieldset.
+  // for ($i = 1; $i <= 12; $i++)
+  // {
+  //   $form['prop_' . $i] = array(
+  //     '#type' => 'fieldset',
+  //     '#title' => 'Propagator ' . $i,
+  //     '#description' => t('This is the description of the fieldset for the Propagator.'),
+  //     '#collapsible' => false,
+  //     'lop_propagator_' . $i . '_mass' => $form['lop_propagator_' . $i . '_mass'],
+  //     'lop_propagator_' . $i . '_power' => $form['lop_propagator_' . $i . '_power'],
+  //     // '#weight' => -4,
+  //   );
+  //   unset($form['lop_propagator_' . $i . '_mass'],
+  //         $form['lop_propagator_' . $i . '_power']);
+  // }
+
+  // dpm($form_state, '$form_state');
+  dpm($form, '$form');
+}
+
+
+/**
+ * Callback function for the first step of the integral sumbission form.
+ */
+function loopedia_integral_first_step(&$form, &$form_state)
+{
+  // Here, we write the names of all elements that need to be hidden in
+  // an array.
   $elements_to_hide = array(
     'lop_comment',
     // 'lop_nickel',
@@ -120,32 +175,100 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
     $elements_to_hide[] = 'lop_propagator_' . $i . '_power';
   }
 
-
+  // Here, we write the appopriate array elements to the elements to
+  // hide.
   foreach ($elements_to_hide as $hide_me)
   {
     $form[$hide_me]['#attributes']['class']['hide_me'] = 'element-hidden';
   }
 
 
-  // // Here, we put the two fields for each propagator into one fieldset.
-  // for ($i = 1; $i <= 12; $i++)
-  // {
-  //   $form['prop_' . $i] = array(
-  //     '#type' => 'fieldset',
-  //     '#title' => 'Propagator ' . $i,
-  //     '#description' => t('This is the description of the fieldset for the Propagator.'),
-  //     '#collapsible' => false,
-  //     'lop_propagator_' . $i . '_mass' => $form['lop_propagator_' . $i . '_mass'],
-  //     'lop_propagator_' . $i . '_power' => $form['lop_propagator_' . $i . '_power'],
-  //     // '#weight' => -4,
-  //   );
-  //   unset($form['lop_propagator_' . $i . '_mass'],
-  //         $form['lop_propagator_' . $i . '_power']);
-  // }
-
-  // dpm($form_state, '$form_state');
-  dpm($form, '$form');
+  $form['actions']['next'] = array(
+    '#type' => 'submit',
+    '#value' => 'Next >>',
+    '#submit' => array('loopedia_integral_next_submit'),
+    // '#validate' => array('form_example_tutorial_8_next_validate'),
+  );
+  $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
 }
+
+
+/**
+ * Callback function for the second step of the integral sumbission form.
+ */
+function loopedia_integral_second_step(&$form, &$form_state)
+{
+  dsm('This is second step function.');
+  $form['actions']['back'] = array(
+    '#type' => 'submit',
+    '#value' => t('<< Back'),
+    '#submit' => array('loopedia_integral_back_submit'),
+    //
+    // We don't want to validate the fields because they will be
+    // validated once the user goes forward. #limit_validation_errors()
+    // takes an array of elements that will be validated. Everything
+    // else will not be validated. See
+    // https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7#limit_validation_errors
+    '#limit_validation_errors' => array(),
+  );
+
+  $form['actions']['next'] = array(
+    '#type' => 'submit',
+    '#value' => 'Next >>',
+    '#submit' => array('loopedia_integral_next_submit'),
+    // '#validate' => array('form_example_tutorial_8_next_validate'),
+  );
+  $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
+}
+
+
+/**
+ * Callback function for the third step of the integral sumbission form.
+ */
+function loopedia_integral_third_step(&$form, &$form_state)
+{
+  dsm('this is step three!');
+}
+
+
+
+/**
+ * Submit handler for loopedia_integral_first_step next button.
+ */
+function loopedia_integral_next_submit(&$form, &$form_state)
+{
+  switch ($form_state['step'])
+  {
+    case 1:
+      // We set 'step' to 2 such that when the form gets build next time,
+      // it will build the second step
+      $form_state['step'] = 2;
+      break;
+    case 2:
+      $form_state['step'] = 3;
+      break;
+  }
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Submit handler for loopedia_integral_first_step next button.
+ */
+function loopedia_integral_back_submit(&$form, &$form_state)
+{
+  switch ($form_state['step'])
+  {
+    case 2:
+      $form_state['step'] = 1;
+      break;
+    case 3:
+      $form_state['step'] = 2;
+      break;
+  }
+  $form_state['rebuild'] = TRUE;
+}
+
+
 
 
 /**
