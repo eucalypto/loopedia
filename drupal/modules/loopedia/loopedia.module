@@ -138,7 +138,7 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
   // }
 
   // dpm($form_state, '$form_state');
-  dpm($form, '$form');
+  // dpm($form, '$form');
 }
 
 
@@ -147,6 +147,8 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
  */
 function loopedia_integral_first_step(&$form, &$form_state)
 {
+  dpm($form_state);
+  dpm($form);
   // Here, we write the names of all elements that need to be hidden in
   // an array.
   $elements_to_hide = array(
@@ -190,6 +192,47 @@ function loopedia_integral_first_step(&$form, &$form_state)
     '#validate' => array('loopedia_integral_next_validate_1'),
   );
   $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
+
+
+  $form['nickel_adjalist'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Nickel or Adjacency List?',
+    '#description' => t('Choose if you want to provide a Nickel Index or an Adjacency List'),
+    '#collapsible' => false,
+    );
+  $form['nickel_adjalist']['selection'] = array(
+    '#type' => 'radios',
+    '#options' => array(
+      'nickel'   => t('Nickel Index'),
+      'adjalist' => t('Adjacency List'),
+    ),
+  );
+
+  $form['nickel_adjalist']['adjalist'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Adjacency List',
+    '#size' => 80,
+    '#maxlength' => 400,
+    // '#required' => TRUE,
+
+    // Only show this filed if "adjacency list" was selected.
+    '#states' => array(
+      'visible' => array(
+        ':input[name="selection"]' => array('value' => 'adjalist'),
+      ),
+    ),
+  );
+
+  $form['lop_nickel']['#states'] = array(
+    'visible' => array(
+      ':input[name="selection"]' => array('value' => 'nickel'),
+    ),
+  );
+  $form['lop_nickel']['#element_validate'][] = 'loopedia_lop_nickel_validate';
+  unset($form['lop_nickel']['#weight']);
+  $form['nickel_adjalist']['lop_nickel'] = $form['lop_nickel'];
+  unset($form['lop_nickel']);
+
 }
 
 /**
@@ -212,7 +255,128 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
  */
 function loopedia_integral_next_validate_1(&$form, &$form_state)
 {
-  dsm('This is the validation of the button' . microtime() );
+  // dpm($form_state);
+  if ($form_state['values']['selection'] == 'adjalist')
+  {
+    // Begin of the check of the given adjacency list
+
+    // Check if the given adjacency list string contains forbidden characters.
+    // Allowed ones are ",", "-", "[", "]", "0-9", " "
+    if (preg_match('/^[,\[\]0-9\s-]*$/', $form_state['values']['adjalist']) !== 1)
+    {
+      form_set_error('adjalist', t(
+      'Your adjacency list seems to contain not allowed characters. The allowed ones are: "[comma]", "-", "[", "]", "0-9", "[whitespace]"'
+    ));
+    }
+
+
+
+    // Calculate the Nickel index from the given Adjacency List
+    $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
+              escapeshellarg($form_state['values']['adjalist']) .
+              " 2>&1";
+    $generated_nickel = trim(shell_exec($exec0));
+
+
+
+    // If the script outputs more than one line (nickel index), then there must
+    // have been an error. So if the output $generated_nickel contains a newline
+    // character ("\n" == PHP_EOL), an error is displayed.
+    // http://stackoverflow.com/questions/9437121/how-to-detect-if-a-string-has-a-new-line-break-in-it
+    if (strpos($generated_nickel, PHP_EOL) !== false)
+    {
+      form_set_error('adjalist', t(
+        "There seems to be a problem with your adjacency list."
+      ));
+    }
+    else
+    {
+      $form_state['values']['lop_nickel']['und'][0]['value'] = $generated_nickel;
+    }
+
+    // End of check of the given adjacency list.
+  }
+  else
+  {
+    // Begin of checking of the given nickel index.
+    $nickel_value_given = $form_state['values']['lop_nickel']['und'][0]['value'];
+
+    // Check the formal structure of the given index: it shall only contain "e",
+    // "0-9" and "|".
+    if (preg_match('/^[e0-9\|]*$/', $nickel_value_given) !== 1)
+    {
+      form_set_error('lop_nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "|".'));
+    }
+
+
+    // Check, if given Nickel index is correct(minimal).
+
+    // When drupal executes a script, it starts in the project path e.g.
+    // /var/www/html/drupal_project/ , where the "sites/" folder is.
+    $exec1 = "python sites/default/scripts/minimalnickel.py " .
+               escapeshellarg($nickel_value_given) .
+               " 2>&1";
+    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel Index
+                            // calculated by script.  trim() was needed here
+                            // because shell_exec() produces one unwanted
+                            // whitespace at the end of the output string
+
+
+    if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
+    {
+      // GraphState outputs a (long) error message if the nickel string argument
+      // is wrong according to the convention. So if the output of the script
+      // has not the same length as the given nickel string, something went
+      // wrong.
+
+      form_set_error('lop_nickel', t(
+        'Your nickel index "@ni_given" seems to be wrong. Please check if it is according to the conventions.',
+        array(
+        '@ni_given' => $nickel_value_given,
+        )
+      ));
+    }
+    elseif ( $nickel_value_given != $nickel_value_correct )
+    {
+      // If the given string has the same length as the outupt but is not equal,
+      // then the given nickel index is not minimal.
+
+      // $form_state['values']['lop_nickel']['und'][0]['value'] = $nickel_value_correct;
+      // form_set_value($form['lop_nickel'], $nickel_value_correct, $form_state);
+
+      form_set_error('lop_nickel', t('The given nickel index: "@ni_given" is not correct (minimal). It was replaced by the right (minimal) Nickel index: <strong>"@ni_correct"</strong>.',
+        array(
+          '@ni_given' => $nickel_value_given,
+          '@ni_correct' => $nickel_value_correct,
+        )
+      ));
+    }
+    else
+    {
+      drupal_set_message(t('The Nickel index "@nickel" is correct!',
+        array('@nickel' => $nickel_value_correct)
+      ));
+    }
+  }
+  // End of checking the Nickel index.
+
+}
+// End of loopedia_integral_next_validate_1()
+
+
+
+/**
+ *  Validate handler for the nickel index
+ */
+function loopedia_lop_nickel_validate($element, $form_state)
+{
+  $ni_given = $form_state['values']['lop_nickel']['und'][0]['value'];
+  // Check the formal structure of the given index: it shall only
+  // contain "e", "0-9" and "|".
+  if (preg_match('/^[e0-9\|]*$/', $ni_given) !== 1)
+  {
+    form_error($element, t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "|".'));
+  }
 }
 
 
@@ -224,6 +388,7 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
 function loopedia_integral_second_step(&$form, &$form_state)
 {
   dsm('This is second step function.');
+  dpm($form_state);
   $form['actions']['back'] = array(
     '#type' => 'submit',
     '#value' => t('<< Back'),
