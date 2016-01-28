@@ -7,26 +7,26 @@
  */
 function loopedia_enable()
 {
-  // Taxonomy:
-  // This is taken from  http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
-  // I saved this site in "loopedia_reference_collection/web_pages/How
-  // to Create Taxonomy Vocabularies and Terms Programatically in Drupal
-  // 7.pdf". This Text uses the hook_install() to save the vocabulary;
-  // but we want to be able to update the vocabulary after installation.
-  // This is why we used the hook_enable(); we just have to update this
-  // code and disable atnd (re-)enable the module.
-  foreach (_loopedia_taxonomy_definition() as $tax)
-  {
-    // Vocabulary:
-    _loopedia_save_or_update_vocabulary($tax);
-    // Terms:
-    _loopedia_save_or_update_taxonomy_terms($tax);
-  }
+  // // Taxonomy:
+  // // This is taken from  http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
+  // // I saved this site in "loopedia_reference_collection/web_pages/How
+  // // to Create Taxonomy Vocabularies and Terms Programatically in Drupal
+  // // 7.pdf". This Text uses the hook_install() to save the vocabulary;
+  // // but we want to be able to update the vocabulary after installation.
+  // // This is why we used the hook_enable(); we just have to update this
+  // // code and disable atnd (re-)enable the module.
+  // foreach (_loopedia_taxonomy_definition() as $tax)
+  // {
+  //   // Vocabulary:
+  //   _loopedia_save_or_update_vocabulary($tax);
+  //   // Terms:
+  //   _loopedia_save_or_update_taxonomy_terms($tax);
+  // }
 
 
   // Custom content type loopedia_integral:
   node_types_rebuild();
-  _loopedia_update_custom_fields(
+  _loopedia_create_or_update_custom_fields(
     _loopedia_integral_installed_fields(),
     _loopedia_integral_installed_instances()
   );
@@ -36,17 +36,17 @@ function loopedia_enable()
 
 
 
-/**
- * Implements hook_install().
- */
-function loopedia_install() {
-  // Custom node type and its fields:
-  node_types_rebuild();
-  _loopedia_create_custom_fields(
-    _loopedia_integral_installed_fields(),
-    _loopedia_integral_installed_instances()
-  );
-}
+// /**
+//  * Implements hook_install().
+//  */
+// function loopedia_install() {
+//   // Custom node type and its fields:
+//   node_types_rebuild();
+//   _loopedia_create_custom_fields(
+//     _loopedia_integral_installed_fields(),
+//     _loopedia_integral_installed_instances()
+//   );
+// }
 
 
 
@@ -58,9 +58,9 @@ function loopedia_install() {
 */
 function loopedia_uninstall()
 {
-  // Taxonomy:
-  $vocab = taxonomy_vocabulary_machine_name_load('lop_test_vocabulary');
-  taxonomy_vocabulary_delete($vocab->vid);
+  // // Taxonomy:
+  // $vocab = taxonomy_vocabulary_machine_name_load('lop_test_vocabulary');
+  // taxonomy_vocabulary_delete($vocab->vid);
 
 
   // Custom node type and fields:
@@ -178,7 +178,7 @@ function _loopedia_save_or_update_taxonomy_terms($voc)
 
 
 /**
- * Creates custom fields and instances.
+ * Creates or updates custom fields and instances.
  *
  * @param array $fields_def
  *   An array defining the fields. For example
@@ -188,43 +188,58 @@ function _loopedia_save_or_update_taxonomy_terms($voc)
  *   An array defining the field instances. For example
  *   _loopedia_integral_installed_instances() returns such an array.
  */
- function _loopedia_create_custom_fields($fields_def, $field_instances_def)
+ function _loopedia_create_or_update_custom_fields($fields_def, $field_instances_def)
  {
    foreach ($fields_def as $field)
    {
-     field_create_field($field);
+     // Commentary
+     if (field_info_field($field['field_name']) == NULL)
+     {
+       field_create_field($field);
+     }
+     else
+     {
+       field_update_field($field);
+     }
    }
 
    foreach ($field_instances_def as $instance)
    {
-    field_create_instance($instance);
+     if (field_info_instance($instance['entity_type'], $instance['field_name'], $instance['bundle']) == NULL)
+     {
+       field_create_instance($instance);
+     }
+     else
+     {
+       field_update_instance($instance);
+     }
    }
  }
 
 
- /**
-  * Uptades custom fields and instances.
-  *
-  * @param array $fields_def
-  *   An array defining the fields. For example
-  *   _loopedia_integral_installed_fields() returns such an array.
-  *
-  * @param array $field_instances_def
-  *   An array defining the field instances. For example
-  *   _loopedia_integral_installed_instances() returns such an array.
-  */
-  function _loopedia_update_custom_fields($fields_def, $field_instances_def)
-  {
-    foreach ($fields_def as $field)
-    {
-      field_update_field($field);
-    }
-
-    foreach ($field_instances_def as $instance)
-    {
-      field_update_instance($instance);
-    }
-  }
+ // /**
+ //  * Uptades custom fields and instances.
+ //  *
+ //  * @param array $fields_def
+ //  *   An array defining the fields. For example
+ //  *   _loopedia_integral_installed_fields() returns such an array.
+ //  *
+ //  * @param array $field_instances_def
+ //  *   An array defining the field instances. For example
+ //  *   _loopedia_integral_installed_instances() returns such an array.
+ //  */
+ //  function _loopedia_update_custom_fields($fields_def, $field_instances_def)
+ //  {
+ //    foreach ($fields_def as $field)
+ //    {
+ //      field_update_field($field);
+ //    }
+ //
+ //    foreach ($field_instances_def as $instance)
+ //    {
+ //      field_update_instance($instance);
+ //    }
+ //  }
 
 
 
@@ -310,6 +325,26 @@ function _loopedia_integral_installed_fields()
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'lop_nickel',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 512,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+  $field_bases['lop_picture_path'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'lop_picture_path',
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -685,6 +720,41 @@ function _loopedia_integral_installed_instances()
       'weight' => -4,
     ),
   );
+
+  $field_instances['lop_i_picture_path'] = array(
+    'bundle' => 'lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'lop_picture_path',
+    'label' => 'Picture Path',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => -4,
+      'default_value' => 'This is the default value. You should not see this!',
+    ),
+  );
+
+
 
 
   $field_instances['lop_i_comment'] = array(
