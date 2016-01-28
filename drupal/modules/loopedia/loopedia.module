@@ -261,8 +261,8 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
   {
     // Begin of the check of the given adjacency list
 
-    // Check if the given adjacency list string contains forbidden characters.
-    // Allowed ones are ",", "-", "[", "]", "0-9", " "
+    // Check if the given adjacency list string contains forbidden
+    // characters. Allowed ones are ",", "-", "[", "]", "0-9", " "
     if (preg_match('/^[,\[\]0-9\s-]*$/', $form_state['values']['adjalist']) !== 1)
     {
       form_set_error('adjalist', t(
@@ -280,9 +280,10 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
 
 
 
-    // If the script outputs more than one line (nickel index), then there must
-    // have been an error. So if the output $generated_nickel contains a newline
-    // character ("\n" == PHP_EOL), an error is displayed.
+    // If the script outputs more than one line (nickel index), then
+    // there must have been an error. So if the output $generated_nickel
+    // contains a newline character ("\n" == PHP_EOL), an error is
+    // displayed.
     // http://stackoverflow.com/questions/9437121/how-to-detect-if-a-string-has-a-new-line-break-in-it
     if (strpos($generated_nickel, PHP_EOL) !== false)
     {
@@ -292,7 +293,11 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
     }
     else
     {
+      // The adjacency list and generated nickel index seem to be all
+      // right. So we can write the nickel index to the appropriate
+      // places:
       $form_state['values']['lop_nickel']['und'][0]['value'] = $generated_nickel;
+      $form_state['input']['lop_nickel']['und'][0]['value'] = $generated_nickel;
     }
 
     // End of check of the given adjacency list.
@@ -302,8 +307,8 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
     // Begin of checking of the given nickel index.
     $nickel_value_given = $form_state['values']['lop_nickel']['und'][0]['value'];
 
-    // Check the formal structure of the given index: it shall only contain "e",
-    // "0-9" and "|".
+    // Check the formal structure of the given index: it shall only
+    // contain "e", "0-9" and "|".
     if (preg_match('/^[e0-9\|]*$/', $nickel_value_given) !== 1)
     {
       form_set_error('lop_nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "|".'));
@@ -317,18 +322,19 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
     $exec1 = "python sites/default/scripts/minimalnickel.py " .
                escapeshellarg($nickel_value_given) .
                " 2>&1";
-    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel Index
-                            // calculated by script.  trim() was needed here
-                            // because shell_exec() produces one unwanted
-                            // whitespace at the end of the output string
+    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel
+                            // Index calculated by script.  trim() was
+                            // needed here because shell_exec() produces
+                            // one unwanted whitespace at the end of the
+                            // output string
 
 
     if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
     {
-      // GraphState outputs a (long) error message if the nickel string argument
-      // is wrong according to the convention. So if the output of the script
-      // has not the same length as the given nickel string, something went
-      // wrong.
+      // GraphState outputs a (long) error message if the nickel string
+      // argument is wrong according to the convention. So if the output
+      // of the script has not the same length as the given nickel
+      // string, something went wrong.
 
       form_set_error('lop_nickel', t(
         'Your nickel index "@ni_given" seems to be wrong. Please check if it is according to the conventions.',
