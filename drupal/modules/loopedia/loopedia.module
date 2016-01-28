@@ -61,14 +61,19 @@ function loopedia_form_alter(&$form, &$form_state, $form_id)
  */
 function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
 {
-  // Add an extra validate function
-  $form['#validate'][] = $form['#validate'][0];
-  $form['#validate'][0] = 'loopedia_lop_integral_form_validate';
+  // // Add an extra validate function
+  // $form['#validate'][] = $form['#validate'][0];
+  // $form['#validate'][0] = 'loopedia_lop_integral_form_validate';
 
   // Here we try to auto-check the checkbox that triggers a revision
   // control
   $form['revision_information']['revision']['#default_value'] = 1;
 
+
+
+  // lop_picture_path will never be visible because we store here the
+  // path to the generated picture of the integral.
+  $form['lop_picture_path']['#pre_render'] = array('loopedia_empty_array');
 
 
   // // We want so set a value for a field through our srcipts. But the
@@ -107,11 +112,9 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
   switch ($form_state['step'])
   {
     case 1:
-      // Do something for the first page
       loopedia_integral_first_step($form, $form_state);
       break;
     case 2:
-      // Do something for the second page
       loopedia_integral_second_step($form, $form_state);
       break;
     case 3:
@@ -181,7 +184,8 @@ function loopedia_integral_first_step(&$form, &$form_state)
   // hide.
   foreach ($elements_to_hide as $hide_me)
   {
-    $form[$hide_me]['#attributes']['class']['hide_me'] = 'element-hidden';
+    // $form[$hide_me]['#attributes']['class']['hide_me'] = 'element-hidden';
+    $form[$hide_me]['#pre_render'] = array('loopedia_empty_array');
   }
 
 
@@ -228,18 +232,44 @@ function loopedia_integral_first_step(&$form, &$form_state)
       ':input[name="selection"]' => array('value' => 'nickel'),
     ),
   );
-  $form['lop_nickel']['#element_validate'][] = 'loopedia_lop_nickel_validate';
+  // $form['lop_nickel']['#element_validate'][] = 'loopedia_lop_nickel_validate';
   unset($form['lop_nickel']['#weight']);
   $form['nickel_adjalist']['lop_nickel'] = $form['lop_nickel'];
   unset($form['lop_nickel']);
 
 }
 
+
+/**
+ * Returns an empty array
+ *
+ * This is used here to hide fields by setting '#pre_render' to this
+ * function.
+ */
+function loopedia_empty_array()
+{
+  return array();
+}
+
+
 /**
  * Submit handler for loopedia_integral_first_step next button.
  */
 function loopedia_integral_next_submit_1(&$form, &$form_state)
 {
+  $nickel = $form_state['values']['lop_nickel']['und'][0]['value'];
+  // Generate Picture to Nickel Index
+  $image_path = "sites/default/files/nickel_generated/" .
+                  uniqid($nickel);
+                 // this is the path to the dot file the image (svg) file will
+                 // have an extra ending of ".svg"
+  $script_path = "sites/default/scripts/neato_from_nickel.py";
+  $exec2 = escapeshellcmd("python $script_path " . $nickel . " $image_path");
+  exec($exec2);
+  // Save image path in 'lop_picture_path':
+  $form_state['values']['lop_picture_path']['und'][0]['value'] = $image_path . ".svg";
+
+
   // We set 'step' to 2 such that when the form gets build next time,
   // it will build the second step
   $form_state['step'] = 2;
@@ -382,13 +412,13 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
 
 
 
-/**
- *  Validate handler for the nickel index
- */
-function loopedia_lop_nickel_validate($element, $form_state)
-{
-  // dpm($element, '$element');
-}
+// /**
+//  *  Validate handler for the nickel index
+//  */
+// function loopedia_lop_nickel_validate($element, $form_state)
+// {
+//   // dpm($element, '$element');
+// }
 
 
 
@@ -400,8 +430,15 @@ function loopedia_lop_nickel_validate($element, $form_state)
  */
 function loopedia_integral_second_step(&$form, &$form_state)
 {
-  dsm('This is second step function.');
-  dpm($form_state);
+  $form['html_text1'] = array(
+    '#type' => 'markup',
+    '#markup' => '<img src="'.
+      $form_state['values']['lop_picture_path']['und'][0]['value'] .
+      ' "alt="alternative text">',
+    );
+
+
+
   $form['actions']['back'] = array(
     '#type' => 'submit',
     '#value' => t('<< Back'),
@@ -422,6 +459,8 @@ function loopedia_integral_second_step(&$form, &$form_state)
     // '#validate' => array('form_example_tutorial_8_next_validate'),
   );
   $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
+  dpm($form_state);
+  dpm($form);
 }
 
 /**
