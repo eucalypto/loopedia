@@ -181,9 +181,9 @@ function nickelplay_form_validate($form, &$form_state)
 
     // Check the formal structure of the given index: it shall only contain "e",
     // "0-9" and "|".
-    if (preg_match('/^[e0-9\|]*$/', $nickel_value_given) !== 1)
+    if (preg_match('/^[e0-9A-Z\|]*$/', $nickel_value_given) !== 1)
     {
-      form_set_error('nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "|".'));
+      form_set_error('nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "A-Z", "|".'));
     }
 
 

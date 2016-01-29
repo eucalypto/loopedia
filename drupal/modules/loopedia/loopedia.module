@@ -269,6 +269,7 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
 
     // Check if the given adjacency list string contains forbidden
     // characters. Allowed ones are ",", "-", "[", "]", "0-9", " "
+    // See http://www.rexegg.com/regex-php.html
     if (preg_match('/^[,\[\]0-9\s-]*$/', $form_state['values']['adjalist']) !== 1)
     {
       form_set_error('adjalist', t(
@@ -315,9 +316,9 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
 
     // Check the formal structure of the given index: it shall only
     // contain "e", "0-9" and "|".
-    if (preg_match('/^[e0-9\|]*$/', $nickel_value_given) !== 1)
+    if (preg_match('/^[e0-9A-Z\|]*$/', $nickel_value_given) !== 1)
     {
-      form_set_error('lop_nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "|".'));
+      form_set_error('lop_nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "A-Z", "|".'));
     }
 
 
@@ -409,6 +410,19 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
   // starts with the path 'http://localhost/loopediatest/node/52/edit',
   // for some reason. So we need an absolute path.
   $form_state['values']['lop_picture_path']['und'][0]['value'] = 'http://localhost/loopediatest/' . $image_path . ".svg";
+
+
+  $legs = substr_count($nickel, 'e');
+  dsm('The number of legs is ' . $legs);
+
+  $propagators = preg_match_all('~[0-9A-Z]~', $nickel);
+  dsm('The number of propagators is ' . $propagators);
+
+  $vertices = substr_count($nickel, '|');
+  dsm('The number of vertices is ' . $vertices);
+
+  $loops = $propagators - $vertices + 1;
+  dsm('The number of loops is ' . $loops);
 
 
   // We set 'step' to 2 such that when the form gets build next time,
