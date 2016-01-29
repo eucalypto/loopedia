@@ -17,21 +17,23 @@ def neatodraw(gs_object, filename):
         dotfile.write("node [shape=point];\n")
 
 
-        externalcount = 0
+        externalcount = 1
+        propagatorcount = 1
         external_dot_string = '{node [shape=plaintext label=""] '
         dot_edges_string = ""
         for edge in gs_object.edges:
             if edge.is_external():
                 string = "E" + str(externalcount)
                 string += " -- "
-                string += str(edge.internal_node) + ";"
+                string += str(edge.internal_node) + " [fontname=Arial, labelfloat=true, fontsize=8, taillabel=Leg_" + str(externalcount) + "];"
                 dot_edges_string += string + "\n"
                 external_dot_string += " E" + str(externalcount)
                 externalcount += 1
             else:
                 string = (str(edge.nodes[0]) + " -- " + str(edge.nodes[1]) +
-                          ";")
+                          " [fontname=Arial, labelfloat=true, fontsize=8, label=P" + str(propagatorcount) + "];")
                 dot_edges_string += string + "\n"
+                propagatorcount += 1
 
         external_dot_string += "}\n"
         dot_edges_string += "}\n"
