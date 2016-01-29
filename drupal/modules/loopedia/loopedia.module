@@ -253,30 +253,6 @@ function loopedia_empty_array()
 
 
 /**
- * Submit handler for loopedia_integral_first_step next button.
- */
-function loopedia_integral_next_submit_1(&$form, &$form_state)
-{
-  $nickel = $form_state['values']['lop_nickel']['und'][0]['value'];
-  // Generate Picture to Nickel Index
-  $image_path = "sites/default/files/nickel_generated/" .
-                  uniqid($nickel);
-                 // this is the path to the dot file the image (svg) file will
-                 // have an extra ending of ".svg"
-  $script_path = "sites/default/scripts/neato_from_nickel.py";
-  $exec2 = escapeshellcmd("python $script_path " . $nickel . " $image_path");
-  exec($exec2);
-  // Save image path in 'lop_picture_path':
-  $form_state['values']['lop_picture_path']['und'][0]['value'] = $image_path . ".svg";
-
-
-  // We set 'step' to 2 such that when the form gets build next time,
-  // it will build the second step
-  $form_state['step'] = 2;
-  $form_state['rebuild'] = TRUE;
-}
-
-/**
  * Validate handler for loopedia_integral_first_step next button
  *
  * It might become important, in which order the validation functions
@@ -412,6 +388,38 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
 
 
 
+/**
+ * Submit handler for loopedia_integral_first_step next button.
+ */
+function loopedia_integral_next_submit_1(&$form, &$form_state)
+{
+  $nickel = $form_state['values']['lop_nickel']['und'][0]['value'];
+  // Generate Picture to Nickel Index
+  $image_path = "sites/default/files/nickel_generated/" .
+                  uniqid($nickel);
+                 // this is the path to the dot file the image (svg) file will
+                 // have an extra ending of ".svg"
+  $script_path = "sites/default/scripts/neato_from_nickel.py";
+  $exec2 = escapeshellcmd("python $script_path " . $nickel . " $image_path");
+  exec($exec2);
+  // Save image path in 'lop_picture_path'. $image_path looks like
+  // 'sites/default/files/...'. We have to prefix this with
+  // 'http://localhost/loopediatest/' in order to get an "absoulte" path
+  // to the file. This is necessary because while editing a node, drupal
+  // starts with the path 'http://localhost/loopediatest/node/52/edit',
+  // for some reason. So we need an absolute path.
+  $form_state['values']['lop_picture_path']['und'][0]['value'] = 'http://localhost/loopediatest/' . $image_path . ".svg";
+
+
+  // We set 'step' to 2 such that when the form gets build next time,
+  // it will build the second step
+  $form_state['step'] = 2;
+  $form_state['rebuild'] = TRUE;
+}
+
+
+
+
 // /**
 //  *  Validate handler for the nickel index
 //  */
@@ -430,11 +438,12 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
  */
 function loopedia_integral_second_step(&$form, &$form_state)
 {
-  $form['html_text1'] = array(
+  $form['feynman_graph'] = array(
     '#type' => 'markup',
     '#markup' => '<img src="'.
       $form_state['values']['lop_picture_path']['und'][0]['value'] .
       ' "alt="alternative text">',
+    '#weight' => -10,
     );
 
 
@@ -513,6 +522,14 @@ function loopedia_lop_integral_form_validate($form, &$form_state)
   dpm($form, '$form');
 }
 
+
+
+//**********************************************************ooo
+
+function loopedia_node_view_alter(&$build)
+{
+  dpm($build);
+}
 
 
 
