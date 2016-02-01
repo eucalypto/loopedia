@@ -150,6 +150,12 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
  */
 function loopedia_integral_first_step(&$form, &$form_state)
 {
+  // The following two numbers are just copies of the definitions in
+  // _loopedia_integral_installed_fields() in "loopedia.install" and
+  // thus should be the same.
+  $max_num_prop = 21;
+  $max_num_leg = 20;
+
   dpm($form_state);
   dpm($form);
   // Here, we write the names of all elements that need to be hidden in
@@ -157,6 +163,7 @@ function loopedia_integral_first_step(&$form, &$form_state)
   $elements_to_hide = array(
     'lop_comment',
     // 'lop_nickel',
+    'lop_vertex_number',
     'lop_literature_arxiv',
     'lop_literature_publication',
     'lop_int_mass_shell_leg_num',
@@ -169,12 +176,12 @@ function loopedia_integral_first_step(&$form, &$form_state)
     'lop_propagator_number',
   );
   // Adding the external leg virtualities to $elements_to_hide :
-  for ($i = 1; $i <= 20; $i++)
+  for ($i = 1; $i <= $max_num_leg; $i++)
   {
     $elements_to_hide[] = 'lop_ext_leg_' . $i . '_virt';
   }
   // Adding the mass and power fields for the propagators:
-  for ($i = 1; $i <= 12; $i++)
+  for ($i = 1; $i <= $max_num_prop; $i++)
   {
     $elements_to_hide[] = 'lop_propagator_' . $i . '_mass';
     $elements_to_hide[] = 'lop_propagator_' . $i . '_power';
@@ -398,8 +405,8 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
   // Generate Picture to Nickel Index
   $image_path = "sites/default/files/nickel_generated/" .
                   uniqid($nickel);
-                 // this is the path to the dot file the image (svg) file will
-                 // have an extra ending of ".svg"
+                 // this is the path to the dot file the image (svg)
+                 // file will have an extra ending of ".svg"
   $script_path = "sites/default/scripts/neato_from_nickel.py";
   $exec2 = escapeshellcmd("python $script_path " . $nickel . " $image_path");
   exec($exec2);
@@ -412,17 +419,24 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
   $form_state['values']['lop_picture_path']['und'][0]['value'] = 'http://localhost/loopediatest/' . $image_path . ".svg";
 
 
+  // Extract information out of the Nickel Index string and save it to
+  // the appropriate fields:
   $legs = substr_count($nickel, 'e');
-  dsm('The number of legs is ' . $legs);
+  $form_state['values']['lop_leg_number']['und'][0]['value'] = $legs;
+  $form_state['input']['lop_leg_number']['und'][0]['value'] = $legs;
 
   $propagators = preg_match_all('~[0-9A-Z]~', $nickel);
-  dsm('The number of propagators is ' . $propagators);
+  $form_state['values']['lop_propagator_number']['und'][0]['value'] = $propagators;
+  $form_state['input']['lop_propagator_number']['und'][0]['value'] = $propagators;
 
   $vertices = substr_count($nickel, '|');
-  dsm('The number of vertices is ' . $vertices);
+  $form_state['values']['lop_vertex_number']['und'][0]['value'] = $vertices;
+  $form_state['input']['lop_vertex_number']['und'][0]['value'] = $vertices;
 
   $loops = $propagators - $vertices + 1;
-  dsm('The number of loops is ' . $loops);
+  $form_state['values']['lop_loop_number']['und'][0]['value'] = $loops;
+  $form_state['input']['lop_loop_number']['und'][0]['value'] = $loops;
+
 
 
   // We set 'step' to 2 such that when the form gets build next time,

@@ -311,9 +311,14 @@ function _loopedia_taxonomy_definition()
  */
 function _loopedia_integral_installed_fields()
 {
+  // If you change these two numbers, you should also change them in the
+  // beginning of _loopedia_integral_installed_instances()
+  //
   // $max_num_prop defines the maximal number of propagators that are
   // being stored.
-  $max_num_prop = 12;
+  $max_num_prop = 21;
+  // Define the maximal number of legs for each integral.
+  $max_num_leg = 20;
 
 
   $field_bases = array();
@@ -379,20 +384,20 @@ function _loopedia_integral_installed_fields()
 
     // This defines the allowed values for the virtuality of the
     // external legs.
-    $allowed_values = array(
+    $allowed_values_virt = array(
       'light-like' => 'light-like',
       // 'on_internal_mass_shell' => 'on_internal_mass_shell',
       'off-shell' => 'off-shell',
     );
     for ($j = 1; $j <= $max_num_prop; $j++)
     {
-      $allowed_values['m' . $j . '^2'] = 'm' . $j . '^2';
+      $allowed_values_virt['m' . $j . '^2'] = 'm' . $j . '^2';
     }
 
 
-    // Define 20 fields for each of the external legs.
-    // This will store the virtuality of each leg.
-    for ($i = 1; $i <= 20; $i++)
+    // Define one field for each external leg, which stores the
+    // virtuality of the leg.
+    for ($i = 1; $i <= $max_num_leg; $i++)
     {
       $field_bases['lop_ext_leg_' . $i . '_virt'] = array(
         'active' => 1,
@@ -408,7 +413,7 @@ function _loopedia_integral_installed_fields()
         'locked' => 0,
         'module' => 'list',
         'settings' => array(
-          'allowed_values' => $allowed_values,
+          'allowed_values' => $allowed_values_virt,
           'allowed_values_function' => '',
         ),
         'translatable' => 0,
@@ -498,6 +503,20 @@ function _loopedia_integral_installed_fields()
       'type' => 'number_integer',
     );
 
+    $field_bases['lop_vertex_number'] = array(
+      'active' => 1,
+      'cardinality' => 1,
+      'deleted' => 0,
+      'entity_types' => array(),
+      'field_name' => 'lop_vertex_number',
+      'indexes' => array(),
+      'locked' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'translatable' => 0,
+      'type' => 'number_integer',
+    );
+
     $field_bases['lop_loop_number'] = array(
       'active' => 1,
       'cardinality' => 1,
@@ -568,6 +587,16 @@ function _loopedia_integral_installed_fields()
       'type' => 'number_integer',
     );
 
+    // Define allowed_values for the propagator masses
+    $allowed_values_prop = array(
+      'massless' => 'massless',
+    );
+    for ($i = 1; $i <= $max_num_prop; $i++)
+    {
+      $allowed_values_prop['m' . $i] = 'm' . $i;
+    }
+
+
     for ($i = 1; $i <= $max_num_prop; $i++)
     {
       $field_bases['lop_propagator_' . $i . '_mass'] = array(
@@ -584,21 +613,7 @@ function _loopedia_integral_installed_fields()
         'locked' => 0,
         'module' => 'list',
         'settings' => array(
-          'allowed_values' => array(
-            'massless' => 'massless',
-            'm1' => 'm1',
-            'm2' => 'm2',
-            'm3' => 'm3',
-            'm4' => 'm4',
-            'm5' => 'm5',
-            'm6' => 'm6',
-            'm7' => 'm7',
-            'm8' => 'm8',
-            'm9' => 'm9',
-            'm10' => 'm10',
-            'm11' => 'm11',
-            'm12' => 'm12',
-          ),
+          'allowed_values' => $allowed_values_prop,
           'allowed_values_function' => '',
         ),
         'translatable' => 0,
@@ -664,6 +679,11 @@ function _loopedia_integral_installed_fields()
  */
 function _loopedia_integral_installed_instances()
 {
+  // These definitions are the same as in the beginning of
+  // _loopedia_integral_installed_fields()
+  $max_num_prop = 21;
+  $max_num_leg = 20;
+
   $field_instances = array();
 
 
@@ -813,7 +833,7 @@ function _loopedia_integral_installed_instances()
     ),
   );
 
-  for ($i = 1; $i <= 20; $i++)
+  for ($i = 1; $i <= $max_num_leg; $i++)
   {
     $field_instances['lop_i_external_leg_' . $i . '_virtuality'] = array(
       'bundle' => 'lop_integral',
@@ -1147,6 +1167,63 @@ function _loopedia_integral_installed_instances()
     ),
   );
 
+  $field_instances['lop_i_vertex_number'] = array(
+    'bundle' => 'lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This is the number of vertices.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 8,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'lop_vertex_number',
+    'label' => 'Number of vertices',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 8,
+    ),
+  );
+
   $field_instances['lop_i_loop_number'] = array(
     'bundle' => 'lop_integral',
     'default_value' => NULL,
@@ -1434,7 +1511,7 @@ function _loopedia_integral_installed_instances()
 
 
 
-  for ($i = 1; $i <=12; $i++)
+  for ($i = 1; $i <= $max_num_prop; $i++)
   {
     $field_instances['lop_i_propagator_' . $i . '_mass'] = array(
       'bundle' => 'lop_integral',
