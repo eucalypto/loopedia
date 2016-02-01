@@ -150,50 +150,12 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
  */
 function loopedia_integral_first_step(&$form, &$form_state)
 {
-  // The following two numbers are just copies of the definitions in
-  // _loopedia_integral_installed_fields() in "loopedia.install" and
-  // thus should be the same.
-  $max_num_prop = 21;
-  $max_num_leg = 20;
-
-  dpm($form_state);
-  dpm($form);
-  // Here, we write the names of all elements that need to be hidden in
-  // an array.
-  $elements_to_hide = array(
-    'lop_comment',
-    // 'lop_nickel',
-    'lop_vertex_number',
-    'lop_literature_arxiv',
-    'lop_literature_publication',
-    'lop_int_mass_shell_leg_num',
-    'lop_leg_number',
-    'lop_light_like_leg_number',
-    'lop_loop_number',
-    'lop_mass_scale_number',
-    'lop_massless_propagator_number',
-    'lop_off_shell_leg_number',
-    'lop_propagator_number',
+  // Define array of fields, that shall be shown
+  $elements_to_show = array(
+    'lop_nickel',
   );
-  // Adding the external leg virtualities to $elements_to_hide :
-  for ($i = 1; $i <= $max_num_leg; $i++)
-  {
-    $elements_to_hide[] = 'lop_ext_leg_' . $i . '_virt';
-  }
-  // Adding the mass and power fields for the propagators:
-  for ($i = 1; $i <= $max_num_prop; $i++)
-  {
-    $elements_to_hide[] = 'lop_propagator_' . $i . '_mass';
-    $elements_to_hide[] = 'lop_propagator_' . $i . '_power';
-  }
 
-  // Here, we write the appopriate array elements to the elements to
-  // hide.
-  foreach ($elements_to_hide as $hide_me)
-  {
-    // $form[$hide_me]['#attributes']['class']['hide_me'] = 'element-hidden';
-    $form[$hide_me]['#pre_render'] = array('loopedia_empty_array');
-  }
+  _loopedia_display_fields($elements_to_show, $form, $form_state);
 
 
   $form['actions']['next'] = array(
@@ -257,6 +219,76 @@ function loopedia_empty_array()
 {
   return array();
 }
+
+
+/**
+ * Adjusts which fields will be displayed
+ *
+ * @param &$fields_to_show array
+ *   This is an array of strings. Each string is the name of the field
+ *   that you want to be displayed.
+ */
+function _loopedia_display_fields(&$fields_to_show, &$form, &$form_state)
+{
+  // Store array of fieldnames in $form_state, if it does not exist.
+  if (!isset($form_state['all_fields']))
+  {
+    // The following two numbers are just copies of the definitions in
+    // _loopedia_integral_installed_fields() in "loopedia.install" and
+    // thus should be the same.
+    $max_num_prop = 21;
+    $max_num_leg = 20;
+
+    // This array is trivially associative because later we want to
+    // erase some elements.
+    $fieldnames = array(
+      'lop_comment' => 'lop_comment',
+      'lop_nickel' => 'lop_nickel',
+      'lop_vertex_number' => 'lop_vertex_number',
+      'lop_literature_arxiv' => 'lop_literature_arxiv',
+      'lop_literature_publication' => 'lop_literature_publication',
+      'lop_int_mass_shell_leg_num' => 'lop_int_mass_shell_leg_num',
+      'lop_leg_number' => 'lop_leg_number',
+      'lop_light_like_leg_number' => 'lop_light_like_leg_number',
+      'lop_loop_number' => 'lop_loop_number',
+      'lop_mass_scale_number' => 'lop_mass_scale_number',
+      'lop_massless_propagator_number' => 'lop_massless_propagator_number',
+      'lop_off_shell_leg_number' => 'lop_off_shell_leg_number',
+      'lop_propagator_number' => 'lop_propagator_number',
+    );
+    // Add the external leg virtualities to $fieldnames :
+    for ($i = 1; $i <= $max_num_leg; $i++)
+    {
+      $fieldnames['lop_ext_leg_' . $i . '_virt'] = 'lop_ext_leg_' . $i . '_virt';
+    }
+    // Add the mass and power fields for the propagators:
+    for ($i = 1; $i <= $max_num_prop; $i++)
+    {
+      $fieldnames['lop_propagator_' . $i . '_mass'] = 'lop_propagator_' . $i . '_mass';
+      $fieldnames['lop_propagator_' . $i . '_power'] = 'lop_propagator_' . $i . '_power';
+    }
+    $form_state['all_fields'] = $fieldnames;
+  }
+
+  // Make a working copy of all fieldnames
+  $fields_to_hide = $form_state['all_fields'];
+
+  // Delete fieldnames from working copy that we want to display
+  foreach ($fields_to_show as $fieldname)
+  {
+    unset($fields_to_hide[$fieldname]);
+  }
+
+  // Make remaining fields invisible:
+  foreach ($fields_to_hide as $hide_me)
+  {
+    // $form[$hide_me]['#attributes']['class']['hide_me'] = 'element-hidden';
+    $form[$hide_me]['#pre_render'] = array('loopedia_empty_array');
+  }
+
+}
+
+
 
 
 /**
@@ -359,8 +391,8 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
     }
     elseif ( $nickel_value_given != $nickel_value_correct )
     {
-      // If the given string has the same length as the outupt but is not equal,
-      // then the given nickel index is not minimal.
+      // If the given string has the same length as the outupt but is
+      // not equal, then the given nickel index is not minimal.
 
       // So we write the corret nickel index to the appropriate places:
       // $form_state['values'] storet the real value that is used
@@ -466,6 +498,28 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
  */
 function loopedia_integral_second_step(&$form, &$form_state)
 {
+  $elements_to_show = array(
+    'lop_nickel',
+    'lop_leg_number',
+    'lop_vertex_number',
+    'lop_loop_number',
+    'lop_propagator_number',
+  );
+  $num_legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
+  for ($i = 1; $i <= $num_legs; $i++)
+  {
+    $elements_to_show[] = 'lop_ext_leg_' . $i . '_virt';
+  }
+  //
+  $num_prop = $form_state['values']['lop_propagator_number']['und'][0]['value'];
+  for ($i = 1; $i <= $num_prop; $i++)
+  {
+    $elements_to_show[] = 'lop_propagator_' . $i . '_mass';
+    $elements_to_show[] = 'lop_propagator_' . $i . '_power';
+  }
+
+  _loopedia_display_fields($elements_to_show, $form, $form_state);
+
   $form['feynman_graph'] = array(
     '#type' => 'markup',
     '#markup' => '<img src="'.
