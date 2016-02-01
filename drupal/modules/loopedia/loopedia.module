@@ -24,7 +24,7 @@ function loopedia_node_info()
       'description' => t('This is the node type for Feynman Integrals'),
       'has_title' => '1',
       'title_label' => t('Integral Title'),
-      'help' => t('This is an explanation that should help you.')
+      // 'help' => t('This is an explanation that should help you.')
     ),
   );
 }
@@ -140,8 +140,8 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
   //         $form['lop_propagator_' . $i . '_power']);
   // }
 
-  // dpm($form_state, '$form_state');
-  // dpm($form, '$form');
+  dpm($form_state, '$form_state');
+  dpm($form, '$form');
 }
 
 
@@ -525,10 +525,58 @@ function loopedia_integral_second_step(&$form, &$form_state)
     '#markup' => '<img src="'.
       $form_state['values']['lop_picture_path']['und'][0]['value'] .
       ' "alt="alternative text">',
-    '#weight' => -10,
+    '#weight' => 10,
+  );
+
+
+  $form['leg_virtuality'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Virtualities of external legs',
+    '#description' => 'Choose the virtuality of the external legs. The choices are:
+       <ul>
+        <li>light-like : p^2 = 0</li>
+        <li>on_internal_mass_shell : p^2 &ne; 0. But p is on a mass shell of one of the (internal) propagators: p^2 = m_j.</li>
+        <li>off-shell: p is not light like and also not on one of the internal mass shells.</li>
+      </ul> ',
+    '#collapsible' => false,
+    '#weight' => 50,
+  );
+  //
+  $legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
+  for ($i = 1; $i <= $legs; $i++)
+  {
+    $form['leg_virtuality']['lop_ext_leg_' . $i . '_virt'] = $form['lop_ext_leg_' . $i . '_virt'];
+    unset($form['lop_ext_leg_' . $i . '_virt']);
+  }
+
+  // Propagators:
+
+  $form['propagators'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Properties of Propagators',
+    '#description' => 'Please set masses and powers of propagators.',
+    '#weight' => 11,
+    '#collapsible' => false,
+  );
+
+  $props = $form_state['values']['lop_propagator_number']['und'][0]['value'];
+  for ($i = 1; $i <= $props; $i++)
+  {
+    $form['propagators']['propagator' . $i] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Propagator ' . $i . ' (P' . $i . ')',
+      '#description' => '',
+      '#collapsible' => false,
+      '#weight' => 10 + $i,
     );
+    $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_mass'] = $form['lop_propagator_' . $i . '_mass'];
+    unset($form['lop_propagator_' . $i . '_mass']);
+    //
+    $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_power'] = $form['lop_propagator_' . $i . '_power'];
+    unset($form['lop_propagator_' . $i . '_power']);
+  }
 
-
+  // Buttons:
 
   $form['actions']['back'] = array(
     '#type' => 'submit',
@@ -550,8 +598,6 @@ function loopedia_integral_second_step(&$form, &$form_state)
     // '#validate' => array('form_example_tutorial_8_next_validate'),
   );
   $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
-  dpm($form_state);
-  dpm($form);
 }
 
 /**
