@@ -613,6 +613,78 @@ function loopedia_integral_second_step(&$form, &$form_state)
  */
 function loopedia_integral_next_submit_2(&$form, &$form_state)
 {
+  // Calculate numbers for popagators:
+  //
+  $props_massless = 0;
+  $props_massive = 0;
+  $props_mass_scales = 0;
+  $scales = array();
+  //
+  $num_prop =  $form_state['values']['lop_propagator_number']['und'][0]['value'];
+  for ($i = 1; $i <= $num_prop; $i++)
+  {
+    $mass = $form_state['values']['lop_propagator_' . $i . '_mass']['und'][0]['value'];
+    if ($mass == 'massless')
+    {
+      $props_massless++;
+    }
+    else
+    {
+      $props_massive++;
+      if ( !in_array($mass, $scales) )
+      {
+        $scales[] = $mass;
+        $props_mass_scales++;
+      }
+    }
+  }
+  // Write calculated values to $form_state['input'][...] and
+  // $form_state['values'][...]
+  foreach (array('input', 'values') as $foo)
+  {
+    $form_state[$foo]['lop_massless_propagator_number']['und'][0]['value'] = $props_massless;
+    $form_state[$foo]['lop_massive_propagator_number']['und'][0]['value'] = $props_massive;
+    $form_state[$foo]['lop_mass_scale_number']['und'][0]['value'] = $props_mass_scales;
+  }
+
+
+  // Calculate numbers for legs:
+  //
+  $legs_light = 0;
+  $legs_offsh = 0;
+  $legs_intmass = 0;
+  //
+  $num_legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
+  for ($i = 1; $i <= $num_legs; $i++)
+  {
+    $virt = $form_state['values']['lop_ext_leg_' . $i . '_virt']['und'][0]['value'];
+    switch ($virt)
+    {
+      case 'light-like':
+        $legs_light++;
+        break;
+      case 'off-shell':
+        $legs_offsh++;
+        break;
+      default:
+        $legs_intmass++;
+        break;
+    }
+  }
+  //
+  // Write calculated values to $form_state['input'][...] and
+  // $form_state['values'][...]
+  foreach (array('input', 'values') as $foo)
+  {
+    $form_state[$foo]['lop_light_like_leg_number']['und'][0]['value'] = $legs_light;
+    $form_state[$foo]['lop_off_shell_leg_number']['und'][0]['value'] = $legs_offsh;
+    $form_state[$foo]['lop_int_mass_shell_leg_num']['und'][0]['value'] = $legs_intmass;
+  }
+
+
+
+
+
   $form_state['step'] = 3;
   $form_state['rebuild'] = TRUE;
 }
