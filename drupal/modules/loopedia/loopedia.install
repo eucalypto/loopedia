@@ -761,11 +761,23 @@ function _loopedia_integral_installed_instances()
     'deleted' => 0,
     'description' => '',
     'display' => array(
+      // 'default' => array(
+      //   'label' => 'above',
+      //   'settings' => array(),
+      //   'type' => 'hidden',
+      //   'weight' => 0,
+      // ),
       'default' => array(
+        //
+        // 'label' specifies how the label is displayed:
+        // 'above' means the label is above the field content
+        // 'inline' means the label is dispalyed on the same line as the
+        //          field content.
         'label' => 'above',
+        'module' => 'text',
         'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
+        'type' => 'text_default',
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'node',
@@ -784,7 +796,7 @@ function _loopedia_integral_installed_instances()
       ),
       'type' => 'text_textfield',
       'weight' => -4,
-      'default_value' => 'This is the default value. You should not see this!',
+      'default_value' => NULL,
     ),
   );
 
