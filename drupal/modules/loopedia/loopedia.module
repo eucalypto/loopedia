@@ -253,6 +253,7 @@ function _loopedia_display_fields(&$fields_to_show, &$form, &$form_state)
       'lop_loop_number' => 'lop_loop_number',
       'lop_mass_scale_number' => 'lop_mass_scale_number',
       'lop_massless_propagator_number' => 'lop_massless_propagator_number',
+      'lop_massive_propagator_number' => 'lop_massive_propagator_number',
       'lop_off_shell_leg_number' => 'lop_off_shell_leg_number',
       'lop_propagator_number' => 'lop_propagator_number',
     );
@@ -545,6 +546,7 @@ function loopedia_integral_second_step(&$form, &$form_state)
   $legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
   for ($i = 1; $i <= $legs; $i++)
   {
+    $form['lop_ext_leg_' . $i . '_virt']['und']['#required'] = true;
     $form['leg_virtuality']['lop_ext_leg_' . $i . '_virt'] = $form['lop_ext_leg_' . $i . '_virt'];
     unset($form['lop_ext_leg_' . $i . '_virt']);
   }
@@ -569,9 +571,15 @@ function loopedia_integral_second_step(&$form, &$form_state)
       '#collapsible' => false,
       '#weight' => 10 + $i,
     );
+    // Set this field as a required field. This way, the user is not allowed to select "-None-"
+    $form['lop_propagator_' . $i . '_mass']['und']['#required'] = true;
+    // Copy field definition to fieldset
     $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_mass'] = $form['lop_propagator_' . $i . '_mass'];
+    // Delete original field definiton
     unset($form['lop_propagator_' . $i . '_mass']);
     //
+    // Do the same for power as above for mass
+    $form['lop_propagator_' . $i . '_power']['und'][0]['value']['#required'] = true;
     $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_power'] = $form['lop_propagator_' . $i . '_power'];
     unset($form['lop_propagator_' . $i . '_power']);
   }
