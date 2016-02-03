@@ -966,7 +966,7 @@ function _loopedia_integral_installed_instances()
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 13,
+      'weight' => 12,
     ),
   );
 
@@ -1017,7 +1017,7 @@ function _loopedia_integral_installed_instances()
         'rows' => 1,
       ),
       'type' => 'text_textarea',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -1699,6 +1699,7 @@ function _loopedia_integral_installed_instances()
         'settings' => array(),
         'type' => 'number',
         'weight' => 50 + $i,
+        // 'default_value' => 1,
       ),
     );
   }

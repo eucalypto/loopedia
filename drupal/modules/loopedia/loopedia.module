@@ -506,11 +506,11 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
 function loopedia_integral_second_step(&$form, &$form_state)
 {
   $elements_to_show = array(
-    'lop_nickel',
-    'lop_leg_number',
-    'lop_vertex_number',
-    'lop_loop_number',
-    'lop_propagator_number',
+    // 'lop_nickel',
+    // 'lop_leg_number',
+    // 'lop_vertex_number',
+    // 'lop_loop_number',
+    // 'lop_propagator_number',
   );
   $num_legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
   for ($i = 1; $i <= $num_legs; $i++)
@@ -527,6 +527,30 @@ function loopedia_integral_second_step(&$form, &$form_state)
 
   _loopedia_display_fields($elements_to_show, $form, $form_state);
 
+
+  // Display calculated numbers in a fieldset. This way, the user cannot
+  // change them.
+  $form['display_calc_topo'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Topological numbers for the integral',
+    '#description' => '
+    <ul>
+    <li>Nickel Index: ' .
+      $form_state['values']['lop_nickel']['und'][0]['value'] . '</li>
+    <li>Number of legs:  ' .
+      $form_state['values']['lop_leg_number']['und'][0]['value'] . '</li>
+    <li>Number of vertices: ' .
+      $form_state['values']['lop_vertex_number']['und'][0]['value'] . '</li>
+    <li>Number of loops: ' .
+      $form_state['values']['lop_loop_number']['und'][0]['value'] . '</li>
+    <li>Number of propagators: ' .
+      $form_state['values']['lop_propagator_number']['und'][0]['value'] . '</li>
+    </ul>',
+  );
+  // Store this fieldset in $form_state for next steps
+  $form_state['display_calc_topo'] = $form['display_calc_topo'];
+
+
   $form['feynman_graph'] = array(
     '#type' => 'markup',
     '#markup' => '<img src="'.
@@ -535,6 +559,9 @@ function loopedia_integral_second_step(&$form, &$form_state)
     '#weight' => 10,
   );
 
+
+
+  // Legs:
 
   $form['leg_virtuality'] = array(
     '#type' => 'fieldset',
@@ -586,6 +613,9 @@ function loopedia_integral_second_step(&$form, &$form_state)
     //
     // Do the same for power as above for mass
     $form['lop_propagator_' . $i . '_power']['und'][0]['value']['#required'] = true;
+    // // Set default value to '1'
+    // // I have NO idea why this doesn't work!!!
+    // $form['lop_propagator_' . $i . '_power']['und'][0]['value']['#default_value'] = '1';
     $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_power'] = $form['lop_propagator_' . $i . '_power'];
     unset($form['lop_propagator_' . $i . '_power']);
   }
@@ -718,6 +748,40 @@ function loopedia_integral_back_submit_2(&$form, &$form_state)
  */
 function loopedia_integral_third_step(&$form, &$form_state)
 {
+
+  $fields_to_show = array(
+    'lop_literature_arxiv',
+    'lop_literature_publication',
+    'lop_comment',
+  );
+  _loopedia_display_fields($fields_to_show, $form, $form_state);
+
+  $form['display_calc_topo'] = $form_state['display_calc_topo'];
+
+  $form['display_calc_color'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Numbers from coloring',
+    '#description' => '
+    <ul>
+    <li>Number of light-like legs: ' .
+      $form_state['values']['lop_light_like_leg_number']['und'][0]['value'] . '</li>
+    <li>Number of legs on an internal mass shell:  ' .
+      $form_state['values']['lop_int_mass_shell_leg_num']['und'][0]['value'] . '</li>
+    <li>Number of off-shell legs: ' .
+      $form_state['values']['lop_off_shell_leg_number']['und'][0]['value'] . '</li>
+    <li>Number of massless propagators: ' .
+      $form_state['values']['lop_massless_propagator_number']['und'][0]['value'] . '</li>
+    <li>Number of massive propagators: ' .
+      $form_state['values']['lop_massive_propagator_number']['und'][0]['value'] . '</li>
+    <li>Number of (internal) mass scales: ' .
+      $form_state['values']['lop_mass_scale_number']['und'][0]['value'] . '</li>
+    </ul>',
+  );
+
+
+
+
+
   $form['actions']['back'] = array(
     '#type' => 'submit',
     '#value' => t('<< Back'),
