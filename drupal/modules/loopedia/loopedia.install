@@ -324,6 +324,28 @@ function _loopedia_integral_installed_fields()
   $field_bases = array();
 
 
+  $field_bases['lop_input'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'lop_input',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 512,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+
+
   $field_bases['lop_nickel'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -700,6 +722,59 @@ function _loopedia_integral_installed_instances()
 
   $field_instances = array();
 
+$field_instances['lop_i_input'] = array(
+    'bundle' => 'lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Graph Identifier, e.g. Adjacency List or Nickel Index',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 16,
+      ),
+      'search_index' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'lop_input',
+    'label' => 'Graph Identifier',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 80,
+      ),
+      'type' => 'text_textfield',
+      'weight' => -4,
+    ),
+  );
 
   $field_instances['lop_i_nickel'] = array(
     'bundle' => 'lop_integral',

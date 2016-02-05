@@ -152,21 +152,12 @@ function loopedia_integral_first_step(&$form, &$form_state)
 {
   // Define array of fields, that shall be shown
   $elements_to_show = array(
-    // 'lop_nickel',
+    'lop_input',
   );
   //
   _loopedia_display_fields($elements_to_show, $form, $form_state);
 
 
-
-  $form['graph_id'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Graph Identifier.',
-    '#size' => 80,
-    '#maxlength' => 400,
-    '#description' => 'Please provide a Nickel Index or an Adjacency List.',
-    '#required' => TRUE,
-  );
 
 
   // Buttons:
@@ -277,7 +268,7 @@ function _loopedia_display_fields(&$fields_to_show, &$form, &$form_state)
  */
 function loopedia_integral_next_validate_1(&$form, &$form_state)
 {
-  $graph_id = &$form_state['values']['graph_id'];
+  $graph_id = &$form_state['values']['lop_input']['und'][0]['value'];
 
   if (strpos($graph_id, '|') !==  FALSE)
   {
