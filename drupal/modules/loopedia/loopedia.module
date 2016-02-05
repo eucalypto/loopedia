@@ -552,18 +552,36 @@ function loopedia_integral_second_step(&$form, &$form_state)
       '#collapsible' => FALSE,
       '#weight' => 10 + $i,
     );
-    // Set this field as a required field. This way, the user is not allowed to select "-None-"
-    $form['lop_propagator_' . $i . '_mass']['und']['#required'] = TRUE;
-    // Copy field definition to fieldset
+
+    // Delete standard allowed choices and set new sensible ones
+    unset($form['lop_propagator_' . $i . '_mass']['und']['#options']);
+    $opts = &$form['lop_propagator_' . $i . '_mass']['und']['#options'];
+    // $opts['_none'] =  '- None -';
+    $opts['massless'] = 'massless';
+    for ($j = 1; $j <= $i; $j++)
+    {
+      $opts['m' . $j] = 'm' . $j;
+    }
+
+    // Copy field definition to fieldset and delete original entry
     $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_mass'] = $form['lop_propagator_' . $i . '_mass'];
-    // Delete original field definiton
     unset($form['lop_propagator_' . $i . '_mass']);
-    //
-    // Do the same for power as above for mass
+
+    // Mass:
+
+    // Make required
     $form['lop_propagator_' . $i . '_power']['und'][0]['value']['#required'] = TRUE;
-    // // Set default value to '1'
-    // // I have NO idea why this doesn't work!!!
-    // $form['lop_propagator_' . $i . '_power']['und'][0]['value']['#default_value'] = '1';
+
+    // Set power to '1', if it is not already filled. This is meant to
+    // set a default value. (Using '#default_value' did not work, for
+    // some unknown reason.)
+    $pow = &$form_state['input']['lop_propagator_' . $i . '_power']['und'][0]['value'];
+    if (empty($pow))
+    {
+      $pow = '1';
+    }
+
+    // Copy definition to fieldset and delete original:
     $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_power'] = $form['lop_propagator_' . $i . '_power'];
     unset($form['lop_propagator_' . $i . '_power']);
   }
@@ -591,7 +609,21 @@ function loopedia_integral_second_step(&$form, &$form_state)
   $legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
   for ($i = 1; $i <= $legs; $i++)
   {
-    $form['lop_ext_leg_' . $i . '_virt']['und']['#required'] = TRUE;
+    // Make field required
+    // $form['lop_ext_leg_' . $i . '_virt']['und']['#required'] = TRUE;
+
+    // Delete original options and define new ones. We need only as many
+    // mass options as there are propagators.
+    unset($form['lop_ext_leg_' . $i . '_virt']['und']['#options']);
+    $opts = &$form['lop_ext_leg_' . $i . '_virt']['und']['#options'];
+    $opts['light-like'] = 'light-like';
+    $opts['off-shell'] = 'off-shell';
+    for ($j = 1; $j <= $props; $j++)
+    {
+      $opts['m' . $j . '^2'] = 'm' . $j . '^2';
+    }
+
+    // Copy definiton to fieldset and delete old one:
     $form['leg_virtuality']['lop_ext_leg_' . $i . '_virt'] = $form['lop_ext_leg_' . $i . '_virt'];
     unset($form['lop_ext_leg_' . $i . '_virt']);
   }
