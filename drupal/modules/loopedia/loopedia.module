@@ -205,6 +205,7 @@ function _loopedia_display_fields(&$fields_to_show, &$form, &$form_state)
     // erase some elements.
     $fieldnames = array(
       'lop_comment' => 'lop_comment',
+      'lop_input' => 'lop_input',
       'lop_nickel' => 'lop_nickel',
       'lop_vertex_number' => 'lop_vertex_number',
       'lop_literature_arxiv' => 'lop_literature_arxiv',
@@ -518,6 +519,7 @@ function loopedia_integral_second_step(&$form, &$form_state)
   $form_state['display_calc_topo'] = $form['display_calc_topo'];
 
 
+  // Display generated Feynman Graph
   $form['feynman_graph'] = array(
     '#type' => 'markup',
     '#markup' => '<img src="'.
@@ -525,31 +527,6 @@ function loopedia_integral_second_step(&$form, &$form_state)
       ' "alt="alternative text">',
     '#weight' => 10,
   );
-
-
-
-  // Legs:
-
-  $form['leg_virtuality'] = array(
-    '#type' => 'fieldset',
-    '#title' => 'Virtualities of external legs',
-    '#description' => 'Choose the virtuality of the external legs. The choices are:
-       <ul>
-        <li>light-like : p^2 = 0</li>
-        <li>on_internal_mass_shell : p^2 &ne; 0. But p is on a mass shell of one of the (internal) propagators: p^2 = m_j.</li>
-        <li>off-shell: p is not light like and also not on one of the internal mass shells.</li>
-      </ul> ',
-    '#collapsible' => FALSE,
-    '#weight' => 50,
-  );
-  //
-  $legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
-  for ($i = 1; $i <= $legs; $i++)
-  {
-    $form['lop_ext_leg_' . $i . '_virt']['und']['#required'] = TRUE;
-    $form['leg_virtuality']['lop_ext_leg_' . $i . '_virt'] = $form['lop_ext_leg_' . $i . '_virt'];
-    unset($form['lop_ext_leg_' . $i . '_virt']);
-  }
 
   // Propagators:
 
@@ -559,6 +536,10 @@ function loopedia_integral_second_step(&$form, &$form_state)
     '#description' => 'Please set masses and powers of propagators.',
     '#weight' => 11,
     '#collapsible' => FALSE,
+    // Let fields in this fieldset be displayed horizontally according
+    // to
+    // http://drupal.stackexchange.com/questions/7954/horizontal-form-elements
+    '#attributes' => array('class' => array('container-inline')),
   );
 
   $props = $form_state['values']['lop_propagator_number']['und'][0]['value'];
@@ -586,6 +567,36 @@ function loopedia_integral_second_step(&$form, &$form_state)
     $form['propagators']['propagator' . $i]['lop_propagator_' . $i . '_power'] = $form['lop_propagator_' . $i . '_power'];
     unset($form['lop_propagator_' . $i . '_power']);
   }
+
+
+  // The same Feynman graph again
+  $form['feynman_graph_2'] = $form['feynman_graph'];
+  $form['feynman_graph_2']['#weight'] = 13;
+
+  // Legs:
+
+  $form['leg_virtuality'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Virtualities of external legs',
+    '#description' => 'Choose the virtuality of the external legs. The choices are:
+       <ul>
+        <li>light-like : p^2 = 0</li>
+        <li>on_internal_mass_shell : p^2 &ne; 0. But p is on a mass shell of one of the (internal) propagators: p^2 = m_j.</li>
+        <li>off-shell: p is not light like and also not on one of the internal mass shells.</li>
+      </ul> ',
+    '#collapsible' => FALSE,
+    '#weight' => 50,
+  );
+  //
+  $legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
+  for ($i = 1; $i <= $legs; $i++)
+  {
+    $form['lop_ext_leg_' . $i . '_virt']['und']['#required'] = TRUE;
+    $form['leg_virtuality']['lop_ext_leg_' . $i . '_virt'] = $form['lop_ext_leg_' . $i . '_virt'];
+    unset($form['lop_ext_leg_' . $i . '_virt']);
+  }
+
+
 
   // Buttons:
 
