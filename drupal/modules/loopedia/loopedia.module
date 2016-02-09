@@ -766,8 +766,10 @@ function loopedia_integral_third_step(&$form, &$form_state)
   );
   _loopedia_display_fields($fields_to_show, $form, $form_state);
 
+  // Topology numbers block:
   $form['display_calc_topo'] = $form_state['display_calc_topo'];
 
+  // Coloring numbers block:
   $form['display_calc_color'] = array(
     '#type' => 'fieldset',
     '#title' => 'Numbers from coloring',
@@ -791,6 +793,8 @@ function loopedia_integral_third_step(&$form, &$form_state)
 
 
 
+
+  // Buttons:
 
   $form['actions']['back'] = array(
     '#type' => 'submit',
