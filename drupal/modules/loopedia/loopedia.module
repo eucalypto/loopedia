@@ -200,6 +200,7 @@ function _loopedia_display_fields(&$fields_to_show, &$form, &$form_state)
     // thus should be the same.
     $max_num_prop = 21;
     $max_num_leg = 20;
+    $num_expr = 5;
 
     // This array is trivially associative because later we want to
     // erase some elements.
@@ -231,6 +232,13 @@ function _loopedia_display_fields(&$fields_to_show, &$form, &$form_state)
       $fieldnames['lop_propagator_' . $i . '_mass'] = 'lop_propagator_' . $i . '_mass';
       $fieldnames['lop_propagator_' . $i . '_power'] = 'lop_propagator_' . $i . '_power';
     }
+    for ($i = 1; $i <= $num_expr; $i++)
+    {
+      $fieldnames['lop_expr_type_' . $i] = 'lop_expr_type_' . $i;
+      $fieldnames['lop_expr_dim_' . $i] = 'lop_expr_dim_' . $i;
+      $fieldnames['lop_expr_body_' . $i] = 'lop_expr_body_' . $i;
+    }
+
     $form_state['all_fields'] = $fieldnames;
   }
 
@@ -758,12 +766,20 @@ function loopedia_integral_back_submit_2(&$form, &$form_state)
  */
 function loopedia_integral_third_step(&$form, &$form_state)
 {
+  $num_expr = 5;
 
   $fields_to_show = array(
     'lop_literature_arxiv',
     'lop_literature_publication',
     'lop_comment',
   );
+
+  for ($i = 1; $i <= $num_expr; $i++)
+  {
+    $fields_to_show[] = 'lop_expr_dim_' . $i;
+    $fields_to_show[] = 'lop_expr_body_' . $i;
+    $fields_to_show[] = 'lop_expr_type_' . $i;
+  }
   _loopedia_display_fields($fields_to_show, $form, $form_state);
 
   // Topology numbers block:
@@ -790,7 +806,35 @@ function loopedia_integral_third_step(&$form, &$form_state)
     </ul>',
   );
 
+  for ($i = 1; $i <= $num_expr; $i++)
+  {
+    $form['expression' . $i] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Input ' . $i,
+      '#description' => '',
+      '#weight' => 14+$i,
+    );
+    $form['expression' . $i]['lop_expr_type_' . $i] = $form['lop_expr_type_' . $i];
+    unset($form['lop_expr_type_' . $i]);
 
+    $form['expression' . $i]['lop_expr_dim_' . $i] = $form['lop_expr_dim_' . $i];
+    unset($form['lop_expr_dim_' . $i]);
+
+    $form['expression' . $i]['lop_expr_body_' . $i] = $form['lop_expr_body_' . $i];
+    unset($form['lop_expr_body_' . $i]);
+
+  }
+
+  for ($i = 2; $i <= $num_expr; $i++)
+  {
+    $form['expression' . $i]['#collapsible'] = TRUE;
+    $form['expression' . $i]['#collapsed'] = TRUE;
+    // $form['expression' . $i]['#states'] = array(
+    //   'visible' => array(
+    //     ':textfield[name^="lop_literature_arxiv"]' => array('empty' => FALSE),
+    //   ),
+    // );
+  }
 
 
 

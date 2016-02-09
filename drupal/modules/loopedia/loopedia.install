@@ -319,7 +319,7 @@ function _loopedia_integral_installed_fields()
   $max_num_prop = 21;
   // Define the maximal number of legs for each integral.
   $max_num_leg = 20;
-
+  $num_expr = 5;
 
   $field_bases = array();
 
@@ -672,6 +672,85 @@ function _loopedia_integral_installed_fields()
     }
 
 
+    $allowed_values_expr_type = array(
+      'N/A' => 'N/A',
+      'epsilon^0' => 'epsilon^0',
+      'epsilon^1' => 'epsilon^1',
+      'epsilon^-1' => 'epslion^-1',
+      'epsilon^-2' => 'epsilon^-2',
+      'epsilon^-3' => 'epsilon^-3',
+      'epsilon^n' => 'epsilon^n',
+    );
+    $allowed_values_expr_dim = array(
+      'N/A' => 'N/A',
+      '4D' => '4D',
+      '6D' => '6D',
+      '8D' => '8D',
+    );
+
+    for ($i = 1; $i <= $num_expr; $i++)
+    {
+      $field_bases['lop_expr_type_' . $i] = array(
+        'active' => 1,
+        'cardinality' => 1,
+        'deleted' => 0,
+        'entity_types' => array(),
+        'field_name' => 'lop_expr_type_' . $i,
+        'indexes' => array(
+          'value' => array(
+            0 => 'value',
+          ),
+        ),
+        'locked' => 0,
+        'module' => 'list',
+        'settings' => array(
+          'allowed_values' => $allowed_values_expr_type,
+          'allowed_values_function' => '',
+        ),
+        'translatable' => 0,
+        'type' => 'list_text',
+      );
+
+      $field_bases['lop_expr_dim_' . $i] = array(
+        'active' => 1,
+        'cardinality' => 1,
+        'deleted' => 0,
+        'entity_types' => array(),
+        'field_name' => 'lop_expr_dim_' . $i,
+        'indexes' => array(
+          'value' => array(
+            0 => 'value',
+          ),
+        ),
+        'locked' => 0,
+        'module' => 'list',
+        'settings' => array(
+          'allowed_values' => $allowed_values_expr_dim,
+          'allowed_values_function' => '',
+        ),
+        'translatable' => 0,
+        'type' => 'list_text',
+      );
+
+      $field_bases['lop_expr_body_' . $i] = array(
+          'active' => 1,
+          'cardinality' => 1,
+          'deleted' => 0,
+          'entity_types' => array(),
+          'field_name' => 'lop_expr_body_' . $i,
+          'indexes' => array(
+            'format' => array(
+              0 => 'format',
+            ),
+          ),
+          'locked' => 0,
+          'module' => 'text',
+          'settings' => array(),
+          'translatable' => 0,
+          'type' => 'text_long',
+        );
+    }
+
 
   //******************************************************************
   // old ones:
@@ -719,6 +798,7 @@ function _loopedia_integral_installed_instances()
   // _loopedia_integral_installed_fields()
   $max_num_prop = 21;
   $max_num_leg = 20;
+  $num_expr = 5;
 
   $field_instances = array();
 
@@ -1778,6 +1858,165 @@ $field_instances['lop_i_input'] = array(
       ),
     );
   }
+
+
+  for ($i = 1; $i <= $num_expr; $i++)
+  {
+    $field_instances['lop_i_expr_type_' . $i] = array(
+      'bundle' => 'lop_integral',
+      'default_value' => NULL,
+      'deleted' => 0,
+      // 'description' => 'Specify the mass of the propagator.',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 18,
+        ),
+        'search_index' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'search_result' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'lop_expr_type_' . $i,
+      'label' => 'Type of input',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => 2,
+      ),
+    );
+
+    $field_instances['lop_i_expr_dim_' . $i] = array(
+      'bundle' => 'lop_integral',
+      'default_value' => NULL,
+      'deleted' => 0,
+      // 'description' => 'Specify the mass of the propagator.',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'list',
+          'settings' => array(),
+          'type' => 'list_default',
+          'weight' => 18,
+        ),
+        'search_index' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'search_result' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'lop_expr_dim_' . $i,
+      'label' => 'Valid in',
+      'required' => 0,
+      'settings' => array(
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'options',
+        'settings' => array(),
+        'type' => 'options_select',
+        'weight' => 3,
+      ),
+    );
+
+    $field_instances['lop_i_expr_body_' . $i] = array(
+      'bundle' => 'lop_integral',
+      'default_value' => NULL,
+      'deleted' => 0,
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          //
+          // 'label' specifies how the label is displayed:
+          // 'above' means the label is above the field content
+          // 'inline' means the label is dispalyed on the same line as the
+          //          field content.
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 17,
+        ),
+        'search_index' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'search_result' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'lop_expr_body_' . $i,
+      'label' => 'Input',
+      'required' => 0,
+      'settings' => array(
+        'text_processing' => 0,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => 2,
+        ),
+        'type' => 'text_textarea',
+        'weight' => 1,
+      ),
+    );
+
+
+  }
+
 
 
 
