@@ -811,7 +811,9 @@ function loopedia_integral_third_step(&$form, &$form_state)
     $form['expression' . $i] = array(
       '#type' => 'fieldset',
       '#title' => 'Input ' . $i,
-      '#description' => '',
+      '#description' => 'Here, you can provide a sort of result of the integral ("input"). Please also choose the type and dimensionality ("Valid in"), if applicable.<br>
+        Your input can be the prefactor in an expansion in epsilon. Then choose the corresponding power in the "Type of input". Your input also can be more general, or just an explanation.<br>
+        If you want to comment or clarify your inputs, please use the "Comment"-field below.',
       '#weight' => 14+$i,
     );
     $form['expression' . $i]['lop_expr_type_' . $i] = $form['lop_expr_type_' . $i];
