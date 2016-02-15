@@ -417,7 +417,7 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
 {
   $nickel = $form_state['values']['lop_nickel']['und'][0]['value'];
   // Generate Picture to Nickel Index
-  $image_path = "sites/default/files/nickel_generated/" .
+  $image_path = "sites/default/files/nickel_generated/tmp/" .
                   uniqid($nickel);
                  // this is the path to the dot file the image (svg)
                  // file will have an extra ending of ".svg"
@@ -425,13 +425,21 @@ function loopedia_integral_next_submit_1(&$form, &$form_state)
   $exec2 = escapeshellcmd("python $script_path " . $nickel . " $image_path");
   exec($exec2);
   // Save image path in 'lop_picture_path'. $image_path looks like
-  // 'sites/default/files/...'. We have to prefix this with
-  // 'http://localhost/loopediatest/' in order to get an "absoulte" path
-  // to the file. This is necessary because while editing a node, drupal
-  // starts with the path 'http://localhost/loopediatest/node/52/edit',
-  // for some reason. So we need an absolute path.
-  $form_state['values']['lop_picture_path']['und'][0]['value'] = 'http://localhost/loopediatest/' . $image_path . ".svg";
-  $form_state['input']['lop_picture_path']['und'][0]['value'] = 'http://localhost/loopediatest/' . $image_path . ".svg";
+  // 'sites/default/files/...'. We have to prefix this with something
+  // like 'http://localhost/loopediatest/' in order to get an "absoulte"
+  // path to the file. This is necessary because while editing a node,
+  // drupal starts with the path
+  // 'http://localhost/loopediatest/node/52/edit', for some reason. So
+  // we need an absolute path.
+  //
+  // http://localhost/loopediatest is the base url for my test drupal
+  // installation. To make this code portable, use the global variable
+  // $GLOBALS['base_url'], which stores exactly what we need.
+  $form_state['values']['lop_picture_path']['und'][0]['value'] = $GLOBALS['base_url'] . '/' . $image_path . ".svg";
+  $form_state['input']['lop_picture_path']['und'][0]['value'] = $GLOBALS['base_url'] . '/' . $image_path . ".svg";
+
+
+
 
 
   // Extract information out of the Nickel Index string and save it to
@@ -849,14 +857,8 @@ function loopedia_integral_third_step(&$form, &$form_state)
     // '#limit_validation_errors' => array(),
   );
 
-  $form['actions']['next'] = array(
-    '#type' => 'submit',
-    '#value' => 'Next >>',
-    '#submit' => array('loopedia_integral_next_submit_3'),
-    // '#validate' => array('form_example_tutorial_8_next_validate'),
-  );
-  // $form['actions']['submit']['#pre_render'] = array('loopedia_empty_array');
-
+  // Add custom save submit handler to first place
+  array_unshift($form['actions']['submit']['#submit'], 'loopedia_integral_save_submit');
 }
 
 
@@ -867,6 +869,37 @@ function loopedia_integral_back_submit_3(&$form, &$form_state)
 {
   $form_state['step'] = 2;
   $form_state['rebuild'] = TRUE;
+}
+
+
+/**
+ *
+ */
+function loopedia_integral_save_submit(&$form, &$form_state)
+{
+  // Generaded Picture:
+
+  // Generadet pictures are stored in a tmp-folder during the integral
+  // submit process. Here, the generaded picture is copied to the real
+  // location.
+
+  // Make reference to stored path
+  $path_old = &$form_state['values']['lop_picture_path']['und'][0]['value'];
+  // Use global variable $GLOBALS['base_url'], which stores the url base
+  // of the drupal installation.
+  $baseurl = $GLOBALS['base_url'] . '/';
+
+  // Remove base_url string from path to get file path
+  $path_old = str_replace($baseurl, '', $path_old);
+  // Write new path by removing '/tmp/' from it
+  $path_new = str_replace('/tmp/', '/', $path_old);
+
+  // Copy picture to new path.
+  $cmd = escapeshellcmd("cp $path_old $path_new");
+  exec($cmd);
+
+  // Write new path to $form_state (reference)
+  $path_old = $baseurl . $path_new;
 }
 
 
