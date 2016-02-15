@@ -918,9 +918,33 @@ function loopedia_lop_integral_form_validate($form, &$form_state)
 
 //**********************************************************ooo
 
+/**
+ * Implements hook_node_view_alter()
+ *
+ * This function alters the display of the nodes
+ */
 function loopedia_node_view_alter(&$build)
 {
-  dpm($build);
+  // Check if the node is lop_integral
+  if ($build['#bundle'] == 'lop_integral')
+  {
+    // Check if picture_path is displayed. If yes, replace it with the
+    // generated picture.
+    if (isset($build['lop_picture_path']))
+    {
+      unset($build['lop_picture_path']);
+      $path = $build['lop_nickel']['#object']->lop_picture_path['und'][0]['value'];
+      // Display generated Feynman Graph
+      $build['feynman_graph'] = array(
+        '#type' => 'markup',
+        '#prefix' => '<img src="',
+        '#markup' => $path,
+        '#suffix' => ' " alt="Generated Feynman Graph">',
+        '#weight' => 0,
+      );
+    }
+  }
+  // dpm($build);
 }
 
 
