@@ -1,9 +1,99 @@
-# README
+README
 
 This is the main README file for the inner workings of loopedia. It is
 written in the Github flavored version of Markdown.
 
-### Backup MySQL
+1. What is Drupal
+
+Drupal is a conntent management system (CMS) written in PHP. It is used
+to manage and display content on the web. It uses a database (e.g.
+MySQL) internally to store data (content) and preferences. This is why
+it is used for Loopedia.
+
+1.1 Modules
+
+Drupal is modular, i.e. it uses plugins to extend the functionality of
+an installation. These plugins are called modules and can be part of the
+official Drupal project (Drupal core), be provided by the community
+(contrib), or be written by yourself (custom).
+
+1.1.1 How to write a custom module
+
+The usual way to write a custom module is as follows. You make a new
+folder in /sites/all/modules/custom/ and name it exactly as your module
+name. Then you make three text files: "modulename.module",
+"modulename.install" and "modulename.info". The info file contains basic
+information about your module that drupal uses to display in its module
+list. The main code is in your .module file but some code must be in the
+.install file, where the installation steps of your module are defined.
+
+Drupal uses special functions called "hooks". They are executed on
+certain steps. In the Drupal documentation they are named
+"hook_hook-name()". If you name one of your functions in the following
+manner, it will be an implementation of this hook and will be executed
+at the same time. To name it correctly, you have to replace "hook" with
+"modulename" in the function definition: "modulename_hook-name()".
+
+This is the usual way, there are tons of hooks. You just have to find
+the right one and write an implementation of it. This way, you can alter
+the behavior of Drupal or add new functionality.
+
+1.2 How Drupal works
+
+1.2.1 Separation of data and look
+
+One important aspect of Drupal (or any CMS) is that it separates data
+and the display (html) in the way that the website (html) is generated
+on the fly, i.e. it is only generated if some browser requests a site.
+
+This allows you to work on the data structures at one time and then
+independently take care of the display. For this, there are "themes"
+that you can install and customize. They define the look of your
+website.
+
+1.2.2 Code vs UI
+
+You can work with Drupal and never see a line of code. A lot of
+functionality is already there with contributed modules that can be
+configured and used through the User Interface of the website. You just
+have to log in as an administrator and you will see this administrative
+UI. All these preferences are stored in the database.
+
+A programmer, however, might want to manage functionality through code.
+Especially when you need something that does not exist as a module. A
+nice advantage of a custom module is that you can port it to any other
+Drupal installation without having to re-create all steps through the
+UI. Also, you can version control your code, which is a very huge plus.
+
+1.2.3 Naming conventions
+
+You should chose a module name that is not used so far. Googling it is a
+good strategy. The names of your function should always begin with
+"modulename_" to prevent collisions.
+
+1.2.4 The Drupal Way
+
+Many modules define special functions that you can call form your
+functions. These are part of the application programming interface (API)
+of this module and are very useful because they handle a lot of the
+administrative stuff for you. An example for this is the connection to
+the database. You can write a custom database query using SQL. But for
+most of the things you want to do, there is already a function that
+handles the database for you.
+
+Not using the API will make your life very difficult.
+
+1.2.4. Working with the Drupal API
+
+Since the display is separated from the data, Drupal tries to generate
+the html code as last as possible. Until then, the data is stored mostly
+in PHP arrays and objects (classes). So most of the work with Drupal
+consists of working with these ararys and objects.
+
+
+2. Installation
+
+2.1 Backup MySQL
 
 To make a backup of the database you can use drush:
 ```
@@ -19,7 +109,7 @@ commands and writes the sql dump to
 `sql_backup/loopedia_drupal_test.sql`
 
 
-### Move Loopedia / Installation
+2.2 Move Loopedia / Installation
 
 My test server environment is an ubuntu pc. You have to have the
 following programs/packages installed:
