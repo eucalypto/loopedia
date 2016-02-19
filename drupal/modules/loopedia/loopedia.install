@@ -36,17 +36,21 @@ function loopedia_enable()
 
 
 
-// /**
-//  * Implements hook_install().
-//  */
-// function loopedia_install() {
-//   // Custom node type and its fields:
-//   node_types_rebuild();
-//   _loopedia_create_custom_fields(
-//     _loopedia_integral_installed_fields(),
-//     _loopedia_integral_installed_instances()
-//   );
-// }
+/**
+ * Implements hook_install().
+ */
+function loopedia_install()
+{
+  // Create folders for generaded feynman graphs
+  //
+  // You should be mindful of which user installs this package. If you
+  // use drush, then this folder will be written as the user you are
+  // using. Then the web-server has no permissions to this folder. If
+  // you install (enable) this package through the drupal web interface,
+  // this folder will be created as www-data user.
+  $path = 'sites/default/files/nickel_generated/tmp';
+  drupal_mkdir($path, NULL, TRUE);
+}
 
 
 
@@ -62,6 +66,10 @@ function loopedia_uninstall()
   // $vocab = taxonomy_vocabulary_machine_name_load('lop_test_vocabulary');
   // taxonomy_vocabulary_delete($vocab->vid);
 
+
+  // Delete directories
+  $path = 'sites/default/files/nickel_generated';
+  file_unmanaged_delete_recursive($path);
 
   // Custom node type and fields:
   foreach (array_keys(_loopedia_integral_installed_fields()) as $field)

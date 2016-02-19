@@ -140,8 +140,8 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
   //         $form['lop_propagator_' . $i . '_power']);
   // }
 
-  dpm($form_state, '$form_state');
-  dpm($form, '$form');
+  // dpm($form_state, '$form_state');
+  // dpm($form, '$form');
 }
 
 
@@ -909,9 +909,9 @@ function loopedia_integral_save_submit(&$form, &$form_state)
  */
 function loopedia_lop_integral_form_validate($form, &$form_state)
 {
-  dsm('I am loopedia_lop_integral_form_validate ' . microtime(TRUE) );
-  dpm($form_state, '$form_state');
-  dpm($form, '$form');
+  // dsm('I am loopedia_lop_integral_form_validate ' . microtime(TRUE) );
+  // dpm($form_state, '$form_state');
+  // dpm($form, '$form');
 }
 
 
