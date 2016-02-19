@@ -1,0 +1,32 @@
+<?php
+
+
+/**
+ * Implements hook_install().
+ */
+function nickelplay_install()
+{
+  // Create folders for generaded feynman graphs
+  //
+  // You should be mindful of which user installs this package. If you
+  // use drush, then this folder will be written as the user you are
+  // using. Then the web-server has no permissions to this folder. If
+  // you install (enable) this package through the drupal web interface,
+  // this folder will be created as www-data user.
+  $path = 'sites/default/files/tmp';
+  drupal_mkdir($path, NULL, TRUE);
+}
+
+
+
+/**
+* Implements hook_uninstall().
+*
+* This function is called when we uninstall the module.
+*/
+function nickelplay_uninstall()
+{
+  // Delete directories
+  $path = 'sites/default/files/tmp';
+  file_unmanaged_delete_recursive($path);
+}
