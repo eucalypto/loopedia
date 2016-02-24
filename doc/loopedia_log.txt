@@ -70,3 +70,19 @@ type and export it to a module. This module is in
 
 I also copied the node example module from the examples-module to
 /doc/drupal/node_example_original/
+
+
+2016-02-24; The search for a drupal search module goes on. As a backend,
+I decided to use "Solr", a search engine (backend) developed by apache.
+This is open source and seems to be very powerful because it is made for
+large sites with a lot of traffic. And I chose the drupal module Search
+API as the search module. They are often used together by many sites and
+are both well maintained. Here one comparison:
+http://drupal.stackexchange.com/questions/15508/search-api-vs-apache-solr-search-integration-in-drupal-7
+
+Interesting websites for Search API:
+https://www.drupal.org/project/search_api_solr
+https://www.drupal.org/node/1999262
+
+Installation of Solr:
+https://www.drupal.org/node/2502221
