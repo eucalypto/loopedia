@@ -84,5 +84,7 @@ Interesting websites for Search API:
 https://www.drupal.org/project/search_api_solr
 https://www.drupal.org/node/1999262
 
-Installation of Solr:
-https://www.drupal.org/node/2502221
+For the installation of Solr I pretty much used this guide:
+(https://www.drupal.org/node/2502221)  It is straight forward. Only the
+automatic start as a service, I did not managed to do. Also, on the real
+server we have to restrict access to the solr web interface and server.
