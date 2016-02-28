@@ -93,7 +93,7 @@ consists of working with these ararys and objects.
 
 2. Installation
 
-2.1 Backup MySQL
+2.1 Backup MySQL Database
 
 To make a backup of the database you can use drush:
 ```
@@ -132,6 +132,7 @@ as (vector) pictures.
 This
 [website](http://linoxide.com/ubuntu-how-to/install-drupal-7-x-apache-2-x-ubuntu/)
 shows how the installation can work.
+
 
 #### Migrate Files
 
@@ -226,6 +227,23 @@ http://linoxide.com/ubuntu-how-to/install-drupal-7-x-apache-2-x-ubuntu/
 
 http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
 
+10. Search
+
+In order to provide search capabilities, we use the module "Serach API".
+And the search index is managed by a separate "server" called Solr.
+
+10.1.1 Exporting and Importing Views
+
+In order to export a view you have to go to Home > Administration >
+Structure > Views. In the "List"-tab you see a list of views. This list
+has a column called "Operations". Here, you select "Export" from some
+options and end up on a site with a window where the "exported" text is
+displayed. This text was copied into
+"loopedia/drupal/views_export/search_page"
+
+To import the view you go again to Home > Administration > Structure >
+Views. At the top you should see an "+ Import" link. There you can copy
+and paste the definition from a file.
 
 
 ### Update Drupal with drush
