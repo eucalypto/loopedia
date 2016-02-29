@@ -38,61 +38,40 @@ $handler->display->display_options['sorts']['search_api_relevance']['id'] = 'sea
 $handler->display->display_options['sorts']['search_api_relevance']['table'] = 'search_api_index_integral_index';
 $handler->display->display_options['sorts']['search_api_relevance']['field'] = 'search_api_relevance';
 $handler->display->display_options['sorts']['search_api_relevance']['order'] = 'DESC';
-/* Filter criterion: Indexed Node: Number of internal mass scales */
-$handler->display->display_options['filters']['lop_mass_scale_number']['id'] = 'lop_mass_scale_number';
-$handler->display->display_options['filters']['lop_mass_scale_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_mass_scale_number']['field'] = 'lop_mass_scale_number';
-$handler->display->display_options['filters']['lop_mass_scale_number']['expose']['operator_id'] = 'lop_mass_scale_number_op';
-$handler->display->display_options['filters']['lop_mass_scale_number']['expose']['label'] = 'Number of internal mass scales';
-$handler->display->display_options['filters']['lop_mass_scale_number']['expose']['operator'] = 'lop_mass_scale_number_op';
-$handler->display->display_options['filters']['lop_mass_scale_number']['expose']['identifier'] = 'lop_mass_scale_number';
-/* Filter criterion: Indexed Node: Number of legs */
-$handler->display->display_options['filters']['lop_leg_number']['id'] = 'lop_leg_number';
-$handler->display->display_options['filters']['lop_leg_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_leg_number']['field'] = 'lop_leg_number';
-/* Filter criterion: Indexed Node: Number of legs on an internal mass shell */
-$handler->display->display_options['filters']['lop_int_mass_shell_leg_num']['id'] = 'lop_int_mass_shell_leg_num';
-$handler->display->display_options['filters']['lop_int_mass_shell_leg_num']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_int_mass_shell_leg_num']['field'] = 'lop_int_mass_shell_leg_num';
-/* Filter criterion: Indexed Node: Number of light-like legs */
-$handler->display->display_options['filters']['lop_light_like_leg_number']['id'] = 'lop_light_like_leg_number';
-$handler->display->display_options['filters']['lop_light_like_leg_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_light_like_leg_number']['field'] = 'lop_light_like_leg_number';
-/* Filter criterion: Indexed Node: Number of loops */
-$handler->display->display_options['filters']['lop_loop_number']['id'] = 'lop_loop_number';
-$handler->display->display_options['filters']['lop_loop_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_loop_number']['field'] = 'lop_loop_number';
-/* Filter criterion: Indexed Node: Number of massive propagators */
-$handler->display->display_options['filters']['lop_massive_propagator_number']['id'] = 'lop_massive_propagator_number';
-$handler->display->display_options['filters']['lop_massive_propagator_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_massive_propagator_number']['field'] = 'lop_massive_propagator_number';
-/* Filter criterion: Indexed Node: Number of massless propagators */
-$handler->display->display_options['filters']['lop_massless_propagator_number']['id'] = 'lop_massless_propagator_number';
-$handler->display->display_options['filters']['lop_massless_propagator_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_massless_propagator_number']['field'] = 'lop_massless_propagator_number';
-/* Filter criterion: Indexed Node: Number of off-shell legs */
-$handler->display->display_options['filters']['lop_off_shell_leg_number']['id'] = 'lop_off_shell_leg_number';
-$handler->display->display_options['filters']['lop_off_shell_leg_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_off_shell_leg_number']['field'] = 'lop_off_shell_leg_number';
-/* Filter criterion: Indexed Node: Number of propagators */
-$handler->display->display_options['filters']['lop_propagator_number']['id'] = 'lop_propagator_number';
-$handler->display->display_options['filters']['lop_propagator_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_propagator_number']['field'] = 'lop_propagator_number';
-/* Filter criterion: Indexed Node: Number of vertices */
-$handler->display->display_options['filters']['lop_vertex_number']['id'] = 'lop_vertex_number';
-$handler->display->display_options['filters']['lop_vertex_number']['table'] = 'search_api_index_integral_index';
-$handler->display->display_options['filters']['lop_vertex_number']['field'] = 'lop_vertex_number';
 /* Filter criterion: Search: Fulltext search */
 $handler->display->display_options['filters']['search_api_views_fulltext']['id'] = 'search_api_views_fulltext';
 $handler->display->display_options['filters']['search_api_views_fulltext']['table'] = 'search_api_index_integral_index';
 $handler->display->display_options['filters']['search_api_views_fulltext']['field'] = 'search_api_views_fulltext';
+$handler->display->display_options['filters']['search_api_views_fulltext']['operator'] = 'OR';
+$handler->display->display_options['filters']['search_api_views_fulltext']['exposed'] = TRUE;
+$handler->display->display_options['filters']['search_api_views_fulltext']['expose']['operator_id'] = 'search_api_views_fulltext_op';
+$handler->display->display_options['filters']['search_api_views_fulltext']['expose']['label'] = 'Fulltext search';
+$handler->display->display_options['filters']['search_api_views_fulltext']['expose']['description'] = 'Blabla';
+$handler->display->display_options['filters']['search_api_views_fulltext']['expose']['operator'] = 'search_api_views_fulltext_op';
+$handler->display->display_options['filters']['search_api_views_fulltext']['expose']['identifier'] = 'search_api_views_fulltext';
+$handler->display->display_options['filters']['search_api_views_fulltext']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+);
+$handler->display->display_options['filters']['search_api_views_fulltext']['group_info']['label'] = 'Fulltext search';
+$handler->display->display_options['filters']['search_api_views_fulltext']['group_info']['identifier'] = 'search_api_views_fulltext';
+$handler->display->display_options['filters']['search_api_views_fulltext']['group_info']['remember'] = FALSE;
+$handler->display->display_options['filters']['search_api_views_fulltext']['group_info']['group_items'] = array(
+  1 => array(),
+  2 => array(),
+  3 => array(),
+);
 $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
   'lop_comment' => 'lop_comment',
+  'lop_literature_arxiv' => 'lop_literature_arxiv',
+  'lop_literature_publication' => 'lop_literature_publication',
+  'lop_nickel' => 'lop_nickel',
+  'title' => 'title',
 );
 
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
-$handler->display->display_options['exposed_block'] = TRUE;
 $handler->display->display_options['path'] = 'search';
 $handler->display->display_options['menu']['type'] = 'normal';
 $handler->display->display_options['menu']['title'] = 'Search';
