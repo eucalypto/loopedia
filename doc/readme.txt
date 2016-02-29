@@ -129,8 +129,8 @@ $ sudo python -m pip install graphstate
 Graphviz is needed to have the programm "neato", which generates graphs
 as (vector) pictures.
 
-This
-[website](http://linoxide.com/ubuntu-how-to/install-drupal-7-x-apache-2-x-ubuntu/)
+This website
+(http://linoxide.com/ubuntu-how-to/install-drupal-7-x-apache-2-x-ubuntu/)
 shows how the installation can work.
 
 
@@ -138,7 +138,7 @@ shows how the installation can work.
 
 You have to transfer the files (the drupal project folder) and the
 database. The files are easily copied. Only remember hidden files like a
-git folder.  
+git folder.
 On ubuntu/apache the websites are stored as folders in
 `/var/www/html/`. Then you have to configure the write permissions
 (ownership) of some folders. Usually the "code" (php-scripts) have to be
@@ -206,7 +206,7 @@ Now to import the sql file you have to use the following commands:
 :~$ drush sql-cli < /path/to/my-sql-dump-file-name.sql
 ```
 
-voila. Drush nows which database to use because this information is
+voila. Drush knows which database to use because this information is
 stored in  `sites/default/settings.php`.
 
 
@@ -232,7 +232,49 @@ http://www.webomelette.com/taxonomy-vocabulary-term-programatically-drupal-7
 In order to provide search capabilities, we use the module "Serach API".
 And the search index is managed by a separate "server" called Solr.
 
-10.1.1 Exporting and Importing Views
+10.2 Solr Search Engine
+
+This guide (https://www.drupal.org/node/2502221) is good. This chapter
+is just a summary of this guide.
+
+10.2.1 Install Solr
+
+- Download solr-5.5.0.tgz and unpack it somewhere. It does not have to
+  be where Drupal is installed.
+- Create new folder structure "solr_install/server/solr/drupal/conf" for
+  the new Solr core. Here "drupal" is just a name.
+- Install the Drupal module Search API Solr Search (search_api_solr)
+- Copy config files from the folder structure of this module
+  (.../search_api_solr/solr-conf/5.x/) to the "conf" folder of the Solr
+  core you created earlier.
+- Replace the file "mapping-ISOLatin1Accent.txt" with the same file from
+  "solr_install/server/solr/configsets/sample_techproducts_configs/"
+
+Now you can run Solr by executing "solr_install/bin/solr start".
+
+10.2.2 Configure Solr
+
+When Solr is running, go to its admin screen:
+(http://localhost:8983/solr/). Click on "Core Admin", then "Add Core"
+and use the core name ("drupal" in our example) in the fields "name" and
+"instanceDir" to create a new Solr core.
+
+10.2.3 Configure Search API Solr Search Module
+
+In the Drupal admin interface go to Configuration > (Search and
+Metadata) > Search API and click on "Add server". Choose a name and
+"Solr service" for Service class. The default configuration should be
+enough. Only for Solr path you need to append the Solr core name to the
+path: "/solr/drupal" (in our case).
+
+Having set up a server in the Search API module, add an Index by going
+again to the Search API Configuration page and clicking on "Add index".
+For "Item type" choose Node and then check "Integral"; and as Server
+choose the one you configured. In the next step of the Index creation
+choose the fields you want to be indexed.
+
+
+10.1.1 Export and Import Views
 
 In order to export a view you have to go to Home > Administration >
 Structure > Views. In the "List"-tab you see a list of views. This list
@@ -248,10 +290,8 @@ and paste the definition from a file.
 
 ### Update Drupal with drush
 To update drupal and all packages, use
-```bash
-$ drush up
-```
-which is an abbreviation of "drush pm-update"
+  ~$ drush up
+which is an abbreviation of "drush pm-update".
 
 ### The following modules are useful:
 
