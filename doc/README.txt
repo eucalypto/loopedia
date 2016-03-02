@@ -171,12 +171,20 @@ Then reload the apache2 server:
 
 #### Install drush
 
-This [website](http://docs.drush.org/en/master/install/) shows you how
-to install drush. I did just the git clone method. In either case, you
-need to [install
-composer](https://getcomposer.org/doc/00-intro.md#globally). You just
-download the  "installer" php file, run it with php, and copy the
-resulting "composer.phar" file as `/usr/local/bin/composer`.
+This website (http://docs.drush.org/en/master/install/) shows you how
+to install drush. And these steps are the easiest way:
+
+- Download "installer" for composer from https://getcomposer.org/installer
+  or https://github.com/composer/getcomposer.org/blob/master/web/installer
+- Run this file with PHP in command line:
+    ~$ php installer
+  It will produce a binary (executable) file "composer.phar"
+- Execute
+    ~$ php composer.phar require drush/drush
+  This will download drush with some other php modules in a subfolder
+  structure. The drush executable is located in vendor/drush/drush/.
+
+You can now use this executable directly or make it globally available.
 
 #### Import MySQL dump
 
@@ -188,6 +196,20 @@ Now to import the sql file you have to use the following commands:
 voila. Drush knows which database to use because this information is
 stored in  `sites/default/settings.php`.
 
+
+3. Security
+
+3.1 File Permissions and Ownership
+
+The web server must not have write (change) permissions to files it
+executes. But it should have read permissions to all files in the drupal
+folder.
+
+Special case: settings.php
+
+The file settings.php contains the database username and password for
+drupal in plain text. So you should
+- remove all permissions for "other" users
 
 
 10. Search
@@ -211,7 +233,7 @@ is just a summary of this guide.
   (.../search_api_solr/solr-conf/5.x/) to the "conf" folder of the Solr
   core you created earlier.
 - Replace the file "mapping-ISOLatin1Accent.txt" with the same file from
-  "solr_install/server/solr/configsets/sample_techproducts_configs/"
+  "solr_install/server/solr/configsets/sample_techproducts_configs/conf/"
 
 Now you can run Solr by executing "solr_install/bin/solr start".
 

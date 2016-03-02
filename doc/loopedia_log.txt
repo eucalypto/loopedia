@@ -88,3 +88,15 @@ For the installation of Solr I pretty much used this guide:
 (https://www.drupal.org/node/2502221)  It is straight forward. Only the
 automatic start as a service, I did not managed to do. Also, on the real
 server we have to restrict access to the solr web interface and server.
+
+
+2016-03-02 Drupal on virtual Suse:
+- Install Opensuse on virtual machine and make an update
+- Install apache2
+- Configure apache2 through Yast: "HTTP Server"
+
+The problem of yesterday was that the server gave a permission error
+site. I used soft links to link from the /srv/www/htdocs/ folder to the
+drupal folder in my home directory. Apparently apache2 is configured to
+not follow symlinks. I copied the drupal folder into /srv/www/htdocs/
+and now it works!
