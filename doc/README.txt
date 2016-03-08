@@ -90,7 +90,7 @@ in PHP arrays and objects (classes). So most of the work with Drupal
 consists of working with these ararys and objects.
 
 
-2. Installation
+2. Migrate Loopedia
 
 2.1 Backup MySQL Database
 
@@ -168,6 +168,54 @@ Then add the following lines to `/etc/apache2/apache2.conf`:
 Then reload the apache2 server:
   $ sudo service apache2 reload
   $ sudo service apache2 restart
+
+
+3. Install and Set up Loopedia
+
+In order to run Drupal with Loopedia you need to do the following things:
+- Set up a web server (apache2)
+- Install drush
+- Install helper programs and libraries
+- Install Drupal
+- Install Loopedia module
+
+Let's have a closer look at those steps.
+
+3.1 Set up a Web Server
+
+3.2 Install Drush
+
+3.3 Install Helper Programs and Libraries
+
+3.4 Install Drupal
+- Download
+- Web browser: installation script
+- Secure file permissions
+
+3.5 Install Loopedia Module
+
+From this repository you have to copy some files to the Drupal
+installation.
+
+3.5.1 Scripts
+
+Copy the scripts
+- edgelist_to_nickel.py
+- minimalnickel.py
+- mygslib.py
+- neato_from_nickel.py
+from "loopedia/graphstate/" to "drupal/sites/default/scripts/".
+
+
+3.5.2 Loopedia Module
+
+Copy the folders "loopedia" and "nickelplay" from
+"loopedia/drupal/modules/" to "drupal/sites/all/modules/custom/".
+
+Then go to the administrator page of Drupal and navigate to the Modules
+section and enable the modules "Loopedia" and "Nickelplay".
+
+
 
 #### Install drush
 
