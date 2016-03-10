@@ -13,10 +13,10 @@ function nickelplay_menu()
 {
   $items = array();
 
-  $items['nickelplay'] = array( // This creates a URL that
+  $items['generate_graph'] = array( // This creates a URL that
                                 // will call this form at "nickelplay"
-    'title' => 'Nickel', //page title
-    'description' => 'A form for playing with nickel indices',
+    'title' => 'Generate Graph', //page title
+    'description' => 'A form for playing with graph identifiers.',
     'page callback' => 'drupal_get_form',  // This is the function that will
                                            // be called when the page is
                                            // accessed.  for a form, use
@@ -39,9 +39,9 @@ function nickelplay_form($form, &$form_state)
 
   $form['guidance'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Help'),
-    '#collapsible' => true,
-    '#collapsed' => true,
+    '#title' => t('Help with Adjacency List or Nickel Index'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
 
   $form['guidance']['adjalist'] = array(
@@ -61,53 +61,24 @@ function nickelplay_form($form, &$form_state)
     ),
   );
 
-  $form['selection'] = array(
-    '#type' => 'radios',
-    '#options' => array(
-      'nickel'   => t('Nickel Index'),
-      'adjalist' => t('Adjacency List'),
-    ),
-    '#title' => t('Choose if you want to provide a Nickel Index or an Adjacency List')
-  );
-
-  $form['nickel'] = array(
+  $form['input'] = array(
     '#type' => 'textfield',
-    '#title' => 'Nickel Index',
+    '#title' => 'Graph Identifier',
+    '#description' => 'Type a Nickel Index or an Adjacency List',
     '#size' => 80,
-    // '#required' => TRUE, //make this field required
-
-    // Only show this field if "nickel index" was selected.
-    '#states' => array(
-      'visible' => array(
-        ':input[name="selection"]' => array('value' => 'nickel'),
-      ),
-    ),
+    '#required' => TRUE, //make this field required
   );
 
-  $form['adjalist'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Adjacency List',
-    '#size' => 80,
-    '#maxlength' => 400,
-    // '#required' => TRUE,
-
-    // Only show this filed if "adjacency list" was selected.
-    '#states' => array(
-      'visible' => array(
-        ':input[name="selection"]' => array('value' => 'adjalist'),
-      ),
-    ),
-  );
 
   // dpm($form_state);
   if (isset($form_state['imagepath']))
   {
-    if ($form_state['values']['selection'] == 'adjalist')
+    if ($form_state['input_type'] == 'adjalist')
     {
       $form['calculatednickel'] = array(
         '#type' => 'item',
         '#title' => t('Correspondung Nickel Index: "@nickel"', array(
-          '@nickel' => $form_state['values']['nickel'],
+          '@nickel' => $form_state['nickel'],
         )),
       );
     }
@@ -120,8 +91,11 @@ function nickelplay_form($form, &$form_state)
 
   $form['submit_button'] = array(
     '#type' => 'submit',
-    '#value' => t('Click Here!'),
+    '#value' => t('Generate Graph!'),
   );
+
+  // dpm($form);
+  // dpm($form_state);
 
   return $form;
 }
@@ -134,56 +108,25 @@ function nickelplay_form($form, &$form_state)
  */
 function nickelplay_form_validate($form, &$form_state)
 {
-  if ($form_state['values']['selection'] == 'adjalist')
+  $graph_id = &$form_state['values']['input'];
+
+  if (strpos($graph_id, '|') !==  FALSE)
   {
-    // Begin of the check of the given adjacency list
+  // $graph_id contains a '|' character. Therefore it is probably a
+  // Nickel index.
 
-    // Check if the given adjacency list string contains forbidden characters.
-    // Allowed ones are ",", "-", "[", "]", "0-9", " "
-    if (preg_match('/^[,\[\]0-9\s-]*$/', $form_state['values']['adjalist']) !== 1)
-    {
-      form_set_error('adjalist', t(
-      'Your adjacency list seems to contain not allowed characters. The allowed ones are: "[comma]", "-", "[", "]", "0-9", "[whitespace]"'
-    ));
-    }
+    // Set input type. This will be used late to control some form
+    // elements.
+    $form_state['input_type'] = 'nickel';
 
-
-
-    // Calculate the Nickel index from the given Adjacency List
-    $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
-              escapeshellarg($form_state['values']['adjalist']) .
-              " 2>&1";
-    $generated_nickel = trim(shell_exec($exec0));
-
-
-
-    // If the script outputs more than one line (nickel index), then there must
-    // have been an error. So if the output $generated_nickel contains a newline
-    // character ("\n" == PHP_EOL), an error is displayed.
-    // http://stackoverflow.com/questions/9437121/how-to-detect-if-a-string-has-a-new-line-break-in-it
-    if (strpos($generated_nickel, PHP_EOL) !== false)
-    {
-      form_set_error('adjalist', t(
-        "There seems to be a problem with your adjacency list."
-      ));
-    }
-    else
-    {
-      $form_state['values']['nickel'] = $generated_nickel;
-    }
-
-    // End of check of the given adjacency list.
-  }
-  else
-  {
     // Begin of checking of the given nickel index.
-    $nickel_value_given = $form_state['values']['nickel'];
+    $nickel_value_given = &$graph_id;
 
-    // Check the formal structure of the given index: it shall only contain "e",
-    // "0-9" and "|".
+    // Check the formal structure of the given index: it shall only
+    // contain "e", "0-9" and "|".
     if (preg_match('/^[e0-9A-Z\|]*$/', $nickel_value_given) !== 1)
     {
-      form_set_error('nickel', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "A-Z", "|".'));
+      form_set_error('graph_id', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "A-Z", "|".'));
     }
 
 
@@ -194,20 +137,21 @@ function nickelplay_form_validate($form, &$form_state)
     $exec1 = "python sites/default/scripts/minimalnickel.py " .
                escapeshellarg($nickel_value_given) .
                " 2>&1";
-    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel Index
-                            // calculated by script.  trim() was needed here
-                            // because shell_exec() produces one unwanted
-                            // whitespace at the end of the output string
+    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel
+                            // Index calculated by script.  trim() was
+                            // needed here because shell_exec() produces
+                            // one unwanted whitespace at the end of the
+                            // output string
 
 
     if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
     {
-      // GraphState outputs a (long) error message if the nickel string argument
-      // is wrong according to the convention. So if the output of the script
-      // has not the same length as the given nickel string, something went
-      // wrong.
+    // GraphState outputs a (long) error message if the nickel string
+    // argument is wrong according to the convention. So if the output
+    // of the script has not the same length as the given nickel
+    // string, something went wrong.
 
-      form_set_error('nickel', t(
+      form_set_error('graph_id', t(
         'Your nickel index "@ni_given" seems to be wrong. Please check if it is according to the conventions.',
         array(
         '@ni_given' => $nickel_value_given,
@@ -216,10 +160,24 @@ function nickelplay_form_validate($form, &$form_state)
     }
     elseif ( $nickel_value_given != $nickel_value_correct )
     {
-      // If the given string has the same length as the outupt but is not equal,
-      // then the given nickel index is not minimal.
+    // If the given string has the same length as the outupt but is not
+    // equal, then the given nickel index is not minimal.
 
-      form_set_error('nickel', t('The given nickel index: "@ni_given" is not correct (minimal). Please use the right (minimal) Nickel index: <strong>"@ni_correct"</strong>.',
+      // So we write the corret nickel index to the appropriate places:
+      // $form_state['values'] storet the real value that is used
+      // further.
+      $form_state['values']['input'] = $nickel_value_correct;
+      // $form_state['input'] apparently stores the user input. This is
+      // printed on the screen.
+      $form_state['input']['input'] = $nickel_value_correct;
+      // // form_set_value() does not work as I expect.
+      // form_set_value($form['nickel_adjalist']['lop_nickel'], 'blabla', $form_state);
+
+
+
+      // Now we print out a message, that the Nickel Index was changed
+      // to the correct version:
+      drupal_set_message(t('The given nickel index: "@ni_given" is not correct (minimal). It was replaced by the correct (minimal) Nickel index: <strong>"@ni_correct"</strong>.',
         array(
           '@ni_given' => $nickel_value_given,
           '@ni_correct' => $nickel_value_correct,
@@ -228,16 +186,73 @@ function nickelplay_form_validate($form, &$form_state)
     }
     else
     {
+    // If none of the cases above apply, the given nickel Index must be
+    // correct.
+
       drupal_set_message(t('The Nickel index "@nickel" is correct!',
         array('@nickel' => $nickel_value_correct)
       ));
     }
 
-    // End of checking the Nickel index.
+    $form_state['nickel'] = $nickel_value_correct;
   }
+  // End of checking the Nickel index.
+  else
+  {
+  // $graph_id is probably not a Nickel Index.
 
+    $form_state['input_type'] = 'adjalist';
+
+    // Begin of the check of the given adjacency list
+
+    $adjalist = &$graph_id;
+    // Check if the given adjacency list string contains forbidden
+    // characters. Allowed ones are ",", "-", "[", "]", "0-9", " "
+    // See http://www.rexegg.com/regex-php.html
+    if (preg_match('/^[,\[\]0-9\s-]*$/', $adjalist) !== 1)
+    {
+      form_set_error('graph_id', t(
+      'Your adjacency list seems to contain not allowed characters. The allowed ones are: "[comma]", "-", "[", "]", "0-9", "[whitespace]"'
+      ));
+    }
+
+
+
+    // Calculate the Nickel index from the given Adjacency List
+    $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
+              escapeshellarg($adjalist) .
+              " 2>&1";
+    $generated_nickel = trim(shell_exec($exec0));
+
+
+
+    // If the script outputs more than one line (nickel index), then
+    // there must have been an error. So if the output $generated_nickel
+    // contains a newline character ("\n" == PHP_EOL), an error is
+    // displayed.
+    // http://stackoverflow.com/questions/9437121/how-to-detect-if-a-string-has-a-new-line-break-in-it
+    if (strpos($generated_nickel, PHP_EOL) !== FALSE)
+    {
+      form_set_error('graph_id', t(
+        "There seems to be a problem with your adjacency list."
+      ));
+    }
+    else
+    {
+    // The adjacency list and generated nickel index seem to be all
+    // right.
+
+      // Write the nickel index to the appropriate places:
+      $form_state['nickel'] = $generated_nickel;
+    }
+
+  }
+  // End of check of the given adjacency list.
 
 }
+// End of nickelplay_form_validate()
+
+
 
 /**
  * Implements hook_form_submit()
@@ -246,17 +261,16 @@ function nickelplay_form_validate($form, &$form_state)
  */
 function nickelplay_form_submit($form, &$form_state)
 {
+  $nickel = &$form_state['nickel'];
   // Generate Picture to Nickel Index
-  $image_path = "sites/default/files/tmp/" .
-                  uniqid($form_state['values']['nickel']);
+  $image_path = "sites/default/files/tmp/" . uniqid($nickel);
                  // this is the path to the dot file the image (svg) file will
                  // have an extra ending of ".svg"
   $script_path = "sites/default/scripts/neato_from_nickel.py";
-  $exec2 = escapeshellcmd("python $script_path " .
-                           $form_state['values']['nickel'] .
+  $exec2 = escapeshellcmd("python $script_path " . $nickel .
                            " $image_path");
   exec($exec2);
-  $form_state['imagepath'] = $image_path . ".svg";
+  $form_state['imagepath'] = $GLOBALS['base_url'] . '/' . $image_path . ".svg";
 
   // drupal_set_message('This should only appear when no error is given!<br />' . $exec2);
 
