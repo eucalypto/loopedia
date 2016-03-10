@@ -185,12 +185,45 @@ Let's have a closer look at those steps.
 
 3.2 Install Drush
 
+This website (http://docs.drush.org/en/master/install/) shows you how
+to install drush. And these steps are the easiest way:
+
+- Download "installer" for composer from https://getcomposer.org/installer
+  or https://github.com/composer/getcomposer.org/blob/master/web/installer
+- Run this file with PHP in command line:
+    ~$ php installer
+  It will produce a binary (executable) file "composer.phar"
+- Execute
+    ~$ php composer.phar require drush/drush
+  This will download drush with some other php modules in a subfolder
+  structure. The drush executable is located in vendor/drush/drush/.
+
+You can now use this executable directly or make it globally available.
+
 3.3 Install Helper Programs and Libraries
+
+3.3.1 Solr
+
+You can find installation steps for Solr in a later chapter.
 
 3.4 Install Drupal
 - Download
 - Web browser: installation script
 - Secure file permissions
+
+Enable the following Drupal Core modules:
+- Database logging
+- Statistics
+- Syslog
+
+Install contributed Drupal modules:
+- Search API (search_api)
+- Entity API (entity)
+- Solr search (search_api_solr)
+- Facet API (facetapi)
+- Views (views)
+- Chaos tools (ctools)
+
 
 3.5 Install Loopedia Module
 
@@ -216,23 +249,14 @@ Then go to the administrator page of Drupal and navigate to the Modules
 section and enable the modules "Loopedia" and "Nickelplay".
 
 
+3.6 Configure Drupal
 
-#### Install drush
+You have to do some steps in the Drupal admin interface.
 
-This website (http://docs.drush.org/en/master/install/) shows you how
-to install drush. And these steps are the easiest way:
 
-- Download "installer" for composer from https://getcomposer.org/installer
-  or https://github.com/composer/getcomposer.org/blob/master/web/installer
-- Run this file with PHP in command line:
-    ~$ php installer
-  It will produce a binary (executable) file "composer.phar"
-- Execute
-    ~$ php composer.phar require drush/drush
-  This will download drush with some other php modules in a subfolder
-  structure. The drush executable is located in vendor/drush/drush/.
 
-You can now use this executable directly or make it globally available.
+
+
 
 #### Import MySQL dump
 
