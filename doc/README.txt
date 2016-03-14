@@ -253,6 +253,14 @@ section and enable the modules "Loopedia" and "Nickelplay".
 
 You have to do some steps in the Drupal admin interface.
 
+Configure search: see "10. Search"
+
+Set User Permissions in "Administration > People > Permissions". Check
+the following permissions for "Authenticated User" under Node:
+- View own unpublished content
+- Integral: Create new content
+- Integral: Edit own content 
+
 
 
 
@@ -326,9 +334,10 @@ path: "/solr/drupal" (in our case).
 
 Having set up a server in the Search API module, add an Index by going
 again to the Search API Configuration page and clicking on "Add index".
-For "Item type" choose Node and then check "Integral"; and as Server
-choose the one you configured. In the next step of the Index creation
-choose the fields you want to be indexed.
+As name choose "Integral Index" so that the machine name reads
+"integral_index". For "Item type" choose Node and then check "Integral";
+and as Server choose the one you configured. In the next step of the
+Index creation choose the fields you want to be indexed.
 
 
 10.1.1 Export and Import Views
