@@ -216,6 +216,10 @@ Enable the following Drupal Core modules:
 - Statistics
 - Syslog
 
+Make the following directories:
+drupal/sites/all/modules/custom/
+drupal/sites/all/modules/contrib/
+
 Install contributed Drupal modules:
 - Search API (search_api)
 - Entity API (entity)
@@ -223,9 +227,32 @@ Install contributed Drupal modules:
 - Facet API (facetapi)
 - Views (views)
 - Chaos tools (ctools)
+You can download them with one command:
+  drush dl search_api entity search_api_solr facetapi views ctools
 
 
-3.5 Install Loopedia Module
+Activated Modules:
+- Core:
+  - Block
+  - Contextual links
+  - Dashboard
+  - Database logging
+  - Field
+  - Field SQL storage
+  - Field UI
+  - File
+  - Statistics
+  - Syslog
+- Search:
+  - Search API
+  - Search facets
+  - Search views
+  - Solr search
+
+If you downloaded all modules and enable the "Serach" modules, they will
+automatically enable modules that they depend on.
+
+3.5 Install Loopedia
 
 From this repository you have to copy some files to the Drupal
 installation.
@@ -259,7 +286,7 @@ Set User Permissions in "Administration > People > Permissions". Check
 the following permissions for "Authenticated User" under Node:
 - View own unpublished content
 - Integral: Create new content
-- Integral: Edit own content 
+- Integral: Edit own content
 
 
 
