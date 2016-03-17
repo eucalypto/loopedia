@@ -1058,17 +1058,17 @@ the new Solr core. Here "drupal" is just a name.</p>
 </li>
 <li>
 <p>Copy config files from the folder structure of this module
-(&#8230;&#8203;/search_api_solr/solr-conf/5.x/) to the "conf" folder of the Solr
+(<code>&#8230;&#8203;/search_api_solr/solr-conf/5.x/</code>) to the "conf" folder of the Solr
 core you created earlier.</p>
 </li>
 <li>
-<p>Replace the file "mapping-ISOLatin1Accent.txt" with the same file from
-"solr_install/server/solr/configsets/sample_techproducts_configs/conf/"</p>
+<p>Replace the file <code>mapping-ISOLatin1Accent.txt</code> with the same file from
+<code>solr_install/server/solr/configsets/sample_techproducts_configs/conf/</code></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Now you can run Solr by executing "solr_install/bin/solr start".</p>
+<p>Now you can run Solr by executing <code>solr_install/bin/solr start</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1082,20 +1082,92 @@ and use the core name ("drupal" in our example) in the fields "name" and
 </div>
 <div class="sect3">
 <h4 id="_configure_search_api_solr_search_module">5.1.3. Configure Search API Solr Search Module</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+When I&#8217;m right, you can export and import these settings with <code>Features</code>. This would make the configuration a lot easier.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>In the Drupal admin interface go to Configuration &gt; (Search and
 Metadata) &gt; Search API and click on "Add server". Choose a name and
 "Solr service" for Service class. The default configuration should be
 enough. Only for Solr path you need to append the Solr core name to the
-path: "/solr/drupal" (in our case).</p>
+path: <code>/solr/drupal</code> (in our case).</p>
 </div>
 <div class="paragraph">
 <p>Having set up a server in the Search API module, add an Index by going
 again to the Search API Configuration page and clicking on "Add index".
-As name choose "Integral Index" so that the machine name reads
-"integral_index". For "Item type" choose Node and then check "Integral";
+As name choose <code>Integral Index</code> so that the machine name reads
+<code>integral_index</code>. For Item type choose <code>Node</code> and then check <code>Integral</code>;
 and as Server choose the one you configured. In the next step of the
-Index creation choose the fields you want to be indexed.</p>
+Index creation choose the fields you want to be indexed:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Title <code>title</code></p>
+</li>
+<li>
+<p>Author <code>author</code></p>
+</li>
+<li>
+<p>Nickel Index <code>lop_nickel</code></p>
+</li>
+<li>
+<p>Comments <code>lop_comment</code></p>
+</li>
+<li>
+<p>arXiv Identifier <code>lop_literature_arxiv</code></p>
+</li>
+<li>
+<p>Publication (Journal,&#8230;&#8203;) <code>lop_literature_publication</code></p>
+</li>
+<li>
+<p>Number of legs on an internal mass shell	<code>lop_int_mass_shell_leg_num</code></p>
+</li>
+<li>
+<p>Number of legs	<code>lop_leg_number</code></p>
+</li>
+<li>
+<p>Number of light-like legs	<code>lop_light_like_leg_number</code></p>
+</li>
+<li>
+<p>Number of vertices	<code>lop_vertex_number</code></p>
+</li>
+<li>
+<p>Number of loops	<code>lop_loop_number</code></p>
+</li>
+<li>
+<p>Number of internal mass scales	<code>lop_mass_scale_number</code></p>
+</li>
+<li>
+<p>Number of massless propagators	<code>lop_massless_propagator_number</code></p>
+</li>
+<li>
+<p>Number of massive propagators	<code>lop_massive_propagator_number</code></p>
+</li>
+<li>
+<p>Number of off-shell legs	<code>lop_off_shell_leg_number</code></p>
+</li>
+<li>
+<p>Number of propagators	<code>lop_propagator_number</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Drupal chooses automatically the right type <code>Integer</code> or <code>Fulltext</code>.</p>
+</div>
+<div class="paragraph">
+<p>Next in the <code>Data Alterations</code> section, you should check <code>Node access</code>
+and <code>Exclude unpublished nodes</code>. And for <code>Processors</code> you can choose
+<code>Ignore case</code> and <code>Highlighting</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1183,7 +1255,7 @@ which is an abbreviation of "drush pm-update".</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-17 16:24:41 CET
+Last updated 2016-03-17 18:37:23 CET
 </div>
 </div>
 </body>

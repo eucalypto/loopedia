@@ -356,12 +356,12 @@ is just a summary of this guide.
   the new Solr core. Here "drupal" is just a name.
 - Install the Drupal module Search API Solr Search (search_api_solr)
 - Copy config files from the folder structure of this module
-  (.../search_api_solr/solr-conf/5.x/) to the "conf" folder of the Solr
+  (`.../search_api_solr/solr-conf/5.x/`) to the "conf" folder of the Solr
   core you created earlier.
-- Replace the file "mapping-ISOLatin1Accent.txt" with the same file from
-  "solr_install/server/solr/configsets/sample_techproducts_configs/conf/"
+- Replace the file `mapping-ISOLatin1Accent.txt` with the same file from
+  `solr_install/server/solr/configsets/sample_techproducts_configs/conf/`
 
-Now you can run Solr by executing "solr_install/bin/solr start".
+Now you can run Solr by executing `solr_install/bin/solr start`.
 
 ==== Configure Solr
 
@@ -372,18 +372,45 @@ and use the core name ("drupal" in our example) in the fields "name" and
 
 ==== Configure Search API Solr Search Module
 
+NOTE: When I'm right, you can export and import these settings with `Features`. This would make the configuration a lot easier.
+
 In the Drupal admin interface go to Configuration > (Search and
 Metadata) > Search API and click on "Add server". Choose a name and
 "Solr service" for Service class. The default configuration should be
 enough. Only for Solr path you need to append the Solr core name to the
-path: "/solr/drupal" (in our case).
+path: `/solr/drupal` (in our case).
 
 Having set up a server in the Search API module, add an Index by going
 again to the Search API Configuration page and clicking on "Add index".
-As name choose "Integral Index" so that the machine name reads
-"integral_index". For "Item type" choose Node and then check "Integral";
+As name choose `Integral Index` so that the machine name reads
+`integral_index`. For Item type choose `Node` and then check `Integral`;
 and as Server choose the one you configured. In the next step of the
-Index creation choose the fields you want to be indexed.
+Index creation choose the fields you want to be indexed:
+
+* Title `title`
+* Author `author`
+* Nickel Index `lop_nickel`
+* Comments `lop_comment`
+* arXiv Identifier `lop_literature_arxiv`
+* Publication (Journal,...) `lop_literature_publication`
+* Number of legs on an internal mass shell	`lop_int_mass_shell_leg_num`
+* Number of legs	`lop_leg_number`
+* Number of light-like legs	`lop_light_like_leg_number`
+* Number of vertices	`lop_vertex_number`
+* Number of loops	`lop_loop_number`
+* Number of internal mass scales	`lop_mass_scale_number`
+* Number of massless propagators	`lop_massless_propagator_number`
+* Number of massive propagators	`lop_massive_propagator_number`
+* Number of off-shell legs	`lop_off_shell_leg_number`
+* Number of propagators	`lop_propagator_number`
+
+Drupal chooses automatically the right type `Integer` or `Fulltext`.
+
+Next in the `Data Alterations` section, you should check `Node access`
+and `Exclude unpublished nodes`. And for `Processors` you can choose
+`Ignore case` and `Highlighting`.
+
+
 
 
 ==== Export and Import Views
