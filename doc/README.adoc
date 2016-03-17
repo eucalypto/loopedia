@@ -1,27 +1,31 @@
-README
+= README
+Viktor Papara <papara@mpp.mpg.de>
+:toc:
+:toclevels: 3
+:numbered:
 
 This is the main README file for the inner workings of loopedia.
 
-1. What is Drupal
+== What is Drupal
 
 Drupal is a conntent management system (CMS) written in PHP. It is used
 to manage and display content on the web. It uses a database (e.g.
 MySQL) internally to store data (content) and preferences. This is why
 it is used for Loopedia.
 
-1.1 Modules
+=== Modules
 
 Drupal is modular, i.e. it uses plugins to extend the functionality of
 an installation. These plugins are called modules and can be part of the
 official Drupal project (Drupal core), be provided by the community
 (contrib), or be written by yourself (custom).
 
-1.1.1 How to write a custom module
+==== How to write a custom module
 
 The usual way to write a custom module is as follows. You make a new
-folder in /sites/all/modules/custom/ and name it exactly as your module
-name. Then you make three text files: "modulename.module",
-"modulename.install" and "modulename.info". The info file contains basic
+folder in `/sites/all/modules/custom/` and name it exactly as your module
+name. Then you make three text files: `modulename.module`,
+`modulename.install` and `modulename.info`. The info file contains basic
 information about your module that drupal uses to display in its module
 list. The main code is in your .module file but some code must be in the
 .install file, where the installation steps of your module are defined.
@@ -37,9 +41,9 @@ This is the usual way, there are tons of hooks. You just have to find
 the right one and write an implementation of it. This way, you can alter
 the behavior of Drupal or add new functionality.
 
-1.2 How Drupal works
+=== How Drupal works
 
-1.2.1 Separation of data and look
+==== Separation of data and look
 
 One important aspect of Drupal (or any CMS) is that it separates data
 and the display (html) in the way that the website (html) is generated
@@ -50,7 +54,7 @@ independently take care of the display. For this, there are "themes"
 that you can install and customize. They define the look of your
 website.
 
-1.2.2 Code vs UI
+==== Code vs UI
 
 You can work with Drupal and never see a line of code. A lot of
 functionality is already there with contributed modules that can be
@@ -64,13 +68,13 @@ nice advantage of a custom module is that you can port it to any other
 Drupal installation without having to re-create all steps through the
 UI. Also, you can version control your code, which is a very huge plus.
 
-1.2.3 Naming conventions
+==== Naming conventions
 
 You should chose a module name that is not used so far. Googling it is a
 good strategy. The names of your function should always begin with
 "modulename_" to prevent collisions.
 
-1.2.4 The Drupal Way
+==== The Drupal Way
 
 Many modules define special functions that you can call form your
 functions. These are part of the application programming interface (API)
@@ -82,7 +86,7 @@ handles the database for you.
 
 Not using the API will make your life very difficult.
 
-1.2.4. Working with the Drupal API
+==== Working with the Drupal API
 
 Since the display is separated from the data, Drupal tries to generate
 the html code as last as possible. Until then, the data is stored mostly
@@ -90,9 +94,9 @@ in PHP arrays and objects (classes). So most of the work with Drupal
 consists of working with these ararys and objects.
 
 
-2. Migrate Loopedia
+== Migrate Loopedia
 
-2.1 Backup MySQL Database
+=== Backup MySQL Database
 
 To make a backup of the database you can use drush:
   ~$ drush cc all
@@ -105,7 +109,7 @@ commands and writes the sql dump to
 `sql_backup/loopedia_drupal_test.sql`
 
 
-2.2 Move Loopedia / Installation
+=== Move Loopedia / Installation
 
 My test server environment is an ubuntu pc. You have to have the
 following programs/packages installed:
@@ -125,7 +129,7 @@ This website
 shows how the installation can work.
 
 
-2.3 Migrate Files
+=== Migrate Files
 
 You have to transfer the files (the drupal project folder) and the
 database. The files are easily copied. Only remember hidden files like a
@@ -139,7 +143,7 @@ page: `Configuration -> File system`. So you have to execute `sudo chown
 --recursive :www-data /paths/to/folders/` in order to  change at least
 the group of the folders and subfolders to www-data.
 
-2.4 Configure MySQL
+=== Configure MySQL
 
 To migrate the database, you can export it with drush (see corresponding
 chapter). Then, on the new system you have to set up MySQL:
@@ -151,7 +155,7 @@ chapter). Then, on the new system you have to set up MySQL:
   mysql> exit;
 
 
-2.5 Configure Apache2
+=== Configure Apache2
 
 In order to have nice urls, the drupal option "clean URLs" can be
 enabled and needs the apache2 module mod_rename according to
@@ -170,9 +174,10 @@ Then reload the apache2 server:
   $ sudo service apache2 restart
 
 
-3. Install and Set up Loopedia
+== Install and Set up Loopedia
 
 In order to run Drupal with Loopedia you need to do the following things:
+
 - Set up a web server (apache2)
 - Install drush
 - Install helper programs and libraries
@@ -181,46 +186,56 @@ In order to run Drupal with Loopedia you need to do the following things:
 
 Let's have a closer look at those steps.
 
-3.1 Set up a Web Server
+=== Set up a Web Server
 
-3.2 Install Drush
+=== Install Drush
 
 This website (http://docs.drush.org/en/master/install/) shows you how
 to install drush. And these steps are the easiest way:
 
-- Download "installer" for composer from https://getcomposer.org/installer
+* Download "installer" for composer from https://getcomposer.org/installer
   or https://github.com/composer/getcomposer.org/blob/master/web/installer
-- Run this file with PHP in command line:
-    ~$ php installer
-  It will produce a binary (executable) file "composer.phar"
-- Execute
-    ~$ php composer.phar require drush/drush
-  This will download drush with some other php modules in a subfolder
-  structure. The drush executable is located in vendor/drush/drush/.
+* Run this file with PHP in command line:
++
+----
+  ~$ php installer
+----
++
+It will produce a binary (executable) file `composer.phar`
+
+* Execute
++
+ ~$ php composer.phar require drush/drush
++
+This will download drush with some other php modules in a subfolder
+structure. The drush executable is located in vendor/drush/drush/.
 
 You can now use this executable directly or make it globally available.
 
-3.3 Install Helper Programs and Libraries
+=== Install Helper Programs and Libraries
 
-3.3.1 Solr
+==== Solr
 
-You can find installation steps for Solr in a later chapter.
+You can find installation steps for Solr in a later chapter: <<Search>>.
 
-3.4 Install Drupal
+=== Install Drupal
 - Download
 - Web browser: installation script
 - Secure file permissions
 
 Enable the following Drupal Core modules:
+
 - Database logging
 - Statistics
 - Syslog
 
 Make the following directories:
-drupal/sites/all/modules/custom/
-drupal/sites/all/modules/contrib/
+
+ drupal/sites/all/modules/custom/
+ drupal/sites/all/modules/contrib/
 
 Install contributed Drupal modules:
+
 - Search API (search_api)
 - Entity API (entity)
 - Solr search (search_api_solr)
@@ -228,59 +243,63 @@ Install contributed Drupal modules:
 - Views (views)
 - Chaos tools (ctools)
 You can download them with one command:
+
   drush dl search_api entity search_api_solr facetapi views ctools
 
 
 Activated Modules:
-- Core:
-  - Block
-  - Contextual links
-  - Dashboard
-  - Database logging
-  - Field
-  - Field SQL storage
-  - Field UI
-  - File
-  - Statistics
-  - Syslog
-- Search:
-  - Search API
-  - Search facets
-  - Search views
-  - Solr search
+
+* Core:
+** Block
+** Contextual links
+** Dashboard
+** Database logging
+** Field
+** Field SQL storage
+** Field UI
+** File
+** Statistics
+** Syslog
+* Search:
+** Search API
+** Search facets
+** Search views
+** Solr search
 
 If you downloaded all modules and enable the "Serach" modules, they will
 automatically enable modules that they depend on.
 
-3.5 Install Loopedia
+=== Install Loopedia
 
 From this repository you have to copy some files to the Drupal
 installation.
 
-3.5.1 Scripts
+==== Scripts
 
 Copy the scripts
+
 - edgelist_to_nickel.py
 - minimalnickel.py
 - mygslib.py
 - neato_from_nickel.py
-from "loopedia/graphstate/" to "drupal/sites/default/scripts/".
+
+from `loopedia/graphstate/` to `drupal/sites/default/scripts/`.
 
 
-3.5.2 Loopedia Module
+==== Loopedia Module
 
-Copy the folders "loopedia" and "nickelplay" from
-"loopedia/drupal/modules/" to "drupal/sites/all/modules/custom/".
+Copy the folders `loopedia` and `nickelplay` from
+`loopedia/drupal/modules/` to `drupal/sites/all/modules/custom/`.
 
 Then go to the administrator page of Drupal and navigate to the Modules
-section and enable the modules "Loopedia" and "Nickelplay".
+section and enable the modules `Loopedia` and `Nickelplay`.
 
 
-3.6 Configure Drupal
+=== Configure Drupal
 
 You have to do some steps in the Drupal admin interface.
 
-Configure search: see "10. Search"
+Configure search: see <<Search>>.
 
 Set User Permissions in "Administration > People > Permissions". Check
 the following permissions for "Authenticated User" under Node:
@@ -304,9 +323,9 @@ voila. Drush knows which database to use because this information is
 stored in  `sites/default/settings.php`.
 
 
-3. Security
+== Security
 
-3.1 File Permissions and Ownership
+=== File Permissions and Ownership
 
 The web server must not have write (change) permissions to files it
 executes. But it should have read permissions to all files in the drupal
@@ -319,17 +338,17 @@ drupal in plain text. So you should
 - remove all permissions for "other" users
 
 
-10. Search
+== Search
 
 In order to provide search capabilities, we use the module "Serach API".
 And the search index is managed by a separate "server" called Solr.
 
-10.2 Solr Search Engine
+=== Solr Search Engine
 
 This guide (https://www.drupal.org/node/2502221) is good. This chapter
 is just a summary of this guide.
 
-10.2.1 Install Solr
+==== Install Solr
 
 - Download solr-5.5.0.tgz and unpack it somewhere. It does not have to
   be where Drupal is installed.
@@ -344,14 +363,14 @@ is just a summary of this guide.
 
 Now you can run Solr by executing "solr_install/bin/solr start".
 
-10.2.2 Configure Solr
+==== Configure Solr
 
 When Solr is running, go to its admin screen:
 (http://localhost:8983/solr/). Click on "Core Admin", then "Add Core"
 and use the core name ("drupal" in our example) in the fields "name" and
 "instanceDir" to create a new Solr core.
 
-10.2.3 Configure Search API Solr Search Module
+==== Configure Search API Solr Search Module
 
 In the Drupal admin interface go to Configuration > (Search and
 Metadata) > Search API and click on "Add server". Choose a name and
@@ -367,7 +386,7 @@ and as Server choose the one you configured. In the next step of the
 Index creation choose the fields you want to be indexed.
 
 
-10.1.1 Export and Import Views
+==== Export and Import Views
 
 In order to export a view you have to go to Home > Administration >
 Structure > Views. In the "List"-tab you see a list of views. This list
@@ -381,7 +400,7 @@ Views. At the top you should see an "+ Import" link. There you can copy
 and paste the definition from a file.
 
 
-### Update Drupal with drush
+=== Update Drupal with drush
 To update drupal and all packages, use
   ~$ drush up
 which is an abbreviation of "drush pm-update".
@@ -389,7 +408,7 @@ which is an abbreviation of "drush pm-update".
 
 
 
-### The following internetsites could be useful:
+=== The following internetsites could be useful:
 
 http://www.sitepoint.com/building-multi-page-wizard-like-form-drupal/
 
