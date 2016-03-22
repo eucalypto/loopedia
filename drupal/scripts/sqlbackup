@@ -1,0 +1,21 @@
+#! /bin/bash
+
+# Make a backup of the drupal database using sql-dump into a file in the
+# current directory.
+
+
+# Create string for the current date. In the format
+# "2015-02-23T15:45:12"
+date=$(date +%Y-%m-%dT%H:%M:%S)
+
+# Save current directory.
+here=$(pwd)
+
+
+# Go to directory of loopedia drupal
+cd /home/pcl305/loopedia/
+
+# Clean caches before backup
+drush cc all
+
+drush sql-dump --ordered-dump > "${here}sql-dump_$date"
