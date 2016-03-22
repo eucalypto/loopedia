@@ -13,9 +13,13 @@ here=$(pwd)
 
 
 # Go to directory of loopedia drupal
+echo "Go to Loopedia folder..."
 cd /home/pcl305/loopedia/
 
+
 # Clean caches before backup
+echo "Clean all caches..."
 drush cc all
 
-drush sql-dump --ordered-dump > "${here}sql-dump_$date"
+echo "Make sql-dump..."
+drush sql-dump --ordered-dump > "${here}/sql-dump_$date"
