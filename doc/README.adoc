@@ -6,6 +6,8 @@ Viktor Papara <papara@mpp.mpg.de>
 
 This is the main README file for the inner workings of loopedia.
 
+
+
 == What is Drupal
 
 Drupal is a conntent management system (CMS) written in PHP. It is used
@@ -94,20 +96,68 @@ in PHP arrays and objects (classes). So most of the work with Drupal
 consists of working with these ararys and objects.
 
 
-== Migrate Loopedia
 
-=== Backup MySQL Database
+
+
+
+== Back up Loopedia
+
+There ar three main parts of a Drupal installation that need backing up:
+
+* Database
+* Drupal installation
+* Extra files
+
+The Solr search index could be backed up too, but it can be regenerated
+at any time.
+
+
+=== Backup Drupal's MySQL Database
 
 To make a backup of the database you can use drush:
+
   ~$ drush cc all
   ~$ drush sql-dump --ordered-dump > ~/my-sql-dump-file-name.sql
+
 The first line clears the caches of drupal and the second one dumps the
 database into the given sql-file.
 
-I've written a script (drushsqlbackup.bash) that executes those two
-commands and writes the sql dump to
-`sql_backup/loopedia_drupal_test.sql`
+I have written a bash script for this:
+`loopedia/drupal/scripts/sqlbackup`. The Folder for the backups is in my
+home folder '/home/pcl247e/papara/loopedia_backups/'. I linked from here
+to the script because this is the place where it should be executed.
 
+
+=== Backup Drupal Installation
+
+The files of the drupal installation are just text files with PHP. They
+can be easily watched by `git`. The installation even includes a
+`.gitignore` file.
+
+You should make a git commit when there is a change in the Drupal code;
+usualy after updates and installations of new packages.
+
+To have an external backup, I use a private github repository
+
+  https://github.com/mppmu/loopedia_site.git
+
+to `git push` the changes.
+
+=== Backup Drupal (generated) Files
+
+The folder `/drupal/sites/default/files/` contains all other files that
+are not part of the drupal installation. They can be binary and should
+be backed up separated from the drupal installation files.
+
+As for the SQL backup, I wrote a bash script `filebackup` that works
+similar and operates in the same folder.
+
+
+
+
+
+
+== Migrate Loopedia
 
 === Move Loopedia / Installation
 
