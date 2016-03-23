@@ -150,26 +150,6 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
 
 
 
-
-/**
- * Returns an empty array
- *
- * This is used here to hide fields by setting '#pre_render' to this
- * function.
- */
-function loopedia_empty_array()
-{
-  return array();
-}
-
-
-
-
-
-
-
-
-
 // /**
 //  *  Validate handler for the nickel index
 //  */
