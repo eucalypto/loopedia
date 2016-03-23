@@ -65,6 +65,9 @@ function loopedia_form_lop_integral_node_form_alter(&$form, &$form_state, $form_
   // for the Loopedia integral submission form are defined.
   form_load_include($form_state, 'inc', 'loopedia', 'loopedia.integral');
 
+  // Load helper functions
+  form_load_include($form_state, 'inc', 'loopedia', 'loopedia.func');
+
   // // Add an extra validate function
   // $form['#validate'][] = $form['#validate'][0];
   // $form['#validate'][0] = 'loopedia_lop_integral_form_validate';

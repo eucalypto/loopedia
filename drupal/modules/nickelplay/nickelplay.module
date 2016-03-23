@@ -48,7 +48,7 @@ function nickelplay_form($form, &$form_state)
     '#type' => 'item',
     '#title' => t('Adjacency List'),
     '#description' => t(
-      'An adjacency list is a list of connections between vertices. Please label the vertices after a non-negative integers (0, 1, 3, 23, ...). And <strong>all</strong> external legs are labelled with the <strong>same</strong> "-1". Please <strong>don\'t</strong> use "-2", "-3" and so on.<br> An example of an adjacency list would be "[-1, 1], [1, 2], [1, 2], [1, 2], [2, -1]" for the Sunrise diagram.'
+      'An adjacency list is a list of connections between vertices. Please label the vertices after a non-negative integers (0, 1, 3, 23, ...). External legs can be labelled with negative numbers like "-1", "-2", "-3".<br> An example of an adjacency list would be "[-1, 1], [1, 2], [1, 2], [1, 2], [2, -2]" for the Sunrise diagram.'
     ),
   );
 
@@ -216,11 +216,15 @@ function nickelplay_form_validate($form, &$form_state)
       ));
     }
 
+    // Load helper functions and convert adjacency list to
+    // graphstate-friendly string.
+    form_load_include($form_state, 'inc', 'loopedia', 'loopedia.func');
+    $adjalist_gs = loopedia_adjalist_to_graphstate($adjalist);
 
 
     // Calculate the Nickel index from the given Adjacency List
     $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
-              escapeshellarg($adjalist) .
+              escapeshellarg($adjalist_gs) .
               " 2>&1";
     $generated_nickel = trim(shell_exec($exec0));
 
