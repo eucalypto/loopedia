@@ -2,7 +2,7 @@ name = Loopedia Module
 description = This module holds all things necessary for loopedia
 core = 7.x
 
-version = 7.x-0.0
+version = 7.x-0.1
 
 files[] = loopedia.install
 files[] = loopedia.module
