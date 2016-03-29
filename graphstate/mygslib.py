@@ -1,5 +1,6 @@
 
 import sys
+import ast
 import graph_state
 from graph_state import graph_state_property
 from graph_state import property_lib
@@ -42,3 +43,17 @@ def neatodraw(gs_object, filename):
     from subprocess import call
     call(["neato", "-Tsvg", "-Gstart=rand", "-Gepsilon=0.000001",
           "-O", filename])
+
+
+# Takes a string representing an adjacency list, converts it to the
+# format of graphstate and returns it 
+def adjalist_to_graphstate(adjalist_raw):
+    # Evaluate string to list of lists (in a hopefully safe way):
+    # https://docs.python.org/2/library/ast.html
+    adjalist = ast.literal_eval(adjalist_raw)
+
+    for i in range(len(adjalist)):
+        for j in range(len(adjalist[i])):
+            adjalist[i][j] = max(adjalist[i][j], -1)
+
+    return adjalist

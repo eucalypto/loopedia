@@ -225,12 +225,9 @@ function loopedia_integral_next_validate_1(&$form, &$form_state)
     ));
     }
 
-    // Convert adjacency list to graphstate-friendly format
-    $adjalist_gs = loopedia_adjalist_to_graphstate($adjalist);
-
     // Calculate the Nickel index from the given Adjacency List
     $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
-              escapeshellarg($adjalist_gs) .
+              escapeshellarg($adjalist) .
               " 2>&1";
     $generated_nickel = trim(shell_exec($exec0));
 

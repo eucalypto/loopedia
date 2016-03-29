@@ -216,15 +216,10 @@ function nickelplay_form_validate($form, &$form_state)
       ));
     }
 
-    // Load helper functions and convert adjacency list to
-    // graphstate-friendly string.
-    form_load_include($form_state, 'inc', 'loopedia', 'loopedia.func');
-    $adjalist_gs = loopedia_adjalist_to_graphstate($adjalist);
-
 
     // Calculate the Nickel index from the given Adjacency List
     $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
-              escapeshellarg($adjalist_gs) .
+              escapeshellarg($adjalist) .
               " 2>&1";
     $generated_nickel = trim(shell_exec($exec0));
 
