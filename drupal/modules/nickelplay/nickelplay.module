@@ -85,7 +85,7 @@ function nickelplay_form($form, &$form_state)
 
     $form['html_text1'] = array(
       '#markup' => t('<img src="'. $form_state['imagepath'] .
-                      ' "alt="alternative text">')
+                      '" alt="generated_graph">')
       );
   }
 

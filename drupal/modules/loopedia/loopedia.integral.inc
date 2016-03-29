@@ -384,7 +384,7 @@ function loopedia_integral_second_step(&$form, &$form_state)
     '#type' => 'markup',
     '#markup' => '<img src="'.
       $form_state['values']['lop_picture_path']['und'][0]['value'] .
-      ' "alt="alternative text">',
+      '" alt="generated_graph">',
     '#weight' => 10,
   );
 

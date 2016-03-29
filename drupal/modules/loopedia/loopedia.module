@@ -198,7 +198,7 @@ function loopedia_node_view_alter(&$build)
         '#type' => 'markup',
         '#prefix' => '<img src="',
         '#markup' => $path,
-        '#suffix' => ' " alt="Generated Feynman Graph">',
+        '#suffix' => '" alt="Generated Feynman Graph">',
         '#weight' => 0,
       );
     }
