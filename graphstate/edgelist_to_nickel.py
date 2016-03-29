@@ -6,19 +6,17 @@
 # Expected output:
 #   e12|23|3|e|
 
-
 import sys
 import graph_state
-import ast
+import mygslib
+
 
 simpleconfig = graph_state.PropertiesConfig.create()
 
 # read the argument string into variable:
 adjalist_raw = sys.argv[1]
 
-# Evaluate string to list of lists (in a hopefully safe way):
-# https://docs.python.org/2/library/ast.html
-adjalist = ast.literal_eval(adjalist_raw)
+adjalist = mygslib.adjalist_to_graphstate(adjalist_raw)
 
 # Take steps to generate graph_state object:
 adjalist_edges = map(simpleconfig.new_edge, adjalist)
