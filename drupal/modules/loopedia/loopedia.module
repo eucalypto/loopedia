@@ -204,7 +204,63 @@ function loopedia_node_view_alter(&$build)
     }
   }
   // dpm($build);
+  // dpm($build['#node']);
+  // dpm($build['field_test_collection']['#object']);
+  // dpm(field_collection_item_load('2'));
 }
+
+
+
+
+/**
+ * Implements hook_field_collection_item_presave()
+ *
+ * Acts on a field collection item being inserted or updated.
+ *
+ * This hook is invoked before the field collection item is saved to the database.
+ *
+ * @param FieldCollectionItemEntity $field_collection_item
+ *   The field collection item that is being inserted or updated.
+ *
+ * @see hook_entity_presave()
+ */
+function loopedia_field_collection_item_presave(FieldCollectionItemEntity $field_collection_item) {
+  $field_collection_item->author = $GLOBALS['user'];
+
+  // $wrapper = $field_collection_item->wrapper();
+  // $wrapper->author->set($GLOBALS['user']);
+
+  dpm($field_collection_item);
+  drupal_set_message("This is hook_field_collection_item_presave");
+}
+
+
+
+
+
+/**
+ * Implements hook_field_collection_item_view()
+ *
+ * Act on a field collection item that is being assembled before rendering.
+ *
+ * @param $field_collection_item
+ *   The field collection item entity.
+ * @param $view_mode
+ *   The view mode the field collection item is rendered in.
+ * @param $langcode
+ *   The language code used for rendering.
+ *
+ *
+ * @see hook_entity_prepare_view()
+ * @see hook_entity_view()
+ */
+function loopedia_field_collection_item_view($field_collection_item, $view_mode, $langcode) {
+  dpm($field_collection_item);
+  // drupal_set_message(t('This is a message'));
+}
+
+
+
 
 
 
