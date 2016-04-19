@@ -100,3 +100,66 @@ site. I used soft links to link from the /srv/www/htdocs/ folder to the
 drupal folder in my home directory. Apparently apache2 is configured to
 not follow symlinks. I copied the drupal folder into /srv/www/htdocs/
 and now it works!
+
+
+2016-04-14
+
+Drupal programming best practices:
+https://www.drupal.org/node/287350
+
+This is a nice series of articles about best practices in Drupal
+programming and configuration. Especially the first one
+[https://www.drupal.org/node/2461383] suggests how to structure drupal
+for a production site while being able to develop and test new features.
+
+
+2016-04-15
+
+One of the main features of Loopedia should be that users can add
+references and results to existing integrals. So one integral may have
+several references/results. This is sort of tricky to implement because
+users should not be able to edit/delete stuff that doesn't belong to
+them.
+
+One solution to this problem may be the module "Relation" (by
+naught101).
+
+
+One other solution is the module "Field Collection". Which does 90% of
+exactly what I want:
+
+* It lets me define a field collection, consisting of several fields.
+  This field colloction can be added as a "field" to nodes (and possibly
+  other entities). And this "field" can be set to store unlimited number
+  of input, which is what I need.
+
+* In the view of the node you see now some links for editing the
+  fieldset on its own. This is exactly the behavior I need! Being able
+  to add information as a field collection without having to edit the
+  whole node itself.
+
+The only downside is that I haven't found a simple way to define user
+permissions for this case. The structure is that this field collection
+is used as a field in the node and this field is configured to store
+several (unlimited) different instances. Now it is tricky to define
+permissions for each of these instances instead of permissions for all
+instances because they are one "field".
+
+The reason for this problem is that a field collection doesn't store
+ownership information. (And for most cases this is fine because a field
+collection knows which node it belongs to; and this node has a user ID
+'uid'.)
+
+So I'm trying to make field collection store the author information as
+well. Luckily, field collections are stored entities, to which the
+"Entity API" module provides useful hooks.
+
+Here is some information about Entities in general:
+http://www.bluespark.com/blog/drupal-entities-part-1-moving-beyond-nodes
+https://evolvingweb.ca/blog/understanding-entity-api-module
+
+
+Since field collections are extended classes of entities, we can use
+Entity metadata
+[wrappers](https://www.drupal.org/documentation/entity-metadata-wrappers)
+to write the user metadata to the field collections.
