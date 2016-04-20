@@ -6,3 +6,10 @@ version = 7.x-v0.1.1
 
 files[] = loopedia.install
 files[] = loopedia.module
+
+
+dependencies[] = core:comment
+dependencies[] = core:field_ui
+dependencies[] = entity
+dependencies[] = views
+dependencies[] = views_ui
