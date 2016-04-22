@@ -152,6 +152,72 @@ function loopedia_feature_field_default_field_instances() {
   );
 
   // Exported field_instance:
+  // 'field_collection_item-field_lop_internal_stuff-field_lop_picture_path'.
+  $field_instances['field_collection_item-field_lop_internal_stuff-field_lop_picture_path'] = array(
+    'bundle' => 'field_lop_internal_stuff',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This is the Path of the neato-generated picture.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_picture_path',
+    'label' => 'Picture Path',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_legs_virt-field_lop_ext_legs_virt'.
+  $field_instances['field_collection_item-field_lop_legs_virt-field_lop_ext_legs_virt'] = array(
+    'bundle' => 'field_lop_legs_virt',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Help text. dutisougfi',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_ext_legs_virt',
+    'label' => 'Legs Virtuality',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance:
   // 'field_collection_item-field_lop_props-field_lop_prop_mass'.
   $field_instances['field_collection_item-field_lop_props-field_lop_prop_mass'] = array(
     'bundle' => 'field_lop_props',
@@ -221,42 +287,6 @@ function loopedia_feature_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 2,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_ext_legs_virt'.
-  $field_instances['node-lop_integral-field_lop_ext_legs_virt'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 16,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_ext_legs_virt',
-    'label' => 'Legs Virtuality',
-    'required' => FALSE,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 14,
     ),
   );
 
@@ -347,6 +377,49 @@ function loopedia_feature_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-lop_integral-field_lop_internal_stuff'.
+  $field_instances['node-lop_integral-field_lop_internal_stuff'] = array(
+    'bundle' => 'lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This field collection should not be visible. It stores internal stuff, that is not meant to be displayed directly to the user.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'field_collection',
+        'settings' => array(
+          'add' => 'Add',
+          'delete' => 'Delete',
+          'description' => TRUE,
+          'edit' => 'Edit',
+          'view_mode' => 'full',
+        ),
+        'type' => 'field_collection_view',
+        'weight' => 19,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_lop_internal_stuff',
+    'label' => 'Internal Stuff',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'field_collection',
+      'settings' => array(),
+      'type' => 'field_collection_hidden',
+      'weight' => 17,
+    ),
+  );
+
   // Exported field_instance: 'node-lop_integral-field_lop_leg_number'.
   $field_instances['node-lop_integral-field_lop_leg_number'] = array(
     'bundle' => 'lop_integral',
@@ -390,6 +463,49 @@ function loopedia_feature_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-lop_integral-field_lop_legs_virt'.
+  $field_instances['node-lop_integral-field_lop_legs_virt'] = array(
+    'bundle' => 'lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Help text for Field Collection.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'field_collection',
+        'settings' => array(
+          'add' => 'Add',
+          'delete' => 'Delete',
+          'description' => TRUE,
+          'edit' => 'Edit',
+          'view_mode' => 'full',
+        ),
+        'type' => 'field_collection_view',
+        'weight' => 18,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_lop_legs_virt',
+    'label' => 'Legs Virtuality',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'field_collection',
+      'settings' => array(),
+      'type' => 'field_collection_embed',
+      'weight' => 16,
     ),
   );
 
@@ -711,46 +827,6 @@ function loopedia_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-lop_integral-field_lop_picture_path'.
-  $field_instances['node-lop_integral-field_lop_picture_path'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 1,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_picture_path',
-    'label' => 'Picture Path',
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 2,
-    ),
-  );
-
   // Exported field_instance: 'node-lop_integral-field_lop_prop_num'.
   $field_instances['node-lop_integral-field_lop_prop_num'] = array(
     'bundle' => 'lop_integral',
@@ -891,8 +967,11 @@ function loopedia_feature_field_default_field_instances() {
   t('Comment');
   t('Graph Identifier');
   t('Graph Identifier, e.g. Adjacency List or Nickel Index');
+  t('Help text for Field Collection.');
+  t('Help text. dutisougfi');
   t('Here you can provide further Publication details. Like journal publications.');
   t('Here, you can write comments that are not in your file. This is the place to specify details of your result or clarify important points.');
+  t('Internal Stuff');
   t('Legs Virtuality');
   t('Mass of Propagator');
   t('Nickel Index');
@@ -913,6 +992,8 @@ function loopedia_feature_field_default_field_instances() {
   t('Propagators');
   t('Publication');
   t('Result File');
+  t('This field collection should not be visible. It stores internal stuff, that is not meant to be displayed directly to the user.');
+  t('This is the Path of the neato-generated picture.');
   t('This is the number of external legs.');
   t('This is the number of light-like legs.');
   t('This is the number of loops.');
