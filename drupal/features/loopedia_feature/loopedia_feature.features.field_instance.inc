@@ -18,7 +18,7 @@ function loopedia_feature_field_default_field_instances() {
     'description' => 'Here, you can write comments that are not in your file. This is the place to specify details of your result or clarify important points.',
     'display' => array(
       'default' => array(
-        'label' => 'hidden',
+        'label' => 'inline',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -53,7 +53,7 @@ function loopedia_feature_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -87,7 +87,7 @@ function loopedia_feature_field_default_field_instances() {
     'description' => 'Please upload a file. It can be a text file, a Mathematca file or any other file that stores the Result in a useful way.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
@@ -125,7 +125,7 @@ function loopedia_feature_field_default_field_instances() {
     'description' => 'Here you can provide further Publication details. Like journal publications.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -152,6 +152,252 @@ function loopedia_feature_field_default_field_instances() {
   );
 
   // Exported field_instance:
+  // 'field_collection_item-field_lop_color_num-field_lop_int_mass_shell_leg_num'.
+  $field_instances['field_collection_item-field_lop_color_num-field_lop_int_mass_shell_leg_num'] = array(
+    'bundle' => 'field_lop_color_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_int_mass_shell_leg_num',
+    'label' => 'Number of legs on an internal mass shell',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_color_num-field_lop_light_like_leg_number'.
+  $field_instances['field_collection_item-field_lop_color_num-field_lop_light_like_leg_number'] = array(
+    'bundle' => 'field_lop_color_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_light_like_leg_number',
+    'label' => 'Number of light-like legs',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_color_num-field_lop_mass_scale_num'.
+  $field_instances['field_collection_item-field_lop_color_num-field_lop_mass_scale_num'] = array(
+    'bundle' => 'field_lop_color_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 5,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_mass_scale_num',
+    'label' => 'Number of internal mass scales',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 12,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_color_num-field_lop_massive_prop_num'.
+  $field_instances['field_collection_item-field_lop_color_num-field_lop_massive_prop_num'] = array(
+    'bundle' => 'field_lop_color_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 4,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_massive_prop_num',
+    'label' => 'Number of massive propagators',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_color_num-field_lop_massless_prop_num'.
+  $field_instances['field_collection_item-field_lop_color_num-field_lop_massless_prop_num'] = array(
+    'bundle' => 'field_lop_color_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_massless_prop_num',
+    'label' => 'Number of massless propagators',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_color_num-field_lop_off_shell_leg_number'.
+  $field_instances['field_collection_item-field_lop_color_num-field_lop_off_shell_leg_number'] = array(
+    'bundle' => 'field_lop_color_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_off_shell_leg_number',
+    'label' => 'Number of off-shell legs',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance:
   // 'field_collection_item-field_lop_internal_stuff-field_lop_picture_path'.
   $field_instances['field_collection_item-field_lop_internal_stuff-field_lop_picture_path'] = array(
     'bundle' => 'field_lop_internal_stuff',
@@ -161,8 +407,9 @@ function loopedia_feature_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
+        'module' => 'text',
         'settings' => array(),
-        'type' => 'hidden',
+        'type' => 'text_default',
         'weight' => 0,
       ),
     ),
@@ -290,6 +537,248 @@ function loopedia_feature_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_topo_num-field_lop_leg_number'.
+  $field_instances['field_collection_item-field_lop_topo_num-field_lop_leg_number'] = array(
+    'bundle' => 'field_lop_topo_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_leg_number',
+    'label' => 'Number of legs',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_topo_num-field_lop_loop_number'.
+  $field_instances['field_collection_item-field_lop_topo_num-field_lop_loop_number'] = array(
+    'bundle' => 'field_lop_topo_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_loop_number',
+    'label' => 'Number of loops',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_topo_num-field_lop_nickel'.
+  $field_instances['field_collection_item-field_lop_topo_num-field_lop_nickel'] = array(
+    'bundle' => 'field_lop_topo_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_nickel',
+    'label' => 'Nickel Index',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_topo_num-field_lop_prop_num'.
+  $field_instances['field_collection_item-field_lop_topo_num-field_lop_prop_num'] = array(
+    'bundle' => 'field_lop_topo_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_prop_num',
+    'label' => 'Number of propagators',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_topo_num-field_lop_vertex_number'.
+  $field_instances['field_collection_item-field_lop_topo_num-field_lop_vertex_number'] = array(
+    'bundle' => 'field_lop_topo_num',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 4,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_vertex_number',
+    'label' => 'Number of vertices',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-lop_integral-field_lop_color_num'.
+  $field_instances['node-lop_integral-field_lop_color_num'] = array(
+    'bundle' => 'lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'field_collection',
+        'settings' => array(
+          'add' => '',
+          'delete' => '',
+          'description' => 1,
+          'edit' => '',
+          'view_mode' => 'full',
+        ),
+        'type' => 'field_collection_view',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_lop_color_num',
+    'label' => 'Coloring Numbers',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'field_collection',
+      'settings' => array(),
+      'type' => 'field_collection_embed',
+      'weight' => 3,
+    ),
+  );
+
   // Exported field_instance: 'node-lop_integral-field_lop_input'.
   $field_instances['node-lop_integral-field_lop_input'] = array(
     'bundle' => 'lop_integral',
@@ -298,7 +787,7 @@ function loopedia_feature_field_default_field_instances() {
     'description' => 'Graph Identifier, e.g. Adjacency List or Nickel Index',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
@@ -308,7 +797,7 @@ function loopedia_feature_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 14,
       ),
     ),
     'entity_type' => 'node',
@@ -330,53 +819,6 @@ function loopedia_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance:
-  // 'node-lop_integral-field_lop_int_mass_shell_leg_num'.
-  $field_instances['node-lop_integral-field_lop_int_mass_shell_leg_num'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 5,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_int_mass_shell_leg_num',
-    'label' => 'Number of legs on an internal mass shell',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 6,
-    ),
-  );
-
   // Exported field_instance: 'node-lop_integral-field_lop_internal_stuff'.
   $field_instances['node-lop_integral-field_lop_internal_stuff'] = array(
     'bundle' => 'lop_integral',
@@ -386,22 +828,15 @@ function loopedia_feature_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'field_collection',
-        'settings' => array(
-          'add' => 'Add',
-          'delete' => 'Delete',
-          'description' => TRUE,
-          'edit' => 'Edit',
-          'view_mode' => 'full',
-        ),
-        'type' => 'field_collection_view',
-        'weight' => 19,
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 7,
       ),
     ),
     'entity_type' => 'node',
@@ -416,53 +851,7 @@ function loopedia_feature_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_hidden',
-      'weight' => 17,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_leg_number'.
-  $field_instances['node-lop_integral-field_lop_leg_number'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'This is the number of external legs.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_leg_number',
-    'label' => 'Number of legs',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 4,
+      'weight' => 12,
     ),
   );
 
@@ -474,23 +863,23 @@ function loopedia_feature_field_default_field_instances() {
     'description' => 'Help text for Field Collection.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'field_collection',
         'settings' => array(
-          'add' => 'Add',
-          'delete' => 'Delete',
-          'description' => TRUE,
-          'edit' => 'Edit',
+          'add' => '',
+          'delete' => '',
+          'description' => 1,
+          'edit' => '',
           'view_mode' => 'full',
         ),
         'type' => 'field_collection_view',
-        'weight' => 18,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 8,
       ),
     ),
     'entity_type' => 'node',
@@ -505,371 +894,7 @@ function loopedia_feature_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 16,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'node-lop_integral-field_lop_light_like_leg_number'.
-  $field_instances['node-lop_integral-field_lop_light_like_leg_number'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'This is the number of light-like legs.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 4,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_light_like_leg_number',
-    'label' => 'Number of light-like legs',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 5,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_loop_number'.
-  $field_instances['node-lop_integral-field_lop_loop_number'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'This is the number of loops.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 7,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_loop_number',
-    'label' => 'Number of loops',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 8,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_mass_scale_num'.
-  $field_instances['node-lop_integral-field_lop_mass_scale_num'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 15,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_mass_scale_num',
-    'label' => 'Number of internal mass scales',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 13,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_massive_prop_num'.
-  $field_instances['node-lop_integral-field_lop_massive_prop_num'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 14,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_massive_prop_num',
-    'label' => 'Number of massive propagators',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 12,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_massless_prop_num'.
-  $field_instances['node-lop_integral-field_lop_massless_prop_num'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 12,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_massless_prop_num',
-    'label' => 'Number of massless propagators',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
       'weight' => 11,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_nickel'.
-  $field_instances['node-lop_integral-field_lop_nickel'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 2,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_nickel',
-    'label' => 'Nickel Index',
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 3,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'node-lop_integral-field_lop_off_shell_leg_number'.
-  $field_instances['node-lop_integral-field_lop_off_shell_leg_number'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'This is the number of off-shell legs. Here, it means that the external leg is neither on a mass-shell of an (internal) propagator, nor is it massless.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 6,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_off_shell_leg_number',
-    'label' => 'Number of off-shell legs',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 7,
-    ),
-  );
-
-  // Exported field_instance: 'node-lop_integral-field_lop_prop_num'.
-  $field_instances['node-lop_integral-field_lop_prop_num'] = array(
-    'bundle' => 'lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_integer',
-        'weight' => 13,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_lop_prop_num',
-    'label' => 'Number of propagators',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 10,
     ),
   );
 
@@ -881,23 +906,23 @@ function loopedia_feature_field_default_field_instances() {
     'description' => 'Propagator help text.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'field_collection',
         'settings' => array(
-          'add' => 'Add',
-          'delete' => 'Delete',
-          'description' => TRUE,
-          'edit' => 'Edit',
+          'add' => '',
+          'delete' => '',
+          'description' => 0,
+          'edit' => '',
           'view_mode' => 'full',
         ),
         'type' => 'field_collection_view',
-        'weight' => 17,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 5,
       ),
     ),
     'entity_type' => 'node',
@@ -912,28 +937,29 @@ function loopedia_feature_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 15,
+      'weight' => 10,
     ),
   );
 
-  // Exported field_instance: 'node-lop_integral-field_lop_vertex_number'.
-  $field_instances['node-lop_integral-field_lop_vertex_number'] = array(
+  // Exported field_instance: 'node-lop_integral-field_lop_topo_num'.
+  $field_instances['node-lop_integral-field_lop_topo_num'] = array(
     'bundle' => 'lop_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'This is the number of vertices.',
+    'description' => 'This is the help text for this thing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'number',
+        'module' => 'field_collection',
         'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => '',
+          'add' => '',
+          'delete' => '',
+          'description' => 0,
+          'edit' => '',
+          'view_mode' => 'full',
         ),
-        'type' => 'number_integer',
-        'weight' => 8,
+        'type' => 'field_collection_view',
+        'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -943,27 +969,24 @@ function loopedia_feature_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_lop_vertex_number',
-    'label' => 'Number of vertices',
+    'field_name' => 'field_lop_topo_num',
+    'label' => 'Topological Integral Numbers',
     'required' => 0,
     'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 0,
-      'module' => 'number',
+      'module' => 'field_collection',
       'settings' => array(),
-      'type' => 'number',
-      'weight' => 9,
+      'type' => 'field_collection_embed',
+      'weight' => 2,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Coloring Numbers');
   t('Comment');
   t('Graph Identifier');
   t('Graph Identifier, e.g. Adjacency List or Nickel Index');
@@ -994,11 +1017,8 @@ function loopedia_feature_field_default_field_instances() {
   t('Result File');
   t('This field collection should not be visible. It stores internal stuff, that is not meant to be displayed directly to the user.');
   t('This is the Path of the neato-generated picture.');
-  t('This is the number of external legs.');
-  t('This is the number of light-like legs.');
-  t('This is the number of loops.');
-  t('This is the number of off-shell legs. Here, it means that the external leg is neither on a mass-shell of an (internal) propagator, nor is it massless.');
-  t('This is the number of vertices.');
+  t('This is the help text for this thing.');
+  t('Topological Integral Numbers');
   t('arXiv Identifier');
 
   return $field_instances;

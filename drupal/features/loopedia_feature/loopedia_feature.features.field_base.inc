@@ -94,6 +94,28 @@ function loopedia_feature_field_default_field_bases() {
     'type' => 'text_long',
   );
 
+  // Exported field_base: 'field_lop_color_num'.
+  $field_bases['field_lop_color_num'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_lop_color_num',
+    'indexes' => array(
+      'revision_id' => array(
+        0 => 'revision_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'field_collection',
+    'settings' => array(
+      'hide_blank_items' => 1,
+      'path' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'field_collection',
+  );
+
   // Exported field_base: 'field_lop_ext_legs_virt'.
   $field_bases['field_lop_ext_legs_virt'] = array(
     'active' => 1,
@@ -449,6 +471,28 @@ function loopedia_feature_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_lop_props',
+    'indexes' => array(
+      'revision_id' => array(
+        0 => 'revision_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'field_collection',
+    'settings' => array(
+      'hide_blank_items' => 1,
+      'path' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'field_collection',
+  );
+
+  // Exported field_base: 'field_lop_topo_num'.
+  $field_bases['field_lop_topo_num'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_lop_topo_num',
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
