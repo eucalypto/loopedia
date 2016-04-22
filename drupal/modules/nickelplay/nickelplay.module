@@ -275,3 +275,58 @@ function nickelplay_form_submit($form, &$form_state)
 
   $form_state['rebuild'] = TRUE;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Here, we want to change the standard submission form to a more custom
+ * version.
+ */
+function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
+{
+  // dpm(field_info_widget_types());
+  // dpm(entity_get_info(), 'entity_get_info');
+
+
+  $form['field_lop_props']['#pre_render'][] = 'nickelplay_field_lop_props_pre_render';
+
+  // Remove some unwantet buttons
+  // unset($form['field_lop_props']['und']['add_more']);
+  // unset($form['field_lop_props']['und'][1]['remove_button']);
+  // unset($form['field_lop_props']['und'][0]['remove_button']);
+  dpm($form);
+}
+
+
+/**
+ * Callback function to change the rendering of Propagator form
+ * elements
+ */
+function nickelplay_field_lop_props_pre_render($element)
+{
+  // Remove some unwantet buttons
+  unset($element['und']['add_more']);
+  unset($element['und'][1]['remove_button']);
+  unset($element['und'][0]['remove_button']);
+  return $element;
+}
+
+// /**
+//  * Implements hook_field_widget_properties_ENTITY_TYPE_alter()
+//  */
+// function nickelplay_field_widget_properties_node_alter(&$widget, $context)
+// {
+//   dpm($widget, '$widget');
+//   dpm($context, '$context');
+// }
+
+/**
+* Implements hook_init().
+*
+* This function can be used for dirty debugging because it is executed
+* on all page requests that are not cached.
+*/
+function nickelplay_init() {
+  // drupal_set_message('Hello');
+  // dpm($form);
+}
