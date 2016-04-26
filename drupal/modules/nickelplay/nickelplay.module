@@ -277,20 +277,26 @@ function nickelplay_form_submit($form, &$form_state)
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter()
  *
+ * FORM_ID = lop_integral_node_form
  * Here, we want to change the standard submission form to a more custom
  * version.
  */
 function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
 {
+  $prop_num = 13;
   // dpm(field_info_widget_types());
   // dpm(entity_get_info(), 'entity_get_info');
 
 
-  $form['field_lop_props']['#pre_render'][] = 'nickelplay_field_lop_props_pre_render';
+  // $form['field_lop_props']['#pre_render'][] = 'nickelplay_field_lop_props_pre_render';
+  // Or we just call the function ourselves:
+  $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
 
-  // Remove some unwantet buttons
+
+
+  // Remove some unwanted buttons
   // unset($form['field_lop_props']['und']['add_more']);
   // unset($form['field_lop_props']['und'][1]['remove_button']);
   // unset($form['field_lop_props']['und'][0]['remove_button']);
@@ -302,12 +308,28 @@ function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $for
  * Callback function to change the rendering of Propagator form
  * elements
  */
-function nickelplay_field_lop_props_pre_render($element)
+function nickelplay_field_lop_props_pre_render($element, $prop_num)
 {
-  // Remove some unwantet buttons
-  unset($element['und']['add_more']);
-  unset($element['und'][1]['remove_button']);
-  unset($element['und'][0]['remove_button']);
+  foreach ($element['und'] as $key => &$value)
+  {
+    if (is_int($key))
+    {
+      if ($key < $prop_num)
+      {
+        // Change titles to display Propagator number
+        $keyplus = $key + 1;
+        $value['field_lop_prop_mass']['und']['#title'] .= " $keyplus" ;
+        $value['field_lop_prop_power']['und'][0]['value']['#title'] .= " $keyplus" ;
+        // unset($value['_weight']);
+      }
+      else
+      {
+        // Hide this element
+        $value['#access'] = FALSE;
+        // unset($element['und'][$key]);
+      }
+    }
+  }
   return $element;
 }
 
@@ -329,4 +351,18 @@ function nickelplay_field_lop_props_pre_render($element)
 function nickelplay_init() {
   // drupal_set_message('Hello');
   // dpm($form);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Specifically FORM_ID = field_ui_field_edit_form
+ *
+ * Change field settings form (Admin UI)
+ */
+function nickelplay_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id)
+{
+  // Add more cardinality (1..30) instead of the default 1..10
+  $form['field']['cardinality']['#options'] = array(FIELD_CARDINALITY_UNLIMITED => t('Unlimited')) + drupal_map_assoc(range(1, 30));
+  // dpm($form)
 }

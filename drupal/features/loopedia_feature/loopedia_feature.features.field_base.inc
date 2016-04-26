@@ -238,7 +238,7 @@ function loopedia_feature_field_default_field_bases() {
   // Exported field_base: 'field_lop_legs_virt'.
   $field_bases['field_lop_legs_virt'] = array(
     'active' => 1,
-    'cardinality' => -1,
+    'cardinality' => 20,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_lop_legs_virt',
@@ -467,7 +467,7 @@ function loopedia_feature_field_default_field_bases() {
   // Exported field_base: 'field_lop_props'.
   $field_bases['field_lop_props'] = array(
     'active' => 1,
-    'cardinality' => -1,
+    'cardinality' => 20,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_lop_props',
