@@ -438,10 +438,10 @@ function loopedia_feature_field_default_field_instances() {
     'bundle' => 'field_lop_legs_virt',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Help text. dutisougfi',
+    'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
@@ -450,7 +450,7 @@ function loopedia_feature_field_default_field_instances() {
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_ext_legs_virt',
-    'label' => 'Leg Virtuality',
+    'label' => 'Virtuality of Leg',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -860,7 +860,7 @@ function loopedia_feature_field_default_field_instances() {
     'bundle' => 'lop_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Help text for Field Collection.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -903,7 +903,7 @@ function loopedia_feature_field_default_field_instances() {
     'bundle' => 'lop_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Propagator help text.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -990,12 +990,9 @@ function loopedia_feature_field_default_field_instances() {
   t('Comment');
   t('Graph Identifier');
   t('Graph Identifier, e.g. Adjacency List or Nickel Index');
-  t('Help text for Field Collection.');
-  t('Help text. dutisougfi');
   t('Here you can provide further Publication details. Like journal publications.');
   t('Here, you can write comments that are not in your file. This is the place to specify details of your result or clarify important points.');
   t('Internal Stuff');
-  t('Leg Virtuality');
   t('Legs Virtuality');
   t('Mass of Propagator');
   t('Nickel Index');
@@ -1012,7 +1009,6 @@ function loopedia_feature_field_default_field_instances() {
   t('Picture Path');
   t('Please upload a file. It can be a text file, a Mathematca file or any other file that stores the Result in a useful way.');
   t('Power of Propagator');
-  t('Propagator help text.');
   t('Propagators');
   t('Publication');
   t('Result File');
@@ -1020,6 +1016,7 @@ function loopedia_feature_field_default_field_instances() {
   t('This is the Path of the neato-generated picture.');
   t('This is the help text for this thing.');
   t('Topological Integral Numbers');
+  t('Virtuality of Leg');
   t('arXiv Identifier');
 
   return $field_instances;
