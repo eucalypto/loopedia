@@ -286,28 +286,30 @@ function nickelplay_form_submit($form, &$form_state)
 function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
 {
   $prop_num = 13;
-  // dpm(field_info_widget_types());
-  // dpm(entity_get_info(), 'entity_get_info');
-
+  $leg_num = 5;
 
   // $form['field_lop_props']['#pre_render'][] = 'nickelplay_field_lop_props_pre_render';
   // Or we just call the function ourselves:
   $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
 
+  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num);
 
 
-  // Remove some unwanted buttons
-  // unset($form['field_lop_props']['und']['add_more']);
-  // unset($form['field_lop_props']['und'][1]['remove_button']);
-  // unset($form['field_lop_props']['und'][0]['remove_button']);
   dpm($form);
   // dpm($form_state);
 }
 
 
 /**
- * Callback function to change the rendering of Propagator form
- * elements
+ * Change form fields for Propagators
+ *
+ * Callback function to change the rendering of a form element
+ *
+ * @param array $element
+ *   The original form element
+ *
+ * @return array $element
+ *   The altered form element
  */
 function nickelplay_field_lop_props_pre_render($element, $prop_num)
 {
@@ -334,6 +336,43 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
 
   return $element;
 }
+
+
+/**
+ * Change form fields for legs
+ *
+ * Callback function to change the rendering of a form element
+ *
+ * @param array $element
+ *   The original form element
+ *
+ * @return array $element
+ *   The altered form element
+ */
+function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
+{
+  foreach ($element['und'] as $key => &$value)
+  {
+    if (is_int($key))
+    {
+      if ($key < $leg_num)
+      {
+        // Change titles to display Propagator number
+        $keyplus = $key + 1;
+        $value['field_lop_ext_legs_virt']['und']['#title'] .= " $keyplus";
+        $value['#nodrag'] = TRUE;
+      }
+      else
+      {
+        // Hide this element
+        // $value['#access'] = FALSE;
+        unset($element['und'][$key]);
+      }
+    }
+  }
+  return $element;
+}
+
 
 // /**
 //  * Implements hook_js_alter()
