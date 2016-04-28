@@ -321,7 +321,7 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
         $keyplus = $key + 1;
         $value['field_lop_prop_mass']['und']['#title'] .= " $keyplus" ;
         $value['field_lop_prop_power']['und'][0]['value']['#title'] .= " $keyplus" ;
-        // unset($value['_weight']);
+        $value['#nodrag'] = TRUE;
       }
       else
       {
@@ -335,21 +335,21 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
   return $element;
 }
 
-/**
- * Implements hook_js_alter()
- *
- * @param $javascript
- *   An array of all JavaScript being presented on the page.
- *
- * @see drupal_add_js()
- * @see drupal_get_js()
- * @see drupal_js_defaults()
- */
-function nickelplay_js_alter(&$javascript)
-{
-  drupal_set_message('hello');
-  dpm($javascript);
-}
+// /**
+//  * Implements hook_js_alter()
+//  *
+//  * @param $javascript
+//  *   An array of all JavaScript being presented on the page.
+//  *
+//  * @see drupal_add_js()
+//  * @see drupal_get_js()
+//  * @see drupal_js_defaults()
+//  */
+// function nickelplay_js_alter(&$javascript)
+// {
+//   drupal_set_message('hello');
+//   dpm($javascript);
+// }
 
 
 
@@ -376,13 +376,34 @@ function nickelplay_init() {
 
 // ********************************************
 // Code for NO tabledrag in multi-valued fields
+// Start
 
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function nickelplay_theme_registry_alter(&$theme_registry)
+{
+  if (isset($theme_registry['field_multiple_value_form']))
+  {
+    $theme_registry['field_multiple_value_form']['type'] = 'module';
+    $theme_registry['field_multiple_value_form']['theme path'] = drupal_get_path('module', 'nickelplay');
+    $theme_registry['field_multiple_value_form']['function'] = 'nickelplay_theme_field_multiple_value_form';
+  }
+}
 
 /**
  * Theme function override for multiple-value form widgets.
  *
  * @see theme_field_multiple_value_form() in
  *      drupal/modules/field/field.form.inc
+ *
+ * This function is taken from http://www.commercialprogression.com/post/how-remove-tabledrag-rearranging-multiple-value-field-widgets
+ *
+ * This function is just a carbon copy of the original one, except that
+ * in the beginning, there is an additional check if a "#nodrag"
+ * property is set. If not, it executes the unaltered part of the
+ * original function. But if #nodrag is set, it executes the same lines
+ * with all parts removed concerning the dragging and weight stuff.
  *
  * Should there be updates to the original function, they have to be
  * merged into this override.
@@ -515,6 +536,9 @@ function nickelplay_theme_field_multiple_value_form($variables)
   return $output;
 }
 
+// Stop
+// Code for NO tabledrag in multi-valued fields
+// ********************************************
 
 
 
