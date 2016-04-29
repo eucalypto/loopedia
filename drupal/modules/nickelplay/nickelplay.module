@@ -276,6 +276,103 @@ function nickelplay_form_submit($form, &$form_state)
   $form_state['rebuild'] = TRUE;
 }
 
+
+/** Implements hook_form_alter().
+ *
+ * This hook is executed on every form page.
+ */
+function nickelplay_form_alter(&$form, &$form_state, $form_id)
+{
+  // dpm($form_id, '$form_id');
+  // dpm($form, '$form');
+  // dpm($form_state, '$form_state');
+}
+
+// ***********************************
+// Begin: Adjust comments for Integral
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ *
+ * FORM_ID = comment_node_lop_integral_form
+ *
+ * Change submission form for integral comments
+ */
+function nickelplay_form_comment_node_lop_integral_form_alter(&$form, &$form_state, $form_id)
+{
+  unset($form['subject']);
+
+  dpm($form);
+}
+
+/**
+ * Implements hook_comment_view_alter(&$build)
+ *
+ * The comment was built; the module may modify the structured content.
+ *
+ * This hook is called after the content has been assembled in a
+ * structured array and may be used for doing processing which requires
+ * that the complete comment content structure has been built.
+ *
+ * If the module wishes to act on the rendered HTML of the comment
+ * rather than the structured content array, it may use this hook to add
+ * a #post_render callback.
+ * Alternatively, it could also implement hook_preprocess_comment(). See
+ * drupal_render() and theme() documentation respectively for details.
+ *
+ * @param $build
+ *   A renderable array representing the comment.
+ *
+ * @see comment_view()
+ * @see hook_entity_view_alter()
+ */
+function nickelplay_comment_view_alter(&$build)
+{
+  unset($build['links']['comment']['#links']['comment-reply']);
+
+  dpm($build);
+}
+
+
+/**
+ * The comment is being viewed. This hook can be used to add additional data to the comment before theming.
+ *
+ * @param $comment
+ *   Passes in the comment the action is being performed on.
+ * @param $view_mode
+ *   View mode, e.g. 'full', 'teaser'...
+ * @param $langcode
+ *   The language code used for rendering.
+ *
+ * @see hook_entity_view()
+ */
+function nickelplay_comment_view($comment, $view_mode, $langcode)
+{
+  dpm($comment);
+  dpm($view_mode);
+}
+
+/**
+ * Implements hook_preprocess_comment().
+ */
+function nickelplay_preprocess_comment(&$vars)
+{
+  // unset($vars['permalink']);
+  // unset($vars['submitted']);
+  dpm($vars);
+}
+
+
+
+// End: Adjust comments for Integral
+// *********************************
+
+
+
+
+// ***************************************
+// Begin: Functions for Integral node form
+
 /**
  * Implements hook_form_FORM_ID_alter()
  *
@@ -373,6 +470,8 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
 }
 
 
+// End: Functions for Integral node form
+// *************************************
 
 
 
@@ -452,8 +551,7 @@ function nickelplay_init() {
 
 
 // ********************************************
-// Code for NO tabledrag in multi-valued fields
-// Start
+// Begin: Code for NO tabledrag in multi-valued fields
 
 /**
  * Implements hook_theme_registry_alter().
@@ -613,8 +711,7 @@ function nickelplay_theme_field_multiple_value_form($variables)
   return $output;
 }
 
-// Stop
-// Code for NO tabledrag in multi-valued fields
+// End: Code for NO tabledrag in multi-valued fields
 // ********************************************
 
 
