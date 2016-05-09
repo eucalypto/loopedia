@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Loopedia Feature feature.
+ */
+
+include_once 'loopedia_feature.features.inc';

@@ -275,3 +275,458 @@ function nickelplay_form_submit($form, &$form_state)
 
   $form_state['rebuild'] = TRUE;
 }
+
+
+/** Implements hook_form_alter().
+ *
+ * This hook is executed on every form page.
+ */
+function nickelplay_form_alter(&$form, &$form_state, $form_id)
+{
+  // dpm($form_id, '$form_id');
+  // dpm($form, '$form');
+  // dpm($form_state, '$form_state');
+}
+
+// ***********************************
+// Begin: Adjust comments for Integral
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ *
+ * FORM_ID = comment_node_lop_integral_form
+ *
+ * Change submission form for integral comments
+ */
+function nickelplay_form_comment_node_lop_integral_form_alter(&$form, &$form_state, $form_id)
+{
+  unset($form['subject']);
+
+  dpm($form);
+}
+
+/**
+ * Implements hook_comment_view_alter(&$build)
+ *
+ * The comment was built; the module may modify the structured content.
+ *
+ * This hook is called after the content has been assembled in a
+ * structured array and may be used for doing processing which requires
+ * that the complete comment content structure has been built.
+ *
+ * If the module wishes to act on the rendered HTML of the comment
+ * rather than the structured content array, it may use this hook to add
+ * a #post_render callback.
+ * Alternatively, it could also implement hook_preprocess_comment(). See
+ * drupal_render() and theme() documentation respectively for details.
+ *
+ * @param $build
+ *   A renderable array representing the comment.
+ *
+ * @see comment_view()
+ * @see hook_entity_view_alter()
+ */
+function nickelplay_comment_view_alter(&$build)
+{
+  unset($build['links']['comment']['#links']['comment-reply']);
+
+  dpm($build);
+}
+
+
+/**
+ * The comment is being viewed. This hook can be used to add additional data to the comment before theming.
+ *
+ * @param $comment
+ *   Passes in the comment the action is being performed on.
+ * @param $view_mode
+ *   View mode, e.g. 'full', 'teaser'...
+ * @param $langcode
+ *   The language code used for rendering.
+ *
+ * @see hook_entity_view()
+ */
+function nickelplay_comment_view($comment, $view_mode, $langcode)
+{
+  dpm($comment);
+  dpm($view_mode);
+}
+
+/**
+ * Implements hook_preprocess_comment().
+ */
+function nickelplay_preprocess_comment(&$vars)
+{
+  // unset($vars['permalink']);
+  // unset($vars['submitted']);
+  dpm($vars);
+}
+
+
+
+// End: Adjust comments for Integral
+// *********************************
+
+
+
+
+// ***************************************
+// Begin: Functions for Integral node form
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ *
+ * FORM_ID = lop_integral_node_form
+ * Here, we want to change the standard submission form to a more custom
+ * version.
+ */
+function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
+{
+  $prop_num = 13;
+  $leg_num = 5;
+
+  // $form['field_lop_props']['#pre_render'][] = 'nickelplay_field_lop_props_pre_render';
+  // Or we just call the function ourselves:
+  $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
+
+  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num);
+
+
+  dpm($form);
+  // dpm($form_state);
+}
+
+
+/**
+ * Change form fields for Propagators
+ *
+ * Callback function to change the rendering of a form element
+ *
+ * @param array $element
+ *   The original form element
+ *
+ * @return array $element
+ *   The altered form element
+ */
+function nickelplay_field_lop_props_pre_render($element, $prop_num)
+{
+  foreach ($element['und'] as $key => &$value)
+  {
+    if (is_int($key))
+    {
+      if ($key < $prop_num)
+      {
+        // Change titles to display Propagator number
+        $keyplus = $key + 1;
+        $value['field_lop_prop_mass']['und']['#title'] .= " $keyplus" ;
+        $value['field_lop_prop_power']['und'][0]['value']['#title'] .= " $keyplus" ;
+        $value['#nodrag'] = TRUE;
+      }
+      else
+      {
+        // Hide this element
+        // $value['#access'] = FALSE;
+        unset($element['und'][$key]);
+      }
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Change form fields for legs
+ *
+ * Callback function to change the rendering of a form element
+ *
+ * @param array $element
+ *   The original form element
+ *
+ * @return array $element
+ *   The altered form element
+ */
+function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
+{
+  foreach ($element['und'] as $key => &$value)
+  {
+    if (is_int($key))
+    {
+      if ($key < $leg_num)
+      {
+        // Change titles to display Propagator number
+        $keyplus = $key + 1;
+        $value['field_lop_ext_legs_virt']['und']['#title'] .= " $keyplus";
+        $value['#nodrag'] = TRUE;
+      }
+      else
+      {
+        // Hide this element
+        // $value['#access'] = FALSE;
+        unset($element['und'][$key]);
+      }
+    }
+  }
+  return $element;
+}
+
+
+// End: Functions for Integral node form
+// *************************************
+
+
+
+
+// // Use function hook_field_widget_WIDGET_TYPE_form_alter() to display
+// // parameters to find something to do with drag (ID)
+// // https://www.drupal.org/node/1488466
+// /**
+//  * Alter widget forms for a specific widget provided by another module.
+//  *
+//  * Modules can implement hook_field_widget_WIDGET_TYPE_form_alter() to modify a
+//  * specific widget form, rather than using hook_field_widget_form_alter() and
+//  * checking the widget type.
+//  *
+//  * @param $element
+//  *   The field widget form element as constructed by hook_field_widget_form().
+//  * @param $form_state
+//  *   An associative array containing the current state of the form.
+//  * @param $context
+//  *   An associative array containing the following key-value pairs, matching the
+//  *   arguments received by hook_field_widget_form():
+//  *   - "form": The form structure where widgets are being attached to. This
+//  *     might be a full form structure, or a sub-element of a larger form.
+//  *   - "field": The field structure.
+//  *   - "instance": The field instance structure.
+//  *   - "langcode": The language associated with $items.
+//  *   - "items": Array of default values for this field.
+//  *   - "delta": The order of this item in the array of subelements (0, 1, 2,
+//  *     etc).
+//  *
+//  * @see hook_field_widget_form()
+//  * @see hook_field_widget_form_alter()
+//  */
+// function nickelplay_field_widget_field_collection_embed_form_alter(&$element, &$form_state, $context)
+// {
+//   drupal_set_message(t('This is field_widget_form_alter'));
+//   dpm($element, '$element');
+//   dpm($context, '$context');
+
+// /**
+//  * Implements hook_js_alter()
+//  *
+//  * @param $javascript
+//  *   An array of all JavaScript being presented on the page.
+//  *
+//  * @see drupal_add_js()
+//  * @see drupal_get_js()
+//  * @see drupal_js_defaults()
+//  */
+// function nickelplay_js_alter(&$javascript)
+// {
+//   drupal_set_message('hello');
+//   dpm($javascript);
+// }
+
+
+
+// /**
+//  * Implements hook_field_widget_properties_ENTITY_TYPE_alter()
+//  */
+// function nickelplay_field_widget_properties_node_alter(&$widget, $context)
+// {
+//   dpm($widget, '$widget');
+//   dpm($context, '$context');
+// }
+
+/**
+* Implements hook_init().
+*
+* This function can be used for dirty debugging because it is executed
+* on all page requests that are not cached.
+*/
+function nickelplay_init() {
+  // drupal_set_message('Hello');
+  // dpm($form);
+}
+
+
+// ********************************************
+// Begin: Code for NO tabledrag in multi-valued fields
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function nickelplay_theme_registry_alter(&$theme_registry)
+{
+  if (isset($theme_registry['field_multiple_value_form']))
+  {
+    $theme_registry['field_multiple_value_form']['type'] = 'module';
+    $theme_registry['field_multiple_value_form']['theme path'] = drupal_get_path('module', 'nickelplay');
+    $theme_registry['field_multiple_value_form']['function'] = 'nickelplay_theme_field_multiple_value_form';
+  }
+}
+
+/**
+ * Theme function override for multiple-value form widgets.
+ *
+ * @see theme_field_multiple_value_form() in
+ *      drupal/modules/field/field.form.inc
+ *
+ * This function is taken from http://www.commercialprogression.com/post/how-remove-tabledrag-rearranging-multiple-value-field-widgets
+ *
+ * This function is just a carbon copy of the original one, except that
+ * in the beginning, there is an additional check if a "#nodrag"
+ * property is set. If not, it executes the unaltered part of the
+ * original function. But if #nodrag is set, it executes the same lines
+ * with all parts removed concerning the dragging and weight stuff.
+ *
+ * Should there be updates to the original function, they have to be
+ * merged into this override.
+ */
+function nickelplay_theme_field_multiple_value_form($variables)
+{
+  $element = $variables['element'];
+  $output = '';
+
+  // The first condition is the override.
+  if (($element['#cardinality'] > 1 || $element['#cardinality'] == FIELD_CARDINALITY_UNLIMITED) && isset($element[0]['#nodrag'])) {
+    $table_id = drupal_html_id($element['#field_name'] . '_values');
+    $required = !empty($element['#required']) ? theme('form_required_marker', $variables) : '';
+
+    $header = array(
+      array(
+        'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
+        'class' => array('field-label'),
+      ),
+    );
+    $rows = array();
+
+    // Sort items according to weight
+    $items = array();
+    foreach (element_children($element) as $key) {
+      if ($key === 'add_more') {
+        $add_more_button = &$element[$key];
+      }
+      else {
+        $items[] = &$element[$key];
+      }
+    }
+    usort($items, '_field_sort_items_value_helper');
+
+    // Add the items as table rows.
+    foreach ($items as $key => $item) {
+      // We don't want the weight to render.
+      unset($item['_weight']);
+      $cells = array(
+        drupal_render($item),
+      );
+      $rows[] = array(
+        'data' => $cells,
+      );
+    }
+
+    $output = '<div class="form-item">';
+    $output .= theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => array(
+        'id' => $table_id,
+        'class' => array('field-multiple-table'),
+      ),
+    ));
+    $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
+    $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
+    $output .= '</div>';
+  }
+  elseif ($element['#cardinality'] > 1 || $element['#cardinality'] == FIELD_CARDINALITY_UNLIMITED) {
+    $table_id = drupal_html_id($element['#field_name'] . '_values');
+    $order_class = $element['#field_name'] . '-delta-order';
+    $required = !empty($element['#required']) ? theme('form_required_marker', $variables) : '';
+
+    $header = array(
+      array(
+        'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
+        'colspan' => 2,
+        'class' => array('field-label'),
+      ),
+      t('Order'),
+    );
+    $rows = array();
+
+    // Sort items according to '_weight' (needed when the form comes back after
+    // preview or failed validation).
+    $items = array();
+    foreach (element_children($element) as $key) {
+      if ($key === 'add_more') {
+        $add_more_button = &$element[$key];
+      }
+      else {
+        $items[] = &$element[$key];
+      }
+    }
+    usort($items, '_field_sort_items_value_helper');
+
+    // Add the items as table rows.
+    foreach ($items as $key => $item) {
+      $item['_weight']['#attributes']['class'] = array($order_class);
+      $delta_element = drupal_render($item['_weight']);
+      $cells = array(
+        array(
+          'data' => '',
+          'class' => array('field-multiple-drag'),
+        ),
+        drupal_render($item),
+        array(
+          'data' => $delta_element,
+          'class' => array('delta-order'),
+        ),
+      );
+      $rows[] = array(
+        'data' => $cells,
+        'class' => array('draggable'),
+      );
+    }
+
+    $output = '<div class="form-item">';
+    $output .= theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => array(
+        'id' => $table_id,
+        'class' => array('field-multiple-table'),
+      ),
+    ));
+    $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
+    $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
+    $output .= '</div>';
+
+    drupal_add_tabledrag($table_id, 'order', 'sibling', $order_class);
+  }
+  else {
+    foreach (element_children($element) as $key) {
+      $output .= drupal_render($element[$key]);
+    }
+  }
+
+  return $output;
+}
+
+// End: Code for NO tabledrag in multi-valued fields
+// ********************************************
+
+
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Specifically FORM_ID = field_ui_field_edit_form
+ *
+ * Change field settings form (Admin UI)
+ */
+function nickelplay_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id)
+{
+  // Add more cardinality (1..30) instead of the default 1..10
+  $form['field']['cardinality']['#options'] = array(FIELD_CARDINALITY_UNLIMITED => t('Unlimited')) + drupal_map_assoc(range(1, 30));
+  // dpm($form)
+}
