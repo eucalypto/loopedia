@@ -330,37 +330,73 @@ function nickelplay_comment_view_alter(&$build)
 {
   unset($build['links']['comment']['#links']['comment-reply']);
 
-  dpm($build);
-}
-
-
-/**
- * The comment is being viewed. This hook can be used to add additional data to the comment before theming.
- *
- * @param $comment
- *   Passes in the comment the action is being performed on.
- * @param $view_mode
- *   View mode, e.g. 'full', 'teaser'...
- * @param $langcode
- *   The language code used for rendering.
- *
- * @see hook_entity_view()
- */
-function nickelplay_comment_view($comment, $view_mode, $langcode)
-{
-  dpm($comment);
-  dpm($view_mode);
+  // dpm($build);
 }
 
 /**
- * Implements hook_preprocess_comment().
+ * Implements hook_node_view_alter()
+ *
+ * Alter the results of node_view().
+ *
+ * This hook is called after the content has been assembled in a structured
+ * array and may be used for doing processing which requires that the complete
+ * node content structure has been built.
+ *
+ * If the module wishes to act on the rendered HTML of the node rather than the
+ * structured content array, it may use this hook to add a #post_render
+ * callback.  Alternatively, it could also implement hook_preprocess_node(). See
+ * drupal_render() and theme() documentation respectively for details.
+ *
+ * @param $build
+ *   A renderable array representing the node content.
+ *
+ * @see node_view()
+ * @see hook_entity_view_alter()
+ *
+ * @ingroup node_api_hooks
  */
-function nickelplay_preprocess_comment(&$vars)
+function nickelplay_node_view_alter(&$build)
 {
-  // unset($vars['permalink']);
-  // unset($vars['submitted']);
-  dpm($vars);
+  if ($build['#bundle'] == 'lop_integral')
+  {
+    // Adjust "Add new reference" link
+    $build['links']['comment']['#links']['comment-add']['title'] = 'Add reference';
+    $build['links']['comment']['#links']['comment-add']['attributes']['title'] = 'Add new reference and/or result to this integral.';
+
+    // Remove link to comments only
+    unset($build['links']['comment']['#links']['comment-comments']);
+
+    dpm($build);
+  }
 }
+
+// /**
+//  * The comment is being viewed. This hook can be used to add additional data to the comment before theming.
+//  *
+//  * @param $comment
+//  *   Passes in the comment the action is being performed on.
+//  * @param $view_mode
+//  *   View mode, e.g. 'full', 'teaser'...
+//  * @param $langcode
+//  *   The language code used for rendering.
+//  *
+//  * @see hook_entity_view()
+//  */
+// function nickelplay_comment_view($comment, $view_mode, $langcode)
+// {
+//   dpm($comment);
+//   dpm($view_mode);
+// }
+
+// /**
+//  * Implements hook_preprocess_comment().
+//  */
+// function nickelplay_preprocess_comment(&$vars)
+// {
+//   // unset($vars['permalink']);
+//   // unset($vars['submitted']);
+//   dpm($vars);
+// }
 
 
 
