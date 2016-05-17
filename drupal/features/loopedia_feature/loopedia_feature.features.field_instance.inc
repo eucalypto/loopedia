@@ -10,40 +10,6 @@
 function loopedia_feature_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'comment-comment_node_lop_integral-comment_body'.
-  $field_instances['comment-comment_node_lop_integral-comment_body'] = array(
-    'bundle' => 'comment_node_lop_integral',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Here, you can write comments that are not in your file. This is the place to specify details of your result or clarify important points.',
-    'display' => array(
-      'default' => array(
-        'label' => 'inline',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'comment',
-    'field_name' => 'comment_body',
-    'label' => 'Comment',
-    'required' => 1,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'rows' => 5,
-      ),
-      'type' => 'text_textarea',
-      'weight' => 0,
-    ),
-  );
-
   // Exported field_instance:
   // 'comment-comment_node_lop_integral-field_comment_arxiv'.
   $field_instances['comment-comment_node_lop_integral-field_comment_arxiv'] = array(
@@ -76,6 +42,41 @@ function loopedia_feature_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'comment-comment_node_lop_integral-field_comment_comment'.
+  $field_instances['comment-comment_node_lop_integral-field_comment_comment'] = array(
+    'bundle' => 'comment_node_lop_integral',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Here, you can write comments that are not in your file. This is the place to specify details of your result or clarify important points.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'comment',
+    'field_name' => 'field_comment_comment',
+    'label' => 'Comment',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 0,
     ),
   );
 
@@ -125,7 +126,7 @@ function loopedia_feature_field_default_field_instances() {
     'description' => 'Here you can provide further Publication details. Like journal publications.',
     'display' => array(
       'default' => array(
-        'label' => 'inline',
+        'label' => 'above',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
