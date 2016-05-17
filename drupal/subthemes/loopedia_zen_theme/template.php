@@ -89,9 +89,12 @@ function loopedia_zen_theme_preprocess_node(&$variables, $hook) {
  */
 function loopedia_zen_theme_preprocess_comment(&$variables, $hook)
 {
-  $submitted_line = $variables['submitted'];
-  $submitted_line_replaced = str_replace('replied on', 'added reference on', $submitted_line);
-  dpm($submitted_line_replaced);
+  // Replace string "replied on" with "added reference on" in submit
+  // html string.
+  $submitted_line = &$variables['submitted'];
+  $submitted_line = str_replace('replied on', 'added reference on', $submitted_line);
+  
+  // dpm($variables);
 }
 
 

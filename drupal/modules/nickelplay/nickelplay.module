@@ -328,9 +328,13 @@ function nickelplay_form_comment_node_lop_integral_form_alter(&$form, &$form_sta
  */
 function nickelplay_comment_view_alter(&$build)
 {
+  // Remove reply link
   unset($build['links']['comment']['#links']['comment-reply']);
 
-  // dpm($build);
+  // Remove link for "login or register"
+  unset($build['links']['comment']['#links']['comment_forbidden']);
+
+  dpm($build);
 }
 
 /**
@@ -360,11 +364,20 @@ function nickelplay_node_view_alter(&$build)
   if ($build['#bundle'] == 'lop_integral')
   {
     // Adjust "Add new reference" link
-    $build['links']['comment']['#links']['comment-add']['title'] = 'Add reference';
-    $build['links']['comment']['#links']['comment-add']['attributes']['title'] = 'Add new reference and/or result to this integral.';
+    if (isset($build['links']['comment']['#links']['comment-add']))
+    {
+      $build['links']['comment']['#links']['comment-add']['title'] = 'Add reference';
+      $build['links']['comment']['#links']['comment-add']['attributes']['title'] = 'Add new reference and/or result to this integral.';
+    }
+
+    // Remove line about "login/register to post links"
+    unset($build['links']['comment']['#links']['comment_forbidden']);
 
     // Remove link to comments only
     unset($build['links']['comment']['#links']['comment-comments']);
+
+    // Remove link "new comments"
+    unset($build['links']['comment']['#links']['comment-new-comments']);
 
     dpm($build);
   }
