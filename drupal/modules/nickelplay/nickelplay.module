@@ -288,6 +288,30 @@ function nickelplay_form_alter(&$form, &$form_state, $form_id)
   // dpm($form_state, '$form_state');
 }
 
+
+/**
+ * Implements hook_permission()
+ *
+ * This function adds a new permission that is supposed to manage
+ * reference (comment) deletion. For this, we have to somehow alter the
+ * function comment_links($comment, $node) from the core module
+ * "comment". I haven't done this yet; until then, this definition is
+ * useless. This overrride of the links-function is just of cosmetic
+ * nature and should not affect the stored integral data (in database);
+ * so this can be done later and is not a priority.
+ */
+function nickelplay_permission()
+{
+  return array(
+    'delete own reference' => array(
+      'title' => t('Delete own references (Comments)'),
+      'description' => t('This permission is meant for the "Comments"-section of permissions. It manages the permission to delete own references, which are stored as comments.'),
+    ),
+  );
+}
+
+
+
 // ***********************************
 // Begin: Adjust comments for Integral
 
