@@ -857,7 +857,7 @@ function loopedia_feature_field_default_field_instances() {
       'active' => 0,
       'module' => 'field_collection',
       'settings' => array(),
-      'type' => 'field_collection_embed',
+      'type' => 'field_collection_hidden',
       'weight' => 3,
     ),
   );
@@ -1062,7 +1062,7 @@ function loopedia_feature_field_default_field_instances() {
       'active' => 0,
       'module' => 'field_collection',
       'settings' => array(),
-      'type' => 'field_collection_embed',
+      'type' => 'field_collection_hidden',
       'weight' => 2,
     ),
   );

@@ -478,10 +478,51 @@ function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $for
 
   $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num);
 
+  // We control the steps of the form with $form_state['step']. If it is
+  // not set, we must be on the first page. So we set it to 1. If
+  // it is set, we obviously don't want to change it here.
+  if (!isset($form_state['step']))
+  {
+    $form_state['step'] = 1;
+  }
+
+  // Decide what to do according to the 'step' variable:
+  switch ($form_state['step'])
+  {
+    case 1:
+      nickelplay_integral_first_step($form, $form_state);
+      break;
+    case 2:
+      nickelplay_integral_second_step($form, $form_state);
+      break;
+    case 3:
+      nickelplay_integral_third_step($form, $form_state);
+      break;
+  }
 
   dpm($form);
   // dpm($form_state);
 }
+
+/**
+* Callback function for the first step of the integral submission form.
+*/
+function nickelplay_integral_first_step(&$form, &$form_state)
+{
+  // Hide propagators and legs
+  $form['field_lop_props']['#attributes']['class'][] = 'element-hidden';
+  $form['field_lop_legs_virt']['#attributes']['class'][] = 'element-hidden';
+
+ // Buttons:
+ $form['actions']['next'] = array(
+   '#type' => 'submit',
+   '#value' => 'Next >>',
+   '#submit' => array('nickelplay_integral_next_submit_1'),
+   '#validate' => array('nickelplay_integral_next_validate_1'),
+ );
+ $form['actions']['submit']['#attributes']['class'][] = 'element-hidden';
+}
+
 
 
 /**
@@ -566,6 +607,8 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
 // Use function hook_field_widget_WIDGET_TYPE_form_alter() to display
 // parameters to find something to do with drag (ID)
 // https://www.drupal.org/node/1488466
+
+
 /**
  * Alter widget forms for a specific widget provided by another module.
  *
