@@ -434,6 +434,47 @@ function loopedia_feature_field_default_field_instances() {
   );
 
   // Exported field_instance:
+  // 'field_collection_item-field_lop_legs_virt-field_lop_ext_legs_no'.
+  $field_instances['field_collection_item-field_lop_legs_virt-field_lop_ext_legs_no'] = array(
+    'bundle' => 'field_lop_legs_virt',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_ext_legs_no',
+    'label' => 'Leg',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance:
   // 'field_collection_item-field_lop_legs_virt-field_lop_ext_legs_virt'.
   $field_instances['field_collection_item-field_lop_legs_virt-field_lop_ext_legs_virt'] = array(
     'bundle' => 'field_lop_legs_virt',
@@ -446,12 +487,12 @@ function loopedia_feature_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 0,
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_ext_legs_virt',
-    'label' => 'Virtuality of Leg',
+    'label' => 'Virtuality',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -461,7 +502,7 @@ function loopedia_feature_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 2,
+      'weight' => 1,
     ),
   );
 
@@ -478,12 +519,12 @@ function loopedia_feature_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
-        'weight' => 0,
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_prop_mass',
-    'label' => 'Mass of Propagator',
+    'label' => 'Mass',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -494,6 +535,47 @@ function loopedia_feature_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_lop_props-field_lop_prop_nr'.
+  $field_instances['field_collection_item-field_lop_props-field_lop_prop_nr'] = array(
+    'bundle' => 'field_lop_props',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_lop_prop_nr',
+    'label' => 'Propagator',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 0,
     ),
   );
 
@@ -515,12 +597,12 @@ function loopedia_feature_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 1,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_prop_power',
-    'label' => 'Power of Propagator',
+    'label' => 'Power',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -994,8 +1076,9 @@ function loopedia_feature_field_default_field_instances() {
   t('Here you can provide further Publication details. Like journal publications.');
   t('Here, you can write comments that are not in your file. This is the place to specify details of your result or clarify important points.');
   t('Internal Stuff');
+  t('Leg');
   t('Legs Virtuality');
-  t('Mass of Propagator');
+  t('Mass');
   t('Nickel Index');
   t('Number of internal mass scales');
   t('Number of legs');
@@ -1009,7 +1092,8 @@ function loopedia_feature_field_default_field_instances() {
   t('Number of vertices');
   t('Picture Path');
   t('Please upload a file. It can be a text file, a Mathematca file or any other file that stores the Result in a useful way.');
-  t('Power of Propagator');
+  t('Power');
+  t('Propagator');
   t('Propagators');
   t('Publication');
   t('Result File');
@@ -1017,7 +1101,7 @@ function loopedia_feature_field_default_field_instances() {
   t('This is the Path of the neato-generated picture.');
   t('This is the help text for this thing.');
   t('Topological Integral Numbers');
-  t('Virtuality of Leg');
+  t('Virtuality');
   t('arXiv Identifier');
 
   return $field_instances;

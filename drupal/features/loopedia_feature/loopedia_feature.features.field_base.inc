@@ -114,6 +114,21 @@ function loopedia_feature_field_default_field_bases() {
     'type' => 'field_collection',
   );
 
+  // Exported field_base: 'field_lop_ext_legs_no'.
+  $field_bases['field_lop_ext_legs_no'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_lop_ext_legs_no',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
   // Exported field_base: 'field_lop_ext_legs_virt'.
   $field_bases['field_lop_ext_legs_virt'] = array(
     'active' => 1,
@@ -430,6 +445,21 @@ function loopedia_feature_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'list_text',
+  );
+
+  // Exported field_base: 'field_lop_prop_nr'.
+  $field_bases['field_lop_prop_nr'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_lop_prop_nr',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
   );
 
   // Exported field_base: 'field_lop_prop_num'.
