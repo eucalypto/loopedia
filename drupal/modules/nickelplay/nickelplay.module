@@ -109,24 +109,50 @@ function nickelplay_form($form, &$form_state)
 function nickelplay_form_validate($form, &$form_state)
 {
   $graph_id = $form_state['values']['input'];
+  $validated_nickel = nickelplay_integral_form_identifier_validation($graph_id);
 
-  if (strpos($graph_id, '|') !==  FALSE)
+  if ($validated_nickel['input_type'] === 'nickel')
   {
-  // $graph_id contains a '|' character. Therefore it is probably a
-  // Nickel index.
-
-    // Set input type. This will be used late to control some form
-    // elements.
     $form_state['input_type'] = 'nickel';
 
-    // Begin of checking of the given nickel index.
-    $nickel_value_given = &$graph_id;
+    // React to different error messages:
+    switch ($validated_nickel['error_code'])
+    {
+      case 'nickel_forbidden_characters':
+        form_set_error('input', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "A-Z", "|".'));
+        break;
+      case 'nickel_wrong_convention':
+        form_set_error('input', t(
+          'Your nickel index "@ni_given" seems to be wrong. Please check if it is according to the conventions.',
+          array(
+          '@ni_given' => $graph_id,
+          )
+        ));
+        break;
+      case 'nickel_non_minimal':
+        drupal_set_message(t('The given nickel index: "@ni_given" is not correct (minimal). It was replaced by the correct (minimal) Nickel index: <strong>"@ni_correct"</strong>.',
+          array(
+            '@ni_given' => $graph_id,
+            '@ni_correct' => $validated_nickel['nickel_correct'],
+          )
+        ));
+        break;
+      case 'nickel_correct':
+        drupal_set_message(t('The Nickel index "@nickel" is correct!',
+          array('@nickel' => $validated_nickel['nickel_correct'])
+        ));
+        break;
+    }
+  }
+  else if ($validated_nickel['input_type'] === 'adjalist')
+  {
+
+  }
 
     // Check the formal structure of the given index: it shall only
     // contain "e", "0-9" and "|".
     if (preg_match('/^[e0-9A-Z\|]*$/', $nickel_value_given) !== 1)
     {
-      form_set_error('graph_id', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "A-Z", "|".'));
     }
 
 
@@ -833,7 +859,7 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
  * $return['nickel_correct'] contains the correct nickel index as string
  *    if it can be obtained at all.
  */
-function nickelplay_integral_form_identifier_validation(&$graph_id)
+function nickelplay_integral_form_identifier_validation($graph_id)
 {
   $return['error_code'] = '';
   $return['input_type'] = '';
@@ -943,6 +969,7 @@ function nickelplay_integral_form_identifier_validation(&$graph_id)
       $return['error_code'] = 'adjalist_success';
       $return['nickel_correct'] = $generated_nickel;
       return $return;
+    }
   }
   // End of check of the given adjacency list.
 }
