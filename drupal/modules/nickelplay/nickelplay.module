@@ -500,6 +500,11 @@ function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $for
       break;
   }
 
+  // To set a value to a field that the user cannot change, set '#value'
+  // instead of '#default_value'. https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7.x#value
+  // unset($form['field_lop_input']['und'][0]['value']['#default_value']);
+  // $form['field_lop_input']['und'][0]['value']['#value'] = '[blablabbbbb]';
+
   dpm($form);
   // dpm($form_state);
 }
@@ -521,6 +526,208 @@ function nickelplay_integral_first_step(&$form, &$form_state)
    '#validate' => array('nickelplay_integral_next_validate_1'),
  );
  $form['actions']['submit']['#attributes']['class'][] = 'element-hidden';
+}
+
+
+/**
+ * Validate handler for nickelplay_integral_first_step next button
+ *
+ * It might become important, in which order the validation functions
+ * are executed. Then, you should experiment with it.
+ *
+ */
+function nickelplay_integral_next_validate_1(&$form, &$form_state)
+{
+  dpm($form_state);
+  // $graph_id = &$form_state['values']['lop_input']['und'][0]['value'];
+  $graph_id = &$form_state['values']['field_lop_input']['und'][0]['value'];
+
+  if (strpos($graph_id, '|') !==  FALSE)
+  {
+    // $graph_id contains a '|' character. Therefore it is probably a
+    // Nickel index.
+    // Begin of checking of the given nickel index.
+    $nickel_value_given = &$graph_id;
+
+    // Check the formal structure of the given index: it shall only
+    // contain "e", "0-9" and "|".
+    if (preg_match('/^[e0-9A-Z\|]*$/', $nickel_value_given) !== 1)
+    {
+      form_set_error('graph_id', t('Your Nickel Index seems to contain other characters than the allowed: "e", "0-9", "A-Z", "|".'));
+    }
+
+
+    // Check, if given Nickel index is correct(minimal).
+
+    // When drupal executes a script, it starts in the project path e.g.
+    // /var/www/html/drupal_project/ , where the "sites/" folder is.
+    $exec1 = "python sites/default/scripts/minimalnickel.py " .
+               escapeshellarg($nickel_value_given) .
+               " 2>&1";
+    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel
+                            // Index calculated by script.  trim() was
+                            // needed here because shell_exec() produces
+                            // one unwanted whitespace at the end of the
+                            // output string
+
+
+    if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
+    {
+      // GraphState outputs a (long) error message if the nickel string
+      // argument is wrong according to the convention. So if the output
+      // of the script has not the same length as the given nickel
+      // string, something went wrong.
+
+      form_set_error('graph_id', t(
+        'Your nickel index "@ni_given" seems to be wrong. Please check if it is according to the conventions.',
+        array(
+        '@ni_given' => $nickel_value_given,
+        )
+      ));
+    }
+    elseif ( $nickel_value_given != $nickel_value_correct )
+    {
+      // If the given string has the same length as the outupt but is
+      // not equal, then the given nickel index is not minimal.
+
+      // So we write the corret nickel index to the appropriate places:
+      // $form_state['values'] storet the real value that is used
+      // further.
+      $form_state['values']['lop_nickel']['und'][0]['value'] = $nickel_value_correct;
+      // $form_state['input'] apparently stores the user input. This is
+      // printed on the screen.
+      $form_state['input']['lop_nickel']['und'][0]['value'] = $nickel_value_correct;
+      // // form_set_value() does not work as I expect.
+      // form_set_value($form['nickel_adjalist']['lop_nickel'], 'blabla', $form_state);
+
+
+      // Now we print out a message, that the Nickel Index was changed
+      // to the correct version:
+      drupal_set_message(t('The given nickel index: "@ni_given" is not correct (minimal). It was replaced by the correct (minimal) Nickel index: <strong>"@ni_correct"</strong>.',
+        array(
+          '@ni_given' => $nickel_value_given,
+          '@ni_correct' => $nickel_value_correct,
+        )
+      ));
+    }
+    else
+    {
+      $form_state['input']['lop_nickel']['und'][0]['value'] = $graph_id;
+      $form_state['values']['lop_nickel']['und'][0]['value'] = $graph_id;
+      drupal_set_message(t('The Nickel index "@nickel" is correct!',
+        array('@nickel' => $nickel_value_correct)
+      ));
+    }
+  }
+  // End of checking the Nickel index.
+  else
+  {
+    // $graph_id is probably not a Nickel Index.
+    // Begin of the check of the given adjacency list
+
+    $adjalist = &$graph_id;
+    // Check if the given adjacency list string contains forbidden
+    // characters. Allowed ones are ",", "-", "[", "]", "0-9", " "
+    // See http://www.rexegg.com/regex-php.html
+    if (preg_match('/^[,\[\]0-9\s-]*$/', $adjalist) !== 1)
+    {
+      form_set_error('graph_id', t(
+      'Your adjacency list seems to contain not allowed characters. The allowed ones are: "[comma]", "-", "[", "]", "0-9", "[whitespace]"'
+    ));
+    }
+
+    // Calculate the Nickel index from the given Adjacency List
+    $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
+              escapeshellarg($adjalist) .
+              " 2>&1";
+    $generated_nickel = trim(shell_exec($exec0));
+
+
+
+    // If the script outputs more than one line (nickel index), then
+    // there must have been an error. So if the output $generated_nickel
+    // contains a newline character ("\n" == PHP_EOL), an error is
+    // displayed.
+    // http://stackoverflow.com/questions/9437121/how-to-detect-if-a-string-has-a-new-line-break-in-it
+    if (strpos($generated_nickel, PHP_EOL) !== FALSE)
+    {
+      form_set_error('graph_id', t(
+        "There seems to be a problem with your adjacency list."
+      ));
+    }
+    else
+    {
+      // The adjacency list and generated nickel index seem to be all
+      // right. So we can write the nickel index to the appropriate
+      // places:
+      $form_state['values']['lop_nickel']['und'][0]['value'] = $generated_nickel;
+      $form_state['input']['lop_nickel']['und'][0]['value'] = $generated_nickel;
+    }
+
+    // End of check of the given adjacency list.
+  }
+}
+// End of loopedia_integral_next_validate_1()
+
+
+/**
+ * Submit handler for loopedia_integral_first_step next button.
+ */
+function nickelplay_integral_next_submit_1(&$form, &$form_state)
+{
+  // dpm($form_state);
+  // $nickel = $form_state['values']['lop_nickel']['und'][0]['value'];
+  // $nickel = $form_state['values']['field_lop_input']['und'][0]['value'];
+  // // Generate Picture to Nickel Index
+  // $image_path = "sites/default/files/nickel_generated/tmp/" .
+  //                 uniqid($nickel);
+  //                // this is the path to the dot file the image (svg)
+  //                // file will have an extra ending of ".svg"
+  // $script_path = "sites/default/scripts/neato_from_nickel.py";
+  // $exec2 = escapeshellcmd("python $script_path " . $nickel . " $image_path");
+  // exec($exec2);
+  // // Save image path in 'lop_picture_path'. $image_path looks like
+  // // 'sites/default/files/...'. We have to prefix this with something
+  // // like 'http://localhost/loopediatest/' in order to get an "absoulte"
+  // // path to the file. This is necessary because while editing a node,
+  // // drupal starts with the path
+  // // 'http://localhost/loopediatest/node/52/edit', for some reason. So
+  // // we need an absolute path.
+  // //
+  // // http://localhost/loopediatest is the base url for my test drupal
+  // // installation. To make this code portable, use the global variable
+  // // $GLOBALS['base_url'], which stores exactly what we need.
+  // $form_state['values']['lop_picture_path']['und'][0]['value'] = $GLOBALS['base_url'] . '/' . $image_path . ".svg";
+  // $form_state['input']['lop_picture_path']['und'][0]['value'] = $GLOBALS['base_url'] . '/' . $image_path . ".svg";
+  //
+  //
+  //
+  //
+  //
+  // // Extract information out of the Nickel Index string and save it to
+  // // the appropriate fields:
+  // $legs = substr_count($nickel, 'e');
+  // $form_state['values']['lop_leg_number']['und'][0]['value'] = $legs;
+  // $form_state['input']['lop_leg_number']['und'][0]['value'] = $legs;
+  //
+  // $propagators = preg_match_all('~[0-9A-Z]~', $nickel);
+  // $form_state['values']['lop_propagator_number']['und'][0]['value'] = $propagators;
+  // $form_state['input']['lop_propagator_number']['und'][0]['value'] = $propagators;
+  //
+  // $vertices = substr_count($nickel, '|');
+  // $form_state['values']['lop_vertex_number']['und'][0]['value'] = $vertices;
+  // $form_state['input']['lop_vertex_number']['und'][0]['value'] = $vertices;
+  //
+  // $loops = $propagators - $vertices + 1;
+  // $form_state['values']['lop_loop_number']['und'][0]['value'] = $loops;
+  // $form_state['input']['lop_loop_number']['und'][0]['value'] = $loops;
+  //
+  //
+  //
+  // // We set 'step' to 2 such that when the form gets build next time,
+  // // it will build the second step
+  // $form_state['step'] = 2;
+  $form_state['rebuild'] = TRUE;
 }
 
 
