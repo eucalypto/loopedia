@@ -143,137 +143,29 @@ function nickelplay_form_validate($form, &$form_state)
         ));
         break;
     }
+    $form_state['nickel'] = $validated_nickel['nickel_correct'];
   }
   else if ($validated_nickel['input_type'] === 'adjalist')
   {
-
-  }
-
-    // Check the formal structure of the given index: it shall only
-    // contain "e", "0-9" and "|".
-    if (preg_match('/^[e0-9A-Z\|]*$/', $nickel_value_given) !== 1)
-    {
-    }
-
-
-    // Check, if given Nickel index is correct(minimal).
-
-    // When drupal executes a script, it starts in the project path e.g.
-    // /var/www/html/drupal_project/ , where the "sites/" folder is.
-    $exec1 = "python sites/default/scripts/minimalnickel.py " .
-               escapeshellarg($nickel_value_given) .
-               " 2>&1";
-    $nickel_value_correct = trim(shell_exec($exec1)); // Correct Nickel
-                            // Index calculated by script.  trim() was
-                            // needed here because shell_exec() produces
-                            // one unwanted whitespace at the end of the
-                            // output string
-
-
-    if ( strlen($nickel_value_given) != strlen($nickel_value_correct) )
-    {
-    // GraphState outputs a (long) error message if the nickel string
-    // argument is wrong according to the convention. So if the output
-    // of the script has not the same length as the given nickel
-    // string, something went wrong.
-
-      form_set_error('graph_id', t(
-        'Your nickel index "@ni_given" seems to be wrong. Please check if it is according to the conventions.',
-        array(
-        '@ni_given' => $nickel_value_given,
-        )
-      ));
-    }
-    elseif ( $nickel_value_given != $nickel_value_correct )
-    {
-    // If the given string has the same length as the outupt but is not
-    // equal, then the given nickel index is not minimal.
-
-      // So we write the corret nickel index to the appropriate places:
-      // $form_state['values'] storet the real value that is used
-      // further.
-      $form_state['values']['input'] = $nickel_value_correct;
-      // $form_state['input'] apparently stores the user input. This is
-      // printed on the screen.
-      $form_state['input']['input'] = $nickel_value_correct;
-      // // form_set_value() does not work as I expect.
-      // form_set_value($form['nickel_adjalist']['lop_nickel'], 'blabla', $form_state);
-
-
-
-      // Now we print out a message, that the Nickel Index was changed
-      // to the correct version:
-      drupal_set_message(t('The given nickel index: "@ni_given" is not correct (minimal). It was replaced by the correct (minimal) Nickel index: <strong>"@ni_correct"</strong>.',
-        array(
-          '@ni_given' => $nickel_value_given,
-          '@ni_correct' => $nickel_value_correct,
-        )
-      ));
-    }
-    else
-    {
-    // If none of the cases above apply, the given nickel Index must be
-    // correct.
-
-      drupal_set_message(t('The Nickel index "@nickel" is correct!',
-        array('@nickel' => $nickel_value_correct)
-      ));
-    }
-
-    $form_state['nickel'] = $nickel_value_correct;
-  }
-  // End of checking the Nickel index.
-  else
-  {
-  // $graph_id is probably not a Nickel Index.
-
     $form_state['input_type'] = 'adjalist';
-
-    // Begin of the check of the given adjacency list
-
     $adjalist = &$graph_id;
-    // Check if the given adjacency list string contains forbidden
-    // characters. Allowed ones are ",", "-", "[", "]", "0-9", " "
-    // See http://www.rexegg.com/regex-php.html
-    if (preg_match('/^[,\[\]0-9\s-]*$/', $adjalist) !== 1)
+    switch ($validated_nickel['error_code'])
     {
-      form_set_error('graph_id', t(
-      'Your adjacency list seems to contain not allowed characters. The allowed ones are: "[comma]", "-", "[", "]", "0-9", "[whitespace]"'
-      ));
+      case 'adjalist_forbidden_characters':
+        form_set_error('graph_id', t(
+        'Your adjacency list seems to contain not allowed characters. The allowed ones are: "[comma]", "-", "[", "]", "0-9", "[whitespace]"'
+        ));
+        break;
+      case 'adjalist_general_problem':
+        form_set_error('graph_id', t(
+          "There seems to be a problem with your adjacency list."
+        ));
+        break;
+      case 'adjalist_success':
+        $form_state['nickel'] = $validated_nickel['nickel_correct'];
+        break;
     }
-
-
-    // Calculate the Nickel index from the given Adjacency List
-    $exec0 = "python sites/default/scripts/edgelist_to_nickel.py " .
-              escapeshellarg($adjalist) .
-              " 2>&1";
-    $generated_nickel = trim(shell_exec($exec0));
-
-
-
-    // If the script outputs more than one line (nickel index), then
-    // there must have been an error. So if the output $generated_nickel
-    // contains a newline character ("\n" == PHP_EOL), an error is
-    // displayed.
-    // http://stackoverflow.com/questions/9437121/how-to-detect-if-a-string-has-a-new-line-break-in-it
-    if (strpos($generated_nickel, PHP_EOL) !== FALSE)
-    {
-      form_set_error('graph_id', t(
-        "There seems to be a problem with your adjacency list."
-      ));
-    }
-    else
-    {
-    // The adjacency list and generated nickel index seem to be all
-    // right.
-
-      // Write the nickel index to the appropriate places:
-      $form_state['nickel'] = $generated_nickel;
-    }
-
   }
-  // End of check of the given adjacency list.
-
 }
 // End of nickelplay_form_validate()
 
