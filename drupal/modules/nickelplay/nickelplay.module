@@ -221,7 +221,7 @@ function nickelplay_form_alter(&$form, &$form_state, $form_id)
 function nickelplay_permission()
 {
   return array(
-    'delete own reference' => array(
+    'loopedia delete own reference' => array(
       'title' => t('Delete own references (Comments)'),
       'description' => t('This permission is meant for the "Comments"-section of permissions. It manages the permission to delete own references, which are stored as comments.'),
     ),
@@ -308,7 +308,7 @@ function nickelplay_node_view_alter(&$build)
     // Adjust links for comments (references)
     nickelplay_lop_integral_view_comment_links($build);
 
-    dpm($build);
+    // dpm($build);
   }
 }
 
@@ -451,7 +451,7 @@ function nickelplay_integral_first_step(&$form, &$form_state)
 {
   // Hide some elements
   $elements = array(
-    &$form['field_lop_props'],
+    // &$form['field_lop_props'],
     &$form['field_lop_legs_virt'],
     &$form['field_lop_topo_num'],
     &$form['field_lop_internal_stuff'],
@@ -601,6 +601,14 @@ function nickelplay_integral_next_submit_1(&$form, &$form_state)
   $input['field_lop_loop_number']['und'][0]['value'] = $loops;
 
 
+  // $prop_num = 13;
+  //
+  // for ($i = 0; $i < $prop_num; $i++)
+  // {
+  //   $iplus = $i + 1;
+  //   $form_state['values']['field_lop_props']['und'][$i]['field_lop_prop_nr']['und'][0]['value'] = "$iplus";
+  //   $form_state['input']['field_lop_props']['und'][$i]['field_lop_prop_nr']['und'][0]['value'] = "$iplus";
+  // }
 
   // We set 'step' to 2 such that when the form gets build next time,
   // it will build the second step
@@ -696,7 +704,9 @@ function nickelplay_integral_second_step(&$form, &$form_state)
     '#submit' => array('nickelplay_integral_next_submit_2'),
     // '#validate' => array('form_example_tutorial_8_next_validate'),
   );
-  $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
+  // $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
+
+  dpm($form_state);
 }
 
 
@@ -713,6 +723,11 @@ function nickelplay_integral_second_step(&$form, &$form_state)
  */
 function nickelplay_field_lop_props_pre_render($element, $prop_num)
 {
+  // // container-inline is used to make the fields being displayed next to
+  // // each other instead of under. But this makes visible a field that
+  // // was hidden with "element-hidden"
+  // $element['#attributes']['class'][] = 'container-inline';
+
   foreach ($element['und'] as $key => &$value)
   {
     if (is_int($key))
@@ -724,6 +739,13 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
         $value['field_lop_prop_mass']['und']['#title'] .= " $keyplus" ;
         $value['field_lop_prop_power']['und'][0]['value']['#title'] .= " $keyplus" ;
         $value['#nodrag'] = TRUE;
+
+        // Set propagator number field
+        $value['field_lop_prop_nr']['und'][0]['value']['#default_value'] = "$keyplus";
+
+        // Hide Number field
+        $hide = array(&$value['field_lop_prop_nr']);
+        nickelplay_hide_elements($hide);
       }
       else
       {
