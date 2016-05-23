@@ -428,14 +428,19 @@ function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $for
 }
 
 /**
- * Hides element by writing $form['element']['#attributes']['class'][] = 'element-hidden';
+ * Hides element by writing $element['#attributes']['class'][] = 'element-hidden';
+ *
+ * @param array of references $elements
+ *   This array should contain references to elements in $form
  */
-function nickelplay_hide_elements(&$form, &$elements)
+function nickelplay_hide_elements(&$elements)
 {
-  foreach ($elements as $name)
+  foreach ($elements as &$element)
   {
-    $form[$name]['#attributes']['class'][] = 'element-hidden';
+    $element['#attributes']['class'][] = 'element-hidden';
   }
+  // Make sure to get rid of dummy reference variable:
+  unset($element);
 }
 
 
@@ -446,13 +451,14 @@ function nickelplay_integral_first_step(&$form, &$form_state)
 {
   // Hide some elements
   $elements = array(
-    'field_lop_props',
-    'field_lop_legs_virt',
-    'field_lop_topo_num',
-    'field_lop_internal_stuff',
-    'field_lop_color_num',
+    &$form['field_lop_props'],
+    &$form['field_lop_legs_virt'],
+    &$form['field_lop_topo_num'],
+    &$form['field_lop_internal_stuff'],
+    &$form['field_lop_color_num'],
   );
-  nickelplay_hide_elements($form, $elements);
+  nickelplay_hide_elements($elements);
+
 
   // Buttons:
   $form['actions']['next'] = array(
@@ -610,12 +616,12 @@ function nickelplay_integral_second_step(&$form, &$form_state)
 {
   // Hide some elements
   $elements = array(
-    'field_lop_input',
-    'field_lop_topo_num',
-    'field_lop_internal_stuff',
-    'field_lop_color_num',
+    &$form['field_lop_input'],
+    &$form['field_lop_topo_num'],
+    &$form['field_lop_internal_stuff'],
+    &$form['field_lop_color_num'],
   );
-  nickelplay_hide_elements($form, $elements);
+  nickelplay_hide_elements($elements);
 
   // $num_legs = $form_state['values']['lop_leg_number']['und'][0]['value'];
   // $num_prop = $form_state['values']['lop_propagator_number']['und'][0]['value'];
