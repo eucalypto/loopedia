@@ -243,6 +243,7 @@ function nickelplay_permission()
 function nickelplay_form_comment_node_lop_integral_form_alter(&$form, &$form_state, $form_id)
 {
   unset($form['subject']);
+  unset($form['actions']['preview']);
 
   dpm($form);
 }
@@ -387,14 +388,7 @@ function nickelplay_lop_integral_view_comment_links(&$build)
  */
 function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $form_id)
 {
-  $prop_num = 13;
-  $leg_num = 5;
 
-  // $form['field_lop_props']['#pre_render'][] = 'nickelplay_field_lop_props_pre_render';
-  // Or we just call the function ourselves:
-  $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
-
-  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num);
 
   // We control the steps of the form with $form_state['step']. If it is
   // not set, we must be on the first page. So we set it to 1. If
@@ -451,7 +445,7 @@ function nickelplay_integral_first_step(&$form, &$form_state)
 {
   // Hide some elements
   $elements = array(
-    // &$form['field_lop_props'],
+    &$form['field_lop_props'],
     &$form['field_lop_legs_virt'],
     &$form['field_lop_topo_num'],
     &$form['field_lop_internal_stuff'],
@@ -516,8 +510,9 @@ function nickelplay_integral_next_validate_1(&$form, &$form_state)
         break;
     }
     // Write correct Nickel to appropiate places
-    $form_state['values']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
-    $form_state['input']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
+    // $form_state['values']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
+    // $form_state['input']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
+    $form_state['topo_nums']['field_lop_nickel'] = $validated_nickel['nickel_correct'];
   }
   else if ($validated_nickel['input_type'] === 'adjalist')
   {
@@ -537,14 +532,15 @@ function nickelplay_integral_next_validate_1(&$form, &$form_state)
         break;
       case 'adjalist_success':
         // Write generated (correct) Nickel to appropiate places
-        $form_state['values']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
-        $form_state['input']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
+        // $form_state['values']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
+        // $form_state['input']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'] = $validated_nickel['nickel_correct'];
+        $form_state['topo_nums']['field_lop_nickel'] = $validated_nickel['nickel_correct'];
         break;
     }
   }
   dpm($form_state);
-}
 // End of loopedia_integral_next_validate_1()
+}
 
 
 /**
@@ -552,7 +548,8 @@ function nickelplay_integral_next_validate_1(&$form, &$form_state)
  */
 function nickelplay_integral_next_submit_1(&$form, &$form_state)
 {
-  $nickel = $form_state['values']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'];
+  // $nickel = $form_state['values']['field_lop_topo_num']['und'][0]['field_lop_nickel']['und'][0]['value'];
+  $nickel = $form_state['topo_nums']['field_lop_nickel'];
   // Generate Picture to Nickel Index
   $image_path = "sites/default/files/nickel_generated/tmp/" .
                   uniqid($nickel);
@@ -579,27 +576,34 @@ function nickelplay_integral_next_submit_1(&$form, &$form_state)
 
 
 
-  // Extract information out of the Nickel Index string and save it to
-  // the appropriate fields:
-  $values = &$form_state['values']['field_lop_topo_num']['und'][0];
-  $input = &$form_state['input']['field_lop_topo_num']['und'][0];
-
+  // // Extract information out of the Nickel Index string and save it to
+  // // the appropriate fields:
+  // $values = &$form_state['values']['field_lop_topo_num']['und'][0];
+  // $input = &$form_state['input']['field_lop_topo_num']['und'][0];
+  //
   $legs = substr_count($nickel, 'e');
-  $values['field_lop_leg_number']['und'][0]['value'] = $legs;
-  $input['field_lop_leg_number']['und'][0]['value'] = $legs;
-
+  // $values['field_lop_leg_number']['und'][0]['value'] = $legs;
+  // $input['field_lop_leg_number']['und'][0]['value'] = $legs;
+  //
   $propagators = preg_match_all('~[0-9A-Z]~', $nickel);
-  $values['field_lop_prop_num']['und'][0]['value'] = $propagators;
-  $input['field_lop_prop_num']['und'][0]['value'] = $propagators;
-
+  // $values['field_lop_prop_num']['und'][0]['value'] = $propagators;
+  // $input['field_lop_prop_num']['und'][0]['value'] = $propagators;
+  //
   $vertices = substr_count($nickel, '|');
-  $values['field_lop_vertex_number']['und'][0]['value'] = $vertices;
-  $input['field_lop_vertex_number']['und'][0]['value'] = $vertices;
-
+  // $values['field_lop_vertex_number']['und'][0]['value'] = $vertices;
+  // $input['field_lop_vertex_number']['und'][0]['value'] = $vertices;
+  //
   $loops = $propagators - $vertices + 1;
-  $values['field_lop_loop_number']['und'][0]['value'] = $loops;
-  $input['field_lop_loop_number']['und'][0]['value'] = $loops;
+  // $values['field_lop_loop_number']['und'][0]['value'] = $loops;
+  // $input['field_lop_loop_number']['und'][0]['value'] = $loops;
 
+
+  // Write topological numbers to extra array in $form_state for future
+  // use.
+  $form_state['topo_nums']['field_lop_leg_number'] = $legs;
+  $form_state['topo_nums']['field_lop_prop_num'] = $propagators;
+  $form_state['topo_nums']['field_lop_vertex_number'] = $vertices;
+  $form_state['topo_nums']['field_lop_loop_number'] = $propagators - $vertices + 1;
 
   // $prop_num = 13;
   //
@@ -616,6 +620,17 @@ function nickelplay_integral_next_submit_1(&$form, &$form_state)
   $form_state['rebuild'] = TRUE;
 }
 
+/**
+ * Submit handler for loopedia_integral_second_step back button.
+ */
+function nickelplay_integral_back_submit_2(&$form, &$form_state)
+{
+  $form_state['step'] = 1;
+  $form_state['rebuild'] = TRUE;
+}
+
+
+
 
 /**
  * Callback function for the second step of the integral sumbission form.
@@ -625,7 +640,7 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   // Hide some elements
   $elements = array(
     &$form['field_lop_input'],
-    &$form['field_lop_topo_num'],
+    // &$form['field_lop_topo_num'],
     &$form['field_lop_internal_stuff'],
     &$form['field_lop_color_num'],
   );
@@ -635,28 +650,43 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   // $num_prop = $form_state['values']['lop_propagator_number']['und'][0]['value'];
 
 
-  // Display calculated numbers in a fieldset. This way, the user cannot
-  // change them.
-  $topo_values = &$form_state['values']['field_lop_topo_num']['und'][0];
-  $form['display_calc_topo'] = array(
-    '#type' => 'fieldset',
-    '#title' => 'Topological numbers for the integral',
-    '#description' => '
-    <ul>
-    <li>Nickel Index: ' .
-      $topo_values['field_lop_nickel']['und'][0]['value'] . '</li>
-    <li>Number of legs:  ' .
-      $topo_values['field_lop_leg_number']['und'][0]['value'] . '</li>
-    <li>Number of vertices: ' .
-      $topo_values['field_lop_vertex_number']['und'][0]['value'] . '</li>
-    <li>Number of loops: ' .
-      $topo_values['field_lop_loop_number']['und'][0]['value'] . '</li>
-    <li>Number of propagators: ' .
-      $topo_values['field_lop_prop_num']['und'][0]['value'] . '</li>
-    </ul>',
+  // // Display calculated numbers in a fieldset. This way, the user cannot
+  // // change them.
+  // $topo_values = &$form_state['values']['field_lop_topo_num']['und'][0];
+  // $form['display_calc_topo'] = array(
+  //   '#type' => 'fieldset',
+  //   '#title' => 'Topological numbers for the integral',
+  //   '#description' => '
+  //   <ul>
+  //   <li>Nickel Index: ' .
+  //     $topo_values['field_lop_nickel']['und'][0]['value'] . '</li>
+  //   <li>Number of legs:  ' .
+  //     $topo_values['field_lop_leg_number']['und'][0]['value'] . '</li>
+  //   <li>Number of vertices: ' .
+  //     $topo_values['field_lop_vertex_number']['und'][0]['value'] . '</li>
+  //   <li>Number of loops: ' .
+  //     $topo_values['field_lop_loop_number']['und'][0]['value'] . '</li>
+  //   <li>Number of propagators: ' .
+  //     $topo_values['field_lop_prop_num']['und'][0]['value'] . '</li>
+  //   </ul>',
+  // );
+  // // Store this fieldset in $form_state for next steps
+  // $form_state['display_calc_topo'] = $form['display_calc_topo'];
+
+  // Set calculated values of fields and make them read only (#disabled,
+  // greyed out)
+  $tops = array(
+    'field_lop_nickel',
+    'field_lop_leg_number',
+    'field_lop_prop_num',
+    'field_lop_vertex_number',
+    'field_lop_loop_number',
   );
-  // Store this fieldset in $form_state for next steps
-  $form_state['display_calc_topo'] = $form['display_calc_topo'];
+  foreach ($tops as $num)
+  {
+    $form['field_lop_topo_num']['und'][0][$num]['#disabled'] = TRUE;
+    $form['field_lop_topo_num']['und'][0][$num]['und'][0]['value']['#value'] = $form_state['topo_nums'][$num];
+  }
 
 
   // Display generated Feynman Graph
@@ -665,13 +695,28 @@ function nickelplay_integral_second_step(&$form, &$form_state)
     '#markup' => '<img src="'.
       $form_state['values']['field_lop_internal_stuff']['und'][0]['field_lop_picture_path']['und'][0]['value'] .
       '" alt="generated_graph">',
-    '#weight' => 10,
+    '#weight' => 9,
   );
 
 
   // The same Feynman graph again
   $form['feynman_graph_2'] = $form['feynman_graph'];
-  $form['feynman_graph_2']['#weight'] = 13;
+  $form['feynman_graph_2']['#weight'] = 11;
+
+
+  // {
+  // Adjust the widgets for propagators and legs
+  // $prop_num = $topo_values['field_lop_prop_num']['und'][0]['value'];
+  $prop_num = $form_state['topo_nums']['field_lop_prop_num'];
+  // $leg_num = $topo_values['field_lop_leg_number']['und'][0]['value'];
+  $leg_num = $form_state['topo_nums']['field_lop_leg_number'];
+  //
+  // $form['field_lop_props']['#pre_render'][] = 'nickelplay_field_lop_props_pre_render';
+  // Or we just call the function ourselves:
+  $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
+
+  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num);
+  // }
 
 
 
@@ -698,15 +743,15 @@ function nickelplay_integral_second_step(&$form, &$form_state)
     '#limit_validation_errors' => array(),
   );
 
-  $form['actions']['next'] = array(
-    '#type' => 'submit',
-    '#value' => 'Next >>',
-    '#submit' => array('nickelplay_integral_next_submit_2'),
-    // '#validate' => array('form_example_tutorial_8_next_validate'),
-  );
+  // $form['actions']['next'] = array(
+  //   '#type' => 'submit',
+  //   '#value' => 'Next >>',
+  //   '#submit' => array('nickelplay_integral_next_submit_2'),
+  //   // '#validate' => array('form_example_tutorial_8_next_validate'),
+  // );
   // $form['actions']['submit']['#attributes']['class']['hide_me'] = 'element-hidden';
 
-  dpm($form_state);
+  // dpm($form_state);
 }
 
 
@@ -723,10 +768,10 @@ function nickelplay_integral_second_step(&$form, &$form_state)
  */
 function nickelplay_field_lop_props_pre_render($element, $prop_num)
 {
-  // // container-inline is used to make the fields being displayed next to
-  // // each other instead of under. But this makes visible a field that
-  // // was hidden with "element-hidden"
-  // $element['#attributes']['class'][] = 'container-inline';
+  // container-inline is used to make the fields being displayed next to
+  // each other instead of under. But this makes visible a field that
+  // was hidden with "element-hidden"
+  $element['#attributes']['class'][] = 'container-inline';
 
   foreach ($element['und'] as $key => &$value)
   {
@@ -740,12 +785,20 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
         $value['field_lop_prop_power']['und'][0]['value']['#title'] .= " $keyplus" ;
         $value['#nodrag'] = TRUE;
 
-        // Set propagator number field
-        $value['field_lop_prop_nr']['und'][0]['value']['#default_value'] = "$keyplus";
+        // // Set propagator number field
+        // $value['field_lop_prop_nr']['und'][0]['value']['#default_value'] = "$keyplus";
 
-        // Hide Number field
-        $hide = array(&$value['field_lop_prop_nr']);
-        nickelplay_hide_elements($hide);
+        // Auto-fill Number field and make it not writable by user.
+        // {This solution works; using '#value' in combination with
+        // '#disabled'. Other solutions can have the disadvantage that
+        // the value of the field is lost for future steps.}
+
+        $value['field_lop_prop_nr']['und'][0]['value']['#value'] = $keyplus;
+        $value['field_lop_prop_nr']['#disabled'] = TRUE;
+
+        // // Hide Number field
+        // $hide = array(&$value['field_lop_prop_nr']);
+        // nickelplay_hide_elements($hide);
       }
       else
       {
@@ -772,6 +825,11 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
  */
 function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
 {
+  // container-inline is used to make the fields being displayed next to
+  // each other instead of under. But this makes visible a field that
+  // was hidden with "element-hidden"
+  $element['#attributes']['class'][] = 'container-inline';
+
   foreach ($element['und'] as $key => &$value)
   {
     if (is_int($key))
@@ -782,6 +840,9 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
         $keyplus = $key + 1;
         $value['field_lop_ext_legs_virt']['und']['#title'] .= " $keyplus";
         $value['#nodrag'] = TRUE;
+        $value['field_lop_ext_legs_no']['und'][0]['value']['#value'] = $keyplus;
+        // $value['field_lop_ext_legs_no']['#value'] = "$keyplus";
+        $value['field_lop_ext_legs_no']['#disabled'] = TRUE;
       }
       else
       {

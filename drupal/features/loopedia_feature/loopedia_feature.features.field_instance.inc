@@ -478,7 +478,11 @@ function loopedia_feature_field_default_field_instances() {
   // 'field_collection_item-field_lop_legs_virt-field_lop_ext_legs_virt'.
   $field_instances['field_collection_item-field_lop_legs_virt-field_lop_ext_legs_virt'] = array(
     'bundle' => 'field_lop_legs_virt',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 'light-like',
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -493,7 +497,7 @@ function loopedia_feature_field_default_field_instances() {
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_ext_legs_virt',
     'label' => 'Virtuality',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -510,7 +514,11 @@ function loopedia_feature_field_default_field_instances() {
   // 'field_collection_item-field_lop_props-field_lop_prop_mass'.
   $field_instances['field_collection_item-field_lop_props-field_lop_prop_mass'] = array(
     'bundle' => 'field_lop_props',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 'massless',
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -525,7 +533,7 @@ function loopedia_feature_field_default_field_instances() {
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_prop_mass',
     'label' => 'Mass',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -583,7 +591,11 @@ function loopedia_feature_field_default_field_instances() {
   // 'field_collection_item-field_lop_props-field_lop_prop_power'.
   $field_instances['field_collection_item-field_lop_props-field_lop_prop_power'] = array(
     'bundle' => 'field_lop_props',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 1,
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -603,7 +615,7 @@ function loopedia_feature_field_default_field_instances() {
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_prop_power',
     'label' => 'Power',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'max' => '',
       'min' => '',
@@ -943,7 +955,12 @@ function loopedia_feature_field_default_field_instances() {
     'bundle' => 'lop_integral',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Choose the virtuality of the external legs. The choices are:
+<ul>
+<li>light-like : p^2 = 0</li>
+<li>on_internal_mass_shell : p^2 &ne; 0. But p is on a mass shell of one of the (internal) propagators: p^2 = m_j.</li>
+<li>off-shell: p is not light like and also not on one of the internal mass shells.</li>
+</ul>',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -1069,6 +1086,12 @@ function loopedia_feature_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Choose the virtuality of the external legs. The choices are:
+<ul>
+<li>light-like : p^2 = 0</li>
+<li>on_internal_mass_shell : p^2 &ne; 0. But p is on a mass shell of one of the (internal) propagators: p^2 = m_j.</li>
+<li>off-shell: p is not light like and also not on one of the internal mass shells.</li>
+</ul>');
   t('Coloring Numbers');
   t('Comment');
   t('Graph Identifier');
