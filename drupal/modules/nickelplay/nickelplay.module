@@ -229,6 +229,16 @@ function nickelplay_permission()
 }
 
 
+/**
+ * Implements hook_menu_alter().
+ */
+function nickelplay_menu_alter(&$items)
+{
+  unset($items['comment/%/view']);
+  // $items['comment/%/delete']['access arguments'] = array('edit', 1);
+  // $items['comment/%/delete']['access callback'] = 'comment_access';
+}
+
 
 // ***********************************
 // Begin: Adjust comments for Integral
