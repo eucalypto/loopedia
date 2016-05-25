@@ -255,6 +255,11 @@ function nickelplay_form_comment_node_lop_integral_form_alter(&$form, &$form_sta
   unset($form['subject']);
   unset($form['actions']['preview']);
 
+  // The Comment module requires the field comment_body. But we do not
+  // want it; we remove it from the form. See
+  // https://www.drupal.org/node/1038652
+  $form['comment_body']['#attributes']['class'][] = 'element-hidden';
+
   dpm($form);
 }
 

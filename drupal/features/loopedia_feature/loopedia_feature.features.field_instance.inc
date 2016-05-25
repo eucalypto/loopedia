@@ -10,6 +10,45 @@
 function loopedia_feature_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'comment-comment_node_lop_integral-comment_body'.
+  $field_instances['comment-comment_node_lop_integral-comment_body'] = array(
+    'bundle' => 'comment_node_lop_integral',
+    'default_value' => array(
+      0 => array(
+        'value' => 'None',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'This field is required by the Comment module. But we are not using it. This is why it is removed from the submit form in nickelplay_form_comment_node_lop_integral_form_alter(). See https://www.drupal.org/node/1038652
+
+And for some crazy reason, this field has to be required. So we set a default value that will be saved as a dummy value.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 4,
+      ),
+    ),
+    'entity_type' => 'comment',
+    'field_name' => 'comment_body',
+    'label' => 'Comment unused',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 5,
+    ),
+  );
+
   // Exported field_instance:
   // 'comment-comment_node_lop_integral-field_comment_arxiv'.
   $field_instances['comment-comment_node_lop_integral-field_comment_arxiv'] = array(
@@ -23,7 +62,7 @@ function loopedia_feature_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 2,
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'comment',
@@ -41,7 +80,7 @@ function loopedia_feature_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 1,
+      'weight' => 0,
     ),
   );
 
@@ -58,7 +97,7 @@ function loopedia_feature_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 0,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'comment',
@@ -76,7 +115,7 @@ function loopedia_feature_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 0,
+      'weight' => 2,
     ),
   );
 
@@ -113,7 +152,7 @@ function loopedia_feature_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 2,
+      'weight' => 1,
     ),
   );
 
@@ -1094,6 +1133,7 @@ function loopedia_feature_field_default_field_instances() {
 </ul>');
   t('Coloring Numbers');
   t('Comment');
+  t('Comment unused');
   t('Graph Identifier');
   t('Graph Identifier, e.g. Adjacency List or Nickel Index');
   t('Here you can provide further Publication details. Like journal publications.');
@@ -1121,6 +1161,9 @@ function loopedia_feature_field_default_field_instances() {
   t('Publication');
   t('Result File');
   t('This field collection should not be visible. It stores internal stuff, that is not meant to be displayed directly to the user.');
+  t('This field is required by the Comment module. But we are not using it. This is why it is removed from the submit form in nickelplay_form_comment_node_lop_integral_form_alter(). See https://www.drupal.org/node/1038652
+
+And for some crazy reason, this field has to be required. So we set a default value that will be saved as a dummy value.');
   t('This is the Path of the neato-generated picture.');
   t('This is the help text for this thing.');
   t('Topological Integral Numbers');
