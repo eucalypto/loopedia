@@ -325,25 +325,30 @@ function nickelplay_node_view_alter(&$build)
     nickelplay_lop_integral_view_comment_links($build);
 
 
-    // Copy Feynman Graph path
-    $path = '';
-    $int_stuff = &$build['field_lop_internal_stuff'][0]['entity']['field_collection_item'];
-    foreach ($int_stuff as &$dummy)
+
+    // Feynman Graph
+    // If internal stuff is displayed (set):
+    // - Read out the path of the generated picture
+    // - Add picture to build array as markup element
+    // - Unset internal stuff element (hide it)
+    if (isset($build['field_lop_internal_stuff']))
     {
-      $path = $dummy['field_lop_picture_path']['#object']->field_lop_picture_path['und'][0]['value'];
+      $path = '';
+      $int_stuff = &$build['field_lop_internal_stuff'][0]['entity']['field_collection_item'];
+      foreach ($int_stuff as &$dummy)
+      {
+        $path = $dummy['field_lop_picture_path']['#object']->field_lop_picture_path['und'][0]['value'];
+      }
+      // Display generated Feynman Graph
+      $build['feynman_graph'] = array(
+        '#type' => 'markup',
+        '#prefix' => '<img src="',
+        '#markup' => $path,
+        '#suffix' => '" alt="Generated Feynman Graph">',
+        '#weight' => -1,
+      );
+      unset($build['field_lop_internal_stuff']);
     }
-
-    // Display generated Feynman Graph
-    $build['feynman_graph'] = array(
-      '#type' => 'markup',
-      '#prefix' => '<img src="',
-      '#markup' => $path,
-      '#suffix' => '" alt="Generated Feynman Graph">',
-      '#weight' => -1,
-    );
-
-    unset($build['field_lop_internal_stuff']);
-
 
     dpm($build);
   }
