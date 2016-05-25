@@ -962,8 +962,15 @@ And for some crazy reason, this field has to be required. So we set a default va
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
+        'module' => 'field_collection',
+        'settings' => array(
+          'add' => '',
+          'delete' => '',
+          'description' => 0,
+          'edit' => '',
+          'view_mode' => 'full',
+        ),
+        'type' => 'field_collection_view',
         'weight' => 11,
       ),
       'teaser' => array(
@@ -1093,7 +1100,7 @@ And for some crazy reason, this field has to be required. So we set a default va
         'settings' => array(
           'add' => '',
           'delete' => '',
-          'description' => 0,
+          'description' => 1,
           'edit' => '',
           'view_mode' => 'full',
         ),
