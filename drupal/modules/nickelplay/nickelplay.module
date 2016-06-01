@@ -334,20 +334,23 @@ function nickelplay_node_view_alter(&$build)
     if (isset($build['field_lop_internal_stuff']))
     {
       $path = '';
-      $int_stuff = &$build['field_lop_internal_stuff'][0]['entity']['field_collection_item'];
-      foreach ($int_stuff as &$dummy)
+      if (isset($build['field_lop_internal_stuff'][0]['entity']['field_collection_item']))
       {
-        $path = $dummy['field_lop_picture_path']['#object']->field_lop_picture_path['und'][0]['value'];
+        $int_stuff = &$build['field_lop_internal_stuff'][0]['entity']['field_collection_item'];
+        foreach ($int_stuff as &$dummy)
+        {
+          $path = $dummy['field_lop_picture_path']['#object']->field_lop_picture_path['und'][0]['value'];
+        }
+        // Display generated Feynman Graph
+        $build['feynman_graph'] = array(
+          '#type' => 'markup',
+          '#prefix' => '<img src="',
+          '#markup' => $path,
+          '#suffix' => '" alt="Generated Feynman Graph">',
+          '#weight' => -1,
+        );
+        unset($build['field_lop_internal_stuff']);
       }
-      // Display generated Feynman Graph
-      $build['feynman_graph'] = array(
-        '#type' => 'markup',
-        '#prefix' => '<img src="',
-        '#markup' => $path,
-        '#suffix' => '" alt="Generated Feynman Graph">',
-        '#weight' => -1,
-      );
-      unset($build['field_lop_internal_stuff']);
     }
 
     dpm($build);
