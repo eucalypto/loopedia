@@ -353,7 +353,7 @@ function nickelplay_node_view_alter(&$build)
       }
     }
 
-    dpm($build);
+    // dpm($build);
   }
 }
 
@@ -676,6 +676,7 @@ function nickelplay_integral_back_submit_2(&$form, &$form_state)
 
 
 
+
 /**
  * Callback function for the second step of the integral sumbission form.
  */
@@ -759,7 +760,7 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   // Or we just call the function ourselves:
   $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
 
-  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num);
+  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $prop_num);
   // }
 
 
@@ -787,6 +788,8 @@ function nickelplay_integral_second_step(&$form, &$form_state)
     '#limit_validation_errors' => array(),
   );
 
+  array_unshift($form['#validate'], 'nickelplay_integral_validate_2');
+
   // $form['actions']['next'] = array(
   //   '#type' => 'submit',
   //   '#value' => 'Next >>',
@@ -798,6 +801,15 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   // dpm($form_state);
 }
 
+
+
+/**
+ * Submit handler for loopedia_integral_second_step submit button.
+ */
+function nickelplay_integral_validate_2(&$form, &$form_state)
+{
+  dpm($form_state);
+}
 
 /**
  * Change form fields for Propagators
@@ -843,6 +855,8 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
         // // Hide Number field
         // $hide = array(&$value['field_lop_prop_nr']);
         // nickelplay_hide_elements($hide);
+
+        $value['field_lop_prop_mass']['und']['#options'] = nickelplay_prop_options($keyplus);
       }
       else
       {
@@ -856,6 +870,25 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
   return $element;
 }
 
+
+/**
+ *  Returns options for propagators
+ *
+ * @param integer $num
+ * @return array
+ */
+function nickelplay_prop_options($num)
+{
+  $options['massless'] = 'massless';
+  for ($i = 1; $i <= $num; $i++)
+  {
+    $option = 'm' . $i;
+    $options[$option] = $option;
+  }
+  return $options;
+}
+
+
 /**
  * Change form fields for legs
  *
@@ -867,7 +900,7 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
  * @return array $element
  *   The altered form element
  */
-function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
+function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num, $prop_num)
 {
   // container-inline is used to make the fields being displayed next to
   // each other instead of under. But this makes visible a field that
@@ -887,6 +920,9 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
         $value['field_lop_ext_legs_no']['und'][0]['value']['#value'] = $keyplus;
         // $value['field_lop_ext_legs_no']['#value'] = "$keyplus";
         $value['field_lop_ext_legs_no']['#disabled'] = TRUE;
+
+        // Options:
+        $value['field_lop_ext_legs_virt']['und']['#options'] = nickelplay_legs_virt_options($prop_num);
       }
       else
       {
@@ -899,6 +935,23 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num)
   return $element;
 }
 
+/**
+ * Returns options for leg virtuality
+ *
+ * @param integer $num
+ * @return array
+ */
+function nickelplay_legs_virt_options($num)
+{
+  $options['light-like'] = 'light-like';
+  $options['off-shell'] = 'off-shell';
+  for ($i = 1; $i <= $num; $i++)
+  {
+    $option = 'm' . $i . '^2';
+    $options[$option] = $option;
+  }
+  return $options;
+}
 
 
 /**
