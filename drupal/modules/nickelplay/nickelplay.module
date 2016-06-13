@@ -324,6 +324,40 @@ function nickelplay_node_view_alter(&$build)
     // Adjust links for comments (references)
     nickelplay_lop_integral_view_comment_links($build);
 
+    $build['info'] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Graph Info',
+      // '#description' => 'This is the description',
+      // '#collapsible' => TRUE,
+      // '#collapsed' => TRUE,
+
+      // The following lines are necessary to make this fieldset
+      // collapsible. See https://www.drupal.org/node/1090282
+      '#attributes' => array(
+        'class' => array('collapsible', 'collapsed'),
+      ),
+      '#attached' => array(
+        'library' => array(
+          array('system', 'drupal.collapse'),
+        ),
+      ),
+    );
+
+    $elements = array(
+      'field_lop_input',
+      'field_lop_props',
+      'field_lop_legs_virt',
+      'field_lop_topo_num',
+      'field_lop_color_num',
+    );
+    foreach ($elements as $element)
+    {
+      if (isset($build[$element]))
+      {
+        $build['info'][$element] = $build[$element];
+        unset($build[$element]);
+      }
+    }
 
 
     // Feynman Graph
@@ -353,7 +387,7 @@ function nickelplay_node_view_alter(&$build)
       }
     }
 
-    // dpm($build);
+    dpm($build);
   }
 }
 
@@ -497,6 +531,12 @@ function nickelplay_integral_first_step(&$form, &$form_state)
   );
   nickelplay_hide_elements($elements);
 
+  $form['blabla'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'My title',
+    '#description' => 'Description',
+    '#collapsible' => TRUE,
+  );
 
   // Buttons:
   $form['actions']['next'] = array(
@@ -687,7 +727,7 @@ function nickelplay_integral_second_step(&$form, &$form_state)
     &$form['field_lop_input'],
     // &$form['field_lop_topo_num'],
     &$form['field_lop_internal_stuff'],
-    &$form['field_lop_color_num'],
+    // &$form['field_lop_color_num'],
   );
   nickelplay_hide_elements($elements);
 
@@ -821,7 +861,7 @@ function nickelplay_integral_validate_2(&$form, &$form_state)
       continue;
     }
 
-    
+
   }
 
 
