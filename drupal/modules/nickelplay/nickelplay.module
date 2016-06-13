@@ -804,10 +804,27 @@ function nickelplay_integral_second_step(&$form, &$form_state)
 
 
 /**
- * Submit handler for loopedia_integral_second_step submit button.
+ * Validate handler for loopedia_integral_second_step submit button.
  */
 function nickelplay_integral_validate_2(&$form, &$form_state)
 {
+  // Propagators
+  $allowed_masses = array();
+
+  foreach ($form_state['values']['field_lop_props']['und'] as $prop)
+  {
+    $mass = &$prop['field_lop_prop_mass']['und'][0]['value'];
+    $number = &$prop['field_lop_prop_nr']['und'][0]['value'];
+    $selfmass = 'm' . $number;
+    if ($mass == 'massless' || $mass == $selfmass)
+    {
+      continue;
+    }
+
+    
+  }
+
+
   dpm($form_state);
 }
 
