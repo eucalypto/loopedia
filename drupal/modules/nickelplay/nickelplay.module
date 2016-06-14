@@ -721,7 +721,8 @@ function nickelplay_integral_next_submit_1(&$form, &$form_state)
 
 
   // Write topological numbers to extra array in $form_state for future
-  // use.
+  // use. These values are put into the right fields in
+  // nickelplay_integral_second_step().
   $form_state['topo_nums']['field_lop_leg_number'] = $legs;
   $form_state['topo_nums']['field_lop_prop_num'] = $propagators;
   $form_state['topo_nums']['field_lop_vertex_number'] = $vertices;
@@ -899,8 +900,24 @@ function nickelplay_integral_validate_2(&$form, &$form_state)
       continue;
     }
 
-
   }
+
+  // Coloring numbers
+  $form_state['colors'] = array();
+  $colors = &$form_state['colors'];
+
+  // Read masses of propagators into one array
+  $prop_masses = array();
+  foreach ($form_state['values']['field_lop_props']['und'] as $index => &$prop)
+  {
+    $prop_masses[$index] = &$prop['field_lop_prop_mass']['und'][0]['value'];
+  }
+
+  // Extract coloring info about propagators
+  $color_count = array_count_values($prop_masses);
+  $colors['massless_prop_nr'] = $color_count['massless'];
+  $colors['massive_prop_nr'] = $form_state['topo_nums']['field_lop_prop_num'] - $color_count['massless'];
+  $colors['different_prop_masses'] = count($color_count) - 1;
 
 
   dpm($form_state);
