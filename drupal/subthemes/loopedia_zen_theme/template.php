@@ -92,8 +92,8 @@ function loopedia_zen_theme_preprocess_comment(&$variables, $hook)
   // Replace string "replied on" with "added reference on" in submit
   // html string.
   $submitted_line = &$variables['submitted'];
-  $submitted_line = str_replace('replied on', 'added reference on', $submitted_line);
-  
+  $submitted_line = str_replace('replied on', '', $submitted_line);
+
   // dpm($variables);
 }
 

@@ -292,7 +292,45 @@ function nickelplay_comment_view_alter(&$build)
   // Remove link for "login or register"
   unset($build['links']['comment']['#links']['comment_forbidden']);
 
-  // dpm($build);
+  $build['fieldset'] = array(
+    '#type' => 'fieldset',
+    // '#title' => 'Graph Info',
+    // '#description' => 'This is the description',
+    // '#collapsible' => TRUE,
+    // '#collapsed' => TRUE,
+
+    // The following lines are necessary to make this fieldset
+    // collapsible. See https://www.drupal.org/node/1090282
+    '#attributes' => array(
+      'class' => array('collapsible'),
+    ),
+    '#attached' => array(
+      'library' => array(
+        array('system', 'drupal.collapse'),
+      ),
+    ),
+  );
+
+
+  $fieldnames = array(
+    'field_comment_arxiv',
+    'field_comment_file',
+    'field_comment_publication',
+    'field_comment_comment',
+    'links',
+  );
+
+
+  foreach ($fieldnames as $field)
+  {
+    if (isset($build[$field]))
+    {
+      $build['fieldset'][$field] = $build[$field];
+      unset($build[$field]);
+    }
+  }
+
+  dpm($build);
 }
 
 /**
