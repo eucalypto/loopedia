@@ -425,7 +425,7 @@ function nickelplay_node_view_alter(&$build)
       }
     }
 
-    dpm($build);
+    // dpm($build);
   }
 }
 
@@ -568,13 +568,6 @@ function nickelplay_integral_first_step(&$form, &$form_state)
     &$form['field_lop_color_num'],
   );
   nickelplay_hide_elements($elements);
-
-  $form['blabla'] = array(
-    '#type' => 'fieldset',
-    '#title' => 'My title',
-    '#description' => 'Description',
-    '#collapsible' => TRUE,
-  );
 
   // Buttons:
   $form['actions']['next'] = array(
@@ -765,8 +758,9 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   $elements = array(
     &$form['field_lop_input'],
     // &$form['field_lop_topo_num'],
+    &$form['field_lop_legs_virt'],
     &$form['field_lop_internal_stuff'],
-    // &$form['field_lop_color_num'],
+    &$form['field_lop_color_num'],
   );
   nickelplay_hide_elements($elements);
 
@@ -823,9 +817,9 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   );
 
 
-  // The same Feynman graph again
-  $form['feynman_graph_2'] = $form['feynman_graph'];
-  $form['feynman_graph_2']['#weight'] = 11;
+  // // The same Feynman graph again
+  // $form['feynman_graph_2'] = $form['feynman_graph'];
+  // $form['feynman_graph_2']['#weight'] = 11;
 
 
   // {
@@ -868,6 +862,14 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   );
 
   array_unshift($form['#validate'], 'nickelplay_integral_validate_2');
+
+  $form['actions']['next'] = array(
+   '#type' => 'submit',
+   '#value' => 'Next >>',
+   '#submit' => array('nickelplay_integral_next_submit_2'),
+  //  '#validate' => array('nickelplay_integral_next_validate_2'),
+  );
+  $form['actions']['submit']['#attributes']['class'][] = 'element-hidden';
 
   // $form['actions']['next'] = array(
   //   '#type' => 'submit',
@@ -920,8 +922,81 @@ function nickelplay_integral_validate_2(&$form, &$form_state)
   $colors['different_prop_masses'] = count($color_count) - 1;
 
 
-  dpm($form_state);
+function nickelplay_integral_next_submit_2(&$form, &$form_state)
+{
+  $form_state['step'] = 3;
+  $form_state['rebuild'] = TRUE;
 }
+
+
+
+/**
+ * Callback function for the third step of the integral sumbission form.
+ */
+function nickelplay_integral_third_step(&$form, &$form_state)
+{
+  // Hide some elements
+  $elements = array(
+    &$form['field_lop_input'],
+    &$form['field_lop_topo_num'],
+    &$form['field_lop_props'],
+    &$form['field_lop_legs_virt'],
+    &$form['field_lop_internal_stuff'],
+    &$form['field_lop_color_num'],
+  );
+  nickelplay_hide_elements($elements);
+
+
+  $form['actions']['back'] = array(
+  '#type' => 'submit',
+  '#value' => t('<< Back'),
+  '#submit' => array('nickelplay_integral_back_submit_3'),
+  //
+  // We don't want to validate the fields because they will be
+  // validated once the user goes forward. #limit_validation_errors()
+  // takes an array of elements that will be validated. Everything
+  // else will not be validated. See
+  // https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7#limit_validation_errors
+  //
+  // This should be used carefully in multi-step forms. Especially if
+  // you have a multi-step form which computes something out of the
+  // $form_state['values'][...]. If you use '#limit_validation_errors'
+  // on a button to go back one step, there won't be any
+  // $form_state['values'][...]. This is why we don't use it in the
+  // button from step 3 to step 2.
+  '#limit_validation_errors' => array(),
+  );
+}
+
+
+
+/**
+ * Submit handler for loopedia_integral_third_step back button.
+ */
+function nickelplay_integral_back_submit_3(&$form, &$form_state)
+{
+  $form_state['step'] = 2;
+  $form_state['rebuild'] = TRUE;
+}
+
+// function nickelplay_integral_submit_2(&$form, &$form_state)
+// {
+//   $colors = &$form_state['colors'];
+//
+//   $input_value = array('input', 'values');
+//
+//   foreach ($input_value as $ip)
+//   {
+//   $form_state[$ip]['field_lop_color_num']['und'][0]['field_lop_massive_prop_num']['und'][0]['value'] = $colors['massive_prop_nr'];
+//   $form_state[$ip]['field_lop_color_num']['und'][0]['field_lop_massless_prop_num']['und'][0]['value'] = $colors['massless_prop_nr'];
+//   $form_state[$ip]['field_lop_color_num']['und'][0]['field_lop_mass_scale_num']['und'][0]['value'] = $colors['different_prop_masses'];
+//   }
+//   form_set_value($form['field_lop_color_num']['und'][0]['field_lop_massless_prop_num']['und'][0]['value'], '42', $form_state);
+//
+//   $form_state['rebuild'] = TRUE;
+//   dpm($form_state);
+// }
+
 
 /**
  * Change form fields for Propagators
