@@ -569,6 +569,17 @@ function nickelplay_integral_first_step(&$form, &$form_state)
   );
   nickelplay_hide_elements($elements);
 
+  // Set default values for propagators (masses).
+
+  // [Drupal Tip: We have to set the defaults in the first step although
+  // the propagators are still invisible to the user. We hid them in a
+  // way that enables us to not loose the input in the next steps. But
+  // it also means that the default values are wrongly taken as input
+  // for the next step because the user obvioulsy could not change
+  // them.]
+  $form['field_lop_props'] = nickelplay_field_lop_props_set_defaults($form['field_lop_props']);
+
+
   // Buttons:
   $form['actions']['next'] = array(
    '#type' => 'submit',
@@ -811,11 +822,13 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   $form['feynman_graph'] = array(
     '#type' => 'markup',
     '#markup' => '<img src="'.
-      $form_state['values']['field_lop_internal_stuff']['und'][0]['field_lop_picture_path']['und'][0]['value'] .
+      $form_state['input']['field_lop_internal_stuff']['und'][0]['field_lop_picture_path']['und'][0]['value'] .
       '" alt="generated_graph">',
     '#weight' => 9,
   );
 
+  // Save Feynman Graph display to $form_state
+  $form_state['feynman_graph'] = $form['feynman_graph'];
 
   // // The same Feynman graph again
   // $form['feynman_graph_2'] = $form['feynman_graph'];
@@ -833,7 +846,7 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   // Or we just call the function ourselves:
   $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
 
-  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $prop_num);
+  // $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $prop_num);
   // }
 
 
@@ -990,11 +1003,22 @@ function nickelplay_integral_third_step(&$form, &$form_state)
     &$form['field_lop_input'],
     &$form['field_lop_topo_num'],
     &$form['field_lop_props'],
-    &$form['field_lop_legs_virt'],
+    // &$form['field_lop_legs_virt'],
     &$form['field_lop_internal_stuff'],
     &$form['field_lop_color_num'],
   );
   nickelplay_hide_elements($elements);
+
+
+  // Add feynman graph element from $form_state
+  $form['feynman_graph'] = $form_state['feynman_graph'];
+
+
+  // Adjust the widgets for legs
+  $prop_num = $form_state['topo_nums']['field_lop_prop_num'];
+  $leg_num = $form_state['topo_nums']['field_lop_leg_number'];
+
+  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $prop_num);
 
 
   $form['actions']['back'] = array(
@@ -1049,6 +1073,32 @@ function nickelplay_integral_back_submit_3(&$form, &$form_state)
 
 
 /**
+ * Set default values
+ *
+ * Callback function to change the rendering of a form element
+ *
+ * @param array $element
+ *   The original form element
+ *
+ * @return array $element
+ *   The altered form element
+ */
+function nickelplay_field_lop_props_set_defaults($element)
+{
+  foreach ($element['und'] as $key => &$value)
+  {
+    if (is_int($key))
+    {
+      // set mass of propagator P3 to 'm3', etc. This is the most
+      // general case.
+      $keyplus = $key + 1;
+      $value['field_lop_prop_mass']['und']['#default_value'] = array('m' . $keyplus);
+    }
+  }
+  return $element;
+}
+
+/**
  * Change form fields for Propagators
  *
  * Callback function to change the rendering of a form element
@@ -1076,10 +1126,11 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
         $keyplus = $key + 1;
         $value['field_lop_prop_mass']['und']['#title'] .= " $keyplus" ;
         $value['field_lop_prop_power']['und'][0]['value']['#title'] .= " $keyplus" ;
-        $value['#nodrag'] = TRUE;
 
-        // // Set propagator number field
-        // $value['field_lop_prop_nr']['und'][0]['value']['#default_value'] = "$keyplus";
+        // Set field size
+        $value['field_lop_prop_nr']['und'][0]['value']['#size'] = 2;
+        $value['field_lop_prop_power']['und'][0]['value']['#size'] = 2;
+        $value['#nodrag'] = TRUE;
 
         // Auto-fill Number field and make it not writable by user.
         // {This solution works; using '#value' in combination with
@@ -1094,6 +1145,7 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
         // nickelplay_hide_elements($hide);
 
         $value['field_lop_prop_mass']['und']['#options'] = nickelplay_prop_options($keyplus);
+        // $value['field_lop_prop_mass']['und']['#default_value'] = array('m' . $keyplus);
       }
       else
       {
