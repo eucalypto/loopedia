@@ -922,6 +922,56 @@ function nickelplay_integral_validate_2(&$form, &$form_state)
   $colors['different_prop_masses'] = count($color_count) - 1;
 
 
+
+
+
+  // Canonicalize Propagator masses
+  // ==============================
+
+  // $canon_masses = $prop_masses;
+  // For some reason, the copy above does not make a real copy but a
+  // sort of reference. If you want to change the entry $canon_masses[3] =
+  // 'something else', you also change the original entry in $prop_masses.
+
+  // Copy entries in $prop_masses to $canon_masses by hand; in order to
+  // avoid annoying unwanted reference bug.
+  $canon_masses = array();
+  foreach ($prop_masses as $mass)
+  {
+    $canon_masses[] = $mass;
+  }
+
+  $used_masses = array('massless');
+  $dummy_count = 1;
+
+  foreach ($prop_masses as $mass)
+  {
+    if (!in_array($mass, $used_masses))
+    {
+      $canon_mass = 'm' . $dummy_count;
+      foreach ($prop_masses as $key => $mass2)
+      {
+        if ($mass2 == $mass)
+        {
+          $canon_masses[$key] = $canon_mass;
+        }
+      }
+      $used_masses[] = $mass;
+      $dummy_count++;
+    }
+  }
+
+
+
+
+  // dpm(array_count_values($prop_masses));
+  dpm($prop_masses);
+  dpm($canon_masses);
+  dpm($color_count);
+  // dpm($form_state);
+  dpm($form);
+}
+
 function nickelplay_integral_next_submit_2(&$form, &$form_state)
 {
   $form_state['step'] = 3;
