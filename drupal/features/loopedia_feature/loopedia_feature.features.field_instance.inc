@@ -236,7 +236,11 @@ And for some crazy reason, this field has to be required. So we set a default va
   // 'field_collection_item-field_lop_color_num-field_lop_light_like_leg_number'.
   $field_instances['field_collection_item-field_lop_color_num-field_lop_light_like_leg_number'] = array(
     'bundle' => 'field_lop_color_num',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -359,7 +363,11 @@ And for some crazy reason, this field has to be required. So we set a default va
   // 'field_collection_item-field_lop_color_num-field_lop_massless_prop_num'.
   $field_instances['field_collection_item-field_lop_color_num-field_lop_massless_prop_num'] = array(
     'bundle' => 'field_lop_color_num',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -608,7 +616,7 @@ And for some crazy reason, this field has to be required. So we set a default va
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_lop_prop_nr',
-    'label' => 'Propagator',
+    'label' => 'P',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -1170,10 +1178,10 @@ And for some crazy reason, this field has to be required. So we set a default va
   t('Number of off-shell legs');
   t('Number of propagators');
   t('Number of vertices');
+  t('P');
   t('Picture Path');
   t('Please upload a file. It can be a text file, a Mathematca file or any other file that stores the Result in a useful way.');
   t('Power');
-  t('Propagator');
   t('Propagators');
   t('Publication');
   t('Result File');

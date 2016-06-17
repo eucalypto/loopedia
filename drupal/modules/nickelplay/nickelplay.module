@@ -440,7 +440,7 @@ function nickelplay_lop_integral_view_comment_links(&$build)
   // Adjust "Add new reference" link
   if (isset($build['links']['comment']['#links']['comment-add']))
   {
-    $build['links']['comment']['#links']['comment-add']['title'] = 'Add reference';
+    $build['links']['comment']['#links']['comment-add']['title'] = 'Add contribution';
     $build['links']['comment']['#links']['comment-add']['attributes']['title'] = 'Add new reference and/or result to this integral.';
   }
 
@@ -846,6 +846,8 @@ function nickelplay_integral_second_step(&$form, &$form_state)
   // Or we just call the function ourselves:
   $form['field_lop_props'] = nickelplay_field_lop_props_pre_render($form['field_lop_props'], $prop_num);
 
+  $form_state['propagators'] = $form['field_lop_props'];
+
   // $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $prop_num);
   // }
 
@@ -930,8 +932,15 @@ function nickelplay_integral_validate_2(&$form, &$form_state)
 
   // Extract coloring info about propagators
   $color_count = array_count_values($prop_masses);
-  $colors['massless_prop_nr'] = $color_count['massless'];
-  $colors['massive_prop_nr'] = $form_state['topo_nums']['field_lop_prop_num'] - $color_count['massless'];
+  if (isset($color_count['massless']))
+  {
+    $colors['massless_prop_nr'] = $color_count['massless'];
+  }
+  else
+  {
+    $colors['massless_prop_nr'] = 0;
+  }
+  $colors['massive_prop_nr'] = $form_state['topo_nums']['field_lop_prop_num'] - $colors['massless_prop_nr'];
   $colors['different_prop_masses'] = count($color_count) - 1;
 
 
@@ -974,15 +983,20 @@ function nickelplay_integral_validate_2(&$form, &$form_state)
     }
   }
 
-
+  // Check, if the propagator masses were already in canonical order. If
+  // not, write the canonical order to $form_state.
+  if ($canon_masses !== $prop_masses)
+  {
+    $form_state['canon_masses'] = $canon_masses;
+  }
 
 
   // dpm(array_count_values($prop_masses));
-  dpm($prop_masses);
-  dpm($canon_masses);
-  dpm($color_count);
+  // dpm($prop_masses);
+  // dpm($canon_masses);
+  // dpm($color_count);
   // dpm($form_state);
-  dpm($form);
+  // dpm($form);
 }
 
 function nickelplay_integral_next_submit_2(&$form, &$form_state)
@@ -1009,6 +1023,23 @@ function nickelplay_integral_third_step(&$form, &$form_state)
   );
   nickelplay_hide_elements($elements);
 
+  // Add propagators
+  if (isset($form_state['propagators']))
+  {
+    $form['field_lop_props'] = $form_state['propagators'];
+  }
+
+
+  // If $form_state['canon_masses'] is set, the masses had to be
+  // canonicalized.
+  if (isset($form_state['canon_masses']))
+  {
+    foreach ($form_state['canon_masses'] as $index => $can_mass)
+    {
+      $form['field_lop_props']['und'][$index]['field_lop_prop_mass']['und']['#value'] = $can_mass;
+    }
+    drupal_set_message(t('Your propagator masses were changed! They were set to a canonical order.'));
+  }
 
   // Add feynman graph element from $form_state
   $form['feynman_graph'] = $form_state['feynman_graph'];

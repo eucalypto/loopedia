@@ -32,7 +32,7 @@ function loopedia_feature_node_info() {
       'has_title' => '1',
       'title_label' => t('Title of Integral'),
       'help' => t('Please specify your Integral by providing a graph identifier (Adjacency List, Nickel Index) and selecting the properties of propagators and legs.<br>
-After saving these general properties, you can add your reference and result. Just use the link "Add reference" on the page of the integral.'),
+After saving these general properties, you can add your reference and result. Just use the link "Add contribution" on the page of the integral.'),
     ),
   );
   drupal_alter('node_info', $items);
