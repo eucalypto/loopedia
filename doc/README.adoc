@@ -359,6 +359,34 @@ the following permissions for "Authenticated User" under Node:
 
 
 
+== Loopedia Administration
+
+=== Features Module
+
+Managing every little configuration in code is not user friendly. But as
+programmers, we still like to have some kind of code that we can put
+under version control.
+
+This is where the Drupal module "Features" helps a lot. It allows to
+export and import configurations of the following:
+
+* Content Types
+* Fields (Bases and Instances)
+* Menü links
+* Search Index/Server
+* Views
+
+It exports PHP files that can be easily added to a git repository.
+
+====== Usage
+
+* Use the Admin UI to change the configurations of something.
+* Go to Administration >> Structure >> Features
+* Look at the "State". It shoud be "Overridden" if you changed something.
+* Click on "Recreate". It auto-selects all prev
+* ...
+
+
 
 
 
