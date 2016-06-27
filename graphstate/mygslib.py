@@ -46,12 +46,14 @@ def neatodraw(gs_object, filename):
 
 
 # Takes a string representing an adjacency list, converts it to the
-# format of graphstate and returns it 
+# format of graphstate and returns it
 def adjalist_to_graphstate(adjalist_raw):
     # Evaluate string to list of lists (in a hopefully safe way):
     # https://docs.python.org/2/library/ast.html
     adjalist = ast.literal_eval(adjalist_raw)
 
+    # Convert external legs, represented by negative integers (-2, -14, ...),
+    # to -1, because GraphState allows only "-1" for the external legs.
     for i in range(len(adjalist)):
         for j in range(len(adjalist[i])):
             adjalist[i][j] = max(adjalist[i][j], -1)
