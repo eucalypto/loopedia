@@ -534,7 +534,11 @@ function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $for
   // $form['field_lop_input']['und'][0]['value']['#value'] = '[blablabbbbb]';
 
   dpm($form);
-  // dpm($form_state);
+  //
+  // if (isset($form_state))
+  // {
+  //   dpm($form_state);
+  // }
 }
 
 /**
@@ -894,19 +898,19 @@ function nickelplay_integral_step_2(&$form, &$form_state)
 function nickelplay_integral_step_2_validate(&$form, &$form_state)
 {
   // Propagators
-  $allowed_masses = array();
+  // $allowed_masses = array();
 
-  foreach ($form_state['values']['field_lop_props']['und'] as $prop)
-  {
-    $mass = &$prop['field_lop_prop_mass']['und'][0]['value'];
-    $number = &$prop['field_lop_prop_nr']['und'][0]['value'];
-    $selfmass = 'm' . $number;
-    if ($mass == 'massless' || $mass == $selfmass)
-    {
-      continue;
-    }
-
-  }
+  // foreach ($form_state['values']['field_lop_props']['und'] as $prop)
+  // {
+  //   $mass = &$prop['field_lop_prop_mass']['und'][0]['value'];
+  //   $number = &$prop['field_lop_prop_nr']['und'][0]['value'];
+  //   $selfmass = 'm' . $number;
+  //   if ($mass == 'massless' || $mass == $selfmass)
+  //   {
+  //     continue;
+  //   }
+  //
+  // }
 
   // Coloring numbers
   $form_state['colors'] = array();
@@ -921,19 +925,21 @@ function nickelplay_integral_step_2_validate(&$form, &$form_state)
 
   // Extract coloring info about propagators
   $color_count = array_count_values($prop_masses);
+
+  // Massless Propagators and distinct propagator masses:
   if (isset($color_count['massless']))
   {
     $colors['massless_prop_nr'] = $color_count['massless'];
+    $colors['different_prop_masses'] = count($color_count) - 1;
   }
   else
   {
     $colors['massless_prop_nr'] = 0;
+    $colors['different_prop_masses'] = count($color_count);
   }
+
+  // Massive propagators: N_massive = N_all - N_massless
   $colors['massive_prop_nr'] = $form_state['topo_nums']['field_lop_prop_num'] - $colors['massless_prop_nr'];
-  $colors['different_prop_masses'] = count($color_count) - 1;
-
-
-
 
 
   // Canonicalize Propagator masses
@@ -976,8 +982,10 @@ function nickelplay_integral_step_2_validate(&$form, &$form_state)
   // not, write the canonical order to $form_state.
   if ($canon_masses !== $prop_masses)
   {
-    $form_state['canon_masses'] = $canon_masses;
+    $form_state['propagators_canonicalized'] = TRUE;
   }
+
+  $form_state['canon_masses'] = $canon_masses;
 
 
   // dpm(array_count_values($prop_masses));
@@ -1026,12 +1034,22 @@ function nickelplay_integral_step_3(&$form, &$form_state)
   if (isset($form_state['propagators']))
   {
     $form['field_lop_props'] = $form_state['propagators'];
+
+    // Set Fields to not-editable:
+    foreach ($form['field_lop_props']['und'] as $key => $prop)
+    {
+      if (is_int($key))
+      {
+        $form['field_lop_props']['und'][$key]['field_lop_prop_power']['#disabled'] = TRUE;
+        $form['field_lop_props']['und'][$key]['field_lop_prop_mass']['#disabled'] = TRUE;
+      }
+    }
   }
 
 
-  // If $form_state['canon_masses'] is set, the masses had to be
-  // canonicalized.
-  if (isset($form_state['canon_masses']))
+  // If $form_state['propagators_canonicalized'] is set, the masses had
+  // to be canonicalized.
+  if (isset($form_state['propagators_canonicalized']))
   {
     foreach ($form_state['canon_masses'] as $index => $can_mass)
     {
@@ -1070,6 +1088,10 @@ function nickelplay_integral_step_3(&$form, &$form_state)
   // button from step 3 to step 2.
   '#limit_validation_errors' => array(),
   );
+
+  array_unshift($form['#validate'], 'nickelplay_integral_step_3_validate');
+
+  dpm($form_state);
 }
 
 
@@ -1081,6 +1103,46 @@ function nickelplay_integral_step_3_back_submit(&$form, &$form_state)
 {
   $form_state['step'] = 2;
   $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Validate handler for loopedia_integral_step_3 submit button.
+ */
+function nickelplay_integral_step_3_validate(&$form, &$form_state)
+{
+  // Read Leg virtualities into an array
+  $virtualities = array();
+  foreach ($form_state['values']['field_lop_legs_virt']['und'] as $index => $leg)
+  {
+    $virtualities[$index] = $leg['field_lop_ext_legs_virt']['und'][0]['value'];
+  }
+
+  $colors = &$form_state['colors'];
+  $color_count = array_count_values($virtualities);
+
+  // Light like legs:
+  if (isset($color_count['light-like'])){
+    $colors['leg_light_like'] = $color_count['light-like'];
+  }
+  else{
+    $colors['leg_light_like'] = 0;
+  }
+
+  // Off-shell-legs
+  if (isset($color_count['off-shell'])){
+    $colors['leg_off_shell'] = $color_count['off-shell'];
+  }
+  else{
+    $colors['leg_off_shell'] = 0;
+  }
+
+  // Legs on internal mass:
+  $colors['leg_internal_mass'] = $form_state['topo_nums']['field_lop_leg_number'] - $colors['leg_light_like'] - $colors['leg_off_shell'];
+
+
+
+
+  dpm($form_state);
 }
 
 // function nickelplay_integral_submit_2(&$form, &$form_state)
@@ -1158,8 +1220,8 @@ function nickelplay_field_lop_props_pre_render($element, $prop_num)
         $value['field_lop_prop_power']['und'][0]['value']['#title'] .= " $keyplus" ;
 
         // Set field size
-        $value['field_lop_prop_nr']['und'][0]['value']['#size'] = 2;
-        $value['field_lop_prop_power']['und'][0]['value']['#size'] = 2;
+        $value['field_lop_prop_nr']['und'][0]['value']['#size'] = 1;
+        $value['field_lop_prop_power']['und'][0]['value']['#size'] = 1;
         $value['#nodrag'] = TRUE;
 
         // Auto-fill Number field and make it not writable by user.
@@ -1242,6 +1304,8 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num, $prop_num
 
         // Options:
         $value['field_lop_ext_legs_virt']['und']['#options'] = nickelplay_legs_virt_options($prop_num);
+
+        $value['field_lop_ext_legs_no']['und'][0]['value']['#size'] = 1;
       }
       else
       {
