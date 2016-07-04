@@ -929,17 +929,17 @@ function nickelplay_integral_step_2_validate(&$form, &$form_state)
   // Massless Propagators and distinct propagator masses:
   if (isset($color_count['massless']))
   {
-    $colors['massless_prop_nr'] = $color_count['massless'];
+    $colors['massless_prop_num'] = $color_count['massless'];
     $colors['different_prop_masses'] = count($color_count) - 1;
   }
   else
   {
-    $colors['massless_prop_nr'] = 0;
+    $colors['massless_prop_num'] = 0;
     $colors['different_prop_masses'] = count($color_count);
   }
 
   // Massive propagators: N_massive = N_all - N_massless
-  $colors['massive_prop_nr'] = $form_state['topo_nums']['field_lop_prop_num'] - $colors['massless_prop_nr'];
+  $colors['massive_prop_nr'] = $form_state['topo_nums']['field_lop_prop_num'] - $colors['massless_prop_num'];
 
 
   // Canonicalize Propagator masses
@@ -1063,10 +1063,10 @@ function nickelplay_integral_step_3(&$form, &$form_state)
 
 
   // Adjust the widgets for legs
-  $prop_num = $form_state['topo_nums']['field_lop_prop_num'];
+  $mass_num = $form_state['colors']['different_prop_masses'];
   $leg_num = $form_state['topo_nums']['field_lop_leg_number'];
 
-  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $prop_num);
+  $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $mass_num);
 
 
   $form['actions']['back'] = array(
@@ -1145,23 +1145,6 @@ function nickelplay_integral_step_3_validate(&$form, &$form_state)
   dpm($form_state);
 }
 
-// function nickelplay_integral_submit_2(&$form, &$form_state)
-// {
-//   $colors = &$form_state['colors'];
-//
-//   $input_value = array('input', 'values');
-//
-//   foreach ($input_value as $ip)
-//   {
-//   $form_state[$ip]['field_lop_color_num']['und'][0]['field_lop_massive_prop_num']['und'][0]['value'] = $colors['massive_prop_nr'];
-//   $form_state[$ip]['field_lop_color_num']['und'][0]['field_lop_massless_prop_num']['und'][0]['value'] = $colors['massless_prop_nr'];
-//   $form_state[$ip]['field_lop_color_num']['und'][0]['field_lop_mass_scale_num']['und'][0]['value'] = $colors['different_prop_masses'];
-//   }
-//   form_set_value($form['field_lop_color_num']['und'][0]['field_lop_massless_prop_num']['und'][0]['value'], '42', $form_state);
-//
-//   $form_state['rebuild'] = TRUE;
-//   dpm($form_state);
-// }
 
 
 /**
@@ -1277,11 +1260,15 @@ function nickelplay_prop_options($num)
  *
  * @param array $element
  *   The original form element
+ * @param int $leg_num
+ *   Number of legs
+ * @param int $mass_num
+ *   Number of available mass shells
  *
  * @return array $element
  *   The altered form element
  */
-function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num, $prop_num)
+function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num, $mass_num)
 {
   // container-inline is used to make the fields being displayed next to
   // each other instead of under. But this makes visible a field that
@@ -1303,7 +1290,7 @@ function nickelplay_field_lop_legs_virt_pre_render($element, $leg_num, $prop_num
         $value['field_lop_ext_legs_no']['#disabled'] = TRUE;
 
         // Options:
-        $value['field_lop_ext_legs_virt']['und']['#options'] = nickelplay_legs_virt_options($prop_num);
+        $value['field_lop_ext_legs_virt']['und']['#options'] = nickelplay_legs_virt_options($mass_num);
 
         $value['field_lop_ext_legs_no']['und'][0]['value']['#size'] = 1;
       }
