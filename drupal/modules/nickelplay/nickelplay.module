@@ -526,6 +526,9 @@ function nickelplay_form_lop_integral_node_form_alter(&$form, &$form_state, $for
     case 3:
       nickelplay_integral_step_3($form, $form_state);
       break;
+    case 4:
+      nickelplay_integral_step_4($form, $form_state);
+      break;
   }
 
   // To set a value to a field that the user cannot change, set '#value'
@@ -557,6 +560,8 @@ function nickelplay_hide_elements(&$elements)
   unset($element);
 }
 
+
+// Step 1
 
 /**
 * Callback function for the first step of the integral submission form.
@@ -592,6 +597,7 @@ function nickelplay_integral_step_1(&$form, &$form_state)
    '#validate' => array('nickelplay_integral_step_1_next_validate'),
   );
   $form['actions']['submit']['#attributes']['class'][] = 'element-hidden';
+  $form['actions']['preview']['#attributes']['class'][] = 'element-hidden';
 }
 
 
@@ -752,8 +758,7 @@ function nickelplay_integral_step_1_next_submit(&$form, &$form_state)
 }
 
 
-
-
+// Step 2:
 
 /**
  * Callback function for the second step of the integral sumbission form.
@@ -799,17 +804,10 @@ function nickelplay_integral_step_2(&$form, &$form_state)
 
   // Set calculated values of fields and make them read only (#disabled,
   // greyed out)
-  $tops = array(
-    'field_lop_nickel',
-    'field_lop_leg_number',
-    'field_lop_prop_num',
-    'field_lop_vertex_number',
-    'field_lop_loop_number',
-  );
-  foreach ($tops as $num)
+  foreach ($form_state['topo_nums'] as $key => $val)
   {
-    $form['field_lop_topo_num']['und'][0][$num]['#disabled'] = TRUE;
-    $form['field_lop_topo_num']['und'][0][$num]['und'][0]['value']['#value'] = $form_state['topo_nums'][$num];
+    $form['field_lop_topo_num']['und'][0][$key]['#disabled'] = TRUE;
+    $form['field_lop_topo_num']['und'][0][$key]['und'][0]['value']['#value'] = $val;
   }
 
 
@@ -930,16 +928,16 @@ function nickelplay_integral_step_2_validate(&$form, &$form_state)
   if (isset($color_count['massless']))
   {
     $colors['massless_prop_num'] = $color_count['massless'];
-    $colors['different_prop_masses'] = count($color_count) - 1;
+    $colors['mass_scale_num'] = count($color_count) - 1;
   }
   else
   {
     $colors['massless_prop_num'] = 0;
-    $colors['different_prop_masses'] = count($color_count);
+    $colors['mass_scale_num'] = count($color_count);
   }
 
   // Massive propagators: N_massive = N_all - N_massless
-  $colors['massive_prop_nr'] = $form_state['topo_nums']['field_lop_prop_num'] - $colors['massless_prop_num'];
+  $colors['massive_prop_num'] = $form_state['topo_nums']['field_lop_prop_num'] - $colors['massless_prop_num'];
 
 
   // Canonicalize Propagator masses
@@ -996,6 +994,9 @@ function nickelplay_integral_step_2_validate(&$form, &$form_state)
   // dpm($form);
 }
 
+/**
+ *  Submit handler for step 2 next button
+ */
 function nickelplay_integral_step_2_next_submit(&$form, &$form_state)
 {
   $form_state['step'] = 3;
@@ -1012,7 +1013,7 @@ function nickelplay_integral_step_2_back_submit(&$form, &$form_state)
 }
 
 
-
+// Step 3:
 
 /**
  * Callback function for the third step of the integral sumbission form.
@@ -1063,7 +1064,7 @@ function nickelplay_integral_step_3(&$form, &$form_state)
 
 
   // Adjust the widgets for legs
-  $mass_num = $form_state['colors']['different_prop_masses'];
+  $mass_num = $form_state['colors']['mass_scale_num'];
   $leg_num = $form_state['topo_nums']['field_lop_leg_number'];
 
   $form['field_lop_legs_virt'] = nickelplay_field_lop_legs_virt_pre_render($form['field_lop_legs_virt'], $leg_num, $mass_num);
@@ -1091,10 +1092,17 @@ function nickelplay_integral_step_3(&$form, &$form_state)
 
   array_unshift($form['#validate'], 'nickelplay_integral_step_3_validate');
 
+  // Buttons
+  $form['actions']['next'] = array(
+   '#type' => 'submit',
+   '#value' => 'Next >>',
+   '#submit' => array('nickelplay_integral_step_3_next_submit'),
+  //  '#validate' => array('nickelplay_integral_step_2_next_validate'),
+  );
+  $form['actions']['submit']['#attributes']['class'][] = 'element-hidden';
+
   dpm($form_state);
 }
-
-
 
 /**
  * Submit handler for loopedia_integral_step_3 back button.
@@ -1106,7 +1114,7 @@ function nickelplay_integral_step_3_back_submit(&$form, &$form_state)
 }
 
 /**
- * Validate handler for loopedia_integral_step_3 submit button.
+ * Validate handler for loopedia_integral_step_3
  */
 function nickelplay_integral_step_3_validate(&$form, &$form_state)
 {
@@ -1122,29 +1130,73 @@ function nickelplay_integral_step_3_validate(&$form, &$form_state)
 
   // Light like legs:
   if (isset($color_count['light-like'])){
-    $colors['leg_light_like'] = $color_count['light-like'];
+    $colors['light_like_leg_number'] = $color_count['light-like'];
   }
   else{
-    $colors['leg_light_like'] = 0;
+    $colors['light_like_leg_number'] = 0;
   }
 
   // Off-shell-legs
   if (isset($color_count['off-shell'])){
-    $colors['leg_off_shell'] = $color_count['off-shell'];
+    $colors['off_shell_leg_number'] = $color_count['off-shell'];
   }
   else{
-    $colors['leg_off_shell'] = 0;
+    $colors['off_shell_leg_number'] = 0;
   }
 
   // Legs on internal mass:
-  $colors['leg_internal_mass'] = $form_state['topo_nums']['field_lop_leg_number'] - $colors['leg_light_like'] - $colors['leg_off_shell'];
+  $colors['int_mass_shell_leg_num'] = $form_state['topo_nums']['field_lop_leg_number'] - $colors['light_like_leg_number'] - $colors['off_shell_leg_number'];
 
 
+  // Write colors from $form_state to form values
+  foreach ($form_state['colors'] as $color => $value)
+  {
+    $index = 'field_lop_' . $color;
+    $form_state['input']['field_lop_color_num']['und'][0][$index]['und'][0]['value'] = $color;
+    $form_state['values']['field_lop_color_num']['und'][0][$index]['und'][0]['value'] = $color;
+    // form_set_value($form['field_lop_color_num']['und'][0][$index], $color, $form_state);
+  }
 
 
   dpm($form_state);
 }
 
+/**
+ * Submit handler for loopedia_integral_step_3
+ */
+function nickelplay_integral_step_3_next_submit(&$form, &$form_state)
+{
+  $form_state['step'] = 4;
+  $form_state['rebuild'] = TRUE;
+}
+
+
+// Step 4
+
+/**
+ * Callback function for the fourth step of the integral sumbission form.
+ */
+function nickelplay_integral_step_4(&$form, &$form_state)
+{
+
+  // Buttons
+
+  $form['actions']['back'] = array(
+  '#type' => 'submit',
+  '#value' => t('<< Back'),
+  '#submit' => array('nickelplay_integral_step_4_back_submit'),
+  '#limit_validation_errors' => array(),
+  );
+}
+
+/**
+ * Submit handler for loopedia_integral_step_4 back button.
+ */
+function nickelplay_integral_step_4_back_submit(&$form, &$form_state)
+{
+  $form_state['step'] = 3;
+  $form_state['rebuild'] = TRUE;
+}
 
 
 /**
