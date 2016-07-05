@@ -236,11 +236,7 @@ And for some crazy reason, this field has to be required. So we set a default va
   // 'field_collection_item-field_lop_color_num-field_lop_light_like_leg_number'.
   $field_instances['field_collection_item-field_lop_color_num-field_lop_light_like_leg_number'] = array(
     'bundle' => 'field_lop_color_num',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -363,11 +359,7 @@ And for some crazy reason, this field has to be required. So we set a default va
   // 'field_collection_item-field_lop_color_num-field_lop_massless_prop_num'.
   $field_instances['field_collection_item-field_lop_color_num-field_lop_massless_prop_num'] = array(
     'bundle' => 'field_lop_color_num',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
